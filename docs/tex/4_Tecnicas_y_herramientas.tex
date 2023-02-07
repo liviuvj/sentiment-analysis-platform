@@ -1,7 +1,97 @@
 \capitulo{4}{Técnicas y herramientas}
 
-Esta parte de la memoria tiene como objetivo presentar las técnicas metodológicas y las herramientas de desarrollo que se han utilizado para llevar a cabo el proyecto. Si se han estudiado diferentes alternativas de metodologías, herramientas, bibliotecas se puede hacer un resumen de los aspectos más destacados de cada alternativa, incluyendo comparativas entre las distintas opciones y una justificación de las elecciones realizadas. 
-No se pretende que este apartado se convierta en un capítulo de un libro dedicado a cada una de las alternativas, sino comentar los aspectos más destacados de cada opción, con un repaso somero a los fundamentos esenciales y referencias bibliográficas para que el lector pueda ampliar su conocimiento sobre el tema.
+Esta parte de la memoria tiene como objetivo presentar las técnicas metodológicas y las herramientas de desarrollo que se han utilizado para llevar a cabo el proyecto. En el caso de algunas de estas herramientas se estudiarán diferentes alternativas, en las que se incluirán comparativas entre las distintas opciones y una justificación de la elección realizadas.
 
 
-\
+
+\section{Técnicas}
+
+En este apartado se hara una breve descripción sobre las técnicas empleadas a lo largo del proyecto.
+
+\subsection{SCRUM}
+Es un proceso de desarrollo software enfocado hacia las metodologías ágiles. Consiste en segmentar un proyecto en varios requisitos que se han de cumplir y posteriormente subdividir estos en tareas. El desarrollo se realiza mediante \textit{sprints}, iteraciones incrementales de normalmente dos semanas de duración, en los que se planifican las tareas a realizar durante dicho periodo.
+
+\subsection{Procesamiento de Lenguaje Natural}
+El término \textit{NLP} (\textit{Natural Language Processing}) se refiere al conjunto de métodos dentro de la inteligencia artificial que trabajan con recursos textuales o sonoros. Se ponen en práctica metodologías de estadística, lingüística y \textit{machine learning} para permitir crear programas que puedan interpretar dicho tipo de información.
+
+\subsection{Sentiment Analysis}
+El análisis de sentimientos es una técnica en la que se busca identificar y extraer información subjetiva a partir de recursos textuales. Las principales maneras de realizar este tipo de análisis siguen dos rutas.
+
+La primera, utilizando reglas y diccionarios de palabras a las que se les asigna distintas puntuaciones según el sentimiento asociado a cada palabra. La segunda, y la que mejores resultados proporciona actualmente, emplea técnicas de \textit{NLP} para extraer características de los datos y comprender el contexto de la información proporcionada. Esto permite realizar clasificaciones y predicciones más acertadas ya que el resultado no se limita simplemente a un subconjunto de palabras, sino al sentido que se les da a las mismas también.
+
+\section{Herramientas}
+
+Para llevar a cabo este proyecto, se ha utilizado el siguiente conjunto de herramientas.
+
+\subsection{GitHub}
+
+Para el \textit{hosting} del repositorio se ha utilizado \textit{GitHub}\footnote{\url{https://github.com//}}, puesto que ya se tenía experiencia en el uso de esta plataforma. Permite realizar la gestión del control de versiones a lo largo del desarrollo del software y simplifica el seguimiento de las tareas. Posee capacidades para creación de procesos de integración continua y despliegue continuo (\textit{CI/CD}), automatización de flujos de trabajo, seguimiento y gestión de proyectos.
+
+\subsection{ZenHub}
+Para facilitar el trabajo de la gestión del proyecto se ha utilizado \textit{ZenHub}\footnote{\url{https://www.zenhub.com/}}. Es una plataforma centrada en mejorar la productividad de los equipos de desarrollo, que permite llevar a cabo la planificación del proyecto, realizar un seguimiento del progreso y calcular métricas de productividad mediante gráficas. 
+
+Se ha elegido esta herramienta ya que, además de permitir realizar toda la gestión del proyecto, cuenta con una extensión web desde la que se puede acceder al panel de control directamente desde el propio repositorio de GitHub. Por lo que todas las operaciones de planificación de tareas se llevan a cabo desde el mismo lugar y facilita el trabajo del desarrollador.
+
+\subsection{Entorno de desarrollo integrado (IDE)}
+
+\subsubsection{Herramientas consideradas:}
+
+\begin{itemize}
+    \item \textbf{Spyder:} Entorno de desarrollo \textit{open-source} especializado en la exploración de datos y el análisis científico.
+    \item \textbf{Visual Studio:} Herramienta que permite realizar todas las tareas de programación, depuración, pruebas y desarrollo de soluciones para cualquier plataforma.
+    \item \textbf{Visual Studio Code:} Versión más ligera y personalizable de Visual Studio.
+\end{itemize}
+
+\subsubsection{Herramienta elegida:}
+
+\begin{itemize}
+    \item \textbf{Visual Studio Code}\footnote{\url{https://code.visualstudio.com/}}
+\end{itemize}
+
+Es el IDE elegido para llevar a cabo el desarrollo de proyecto. Como ventajas principales, presenta un tamaño reducido de instalación respecto a las otras opciones y permite la configuración y ejecución de tareas, además de la capacidad para instalar y personalizar nuevas funcionalidades mediante sus extensiones.
+
+\subsubsection{Extensiones utilizadas}
+
+Se han escogido una serie de extensiones del \textit{Marketplace} que presenta la herramienta para facilitar la calidad de vida al trabajar con este IDE.
+
+\begin{itemize}
+    \item \textbf{Python:} Extensión principal para dar soporte al lenguaje de programación Python para el correcto desarrollo de código (\textit{linting}, formato de código, exploración de variables, depuración, etc.).
+    \item \textbf{Python Docstring Generator:} Facilita y Asiste en la creación de comentarios tipo \textit{docstring} para funciones en Python.
+    \item \textbf{Pylance:} Servidor de lenguae que añade soporte adicional a Python.
+    \item \textbf{Trailing Whitespace:} Resalta y recorta los espacios en blanco sobrantes.
+    \item \textbf{Visual Studio IntelliCode:} Emplea IA para añadir desarrollo predictivo y autocompletado de código.
+    \item \textbf{Docker:} Facilita la creación y gestión de contenedores a través del IDE.
+\end{itemize}
+
+\subsection{Editor \LaTeX}
+
+\subsubsection{Herramientas consideradas:}
+
+\begin{itemize}
+    \item \textbf{MiK\TeX{} + Texmaker:} Herramientas que realizan la traducción de \LaTeX{} a texto y permiten gestionar y editar este tipo de archivos, respectivamente.
+    \item \textbf{Overleaf:} Plataforma en línea que facilita la gestión y edición de documentos con formato \LaTeX{}.
+\end{itemize}
+
+\subsubsection{Herramienta elegida:}
+
+\begin{itemize}
+    \item \textbf{Overleaf}
+\end{itemize}
+
+Overleaf es un editor en línea\footnote{\url{https://es.overleaf.com/}} de \LaTeX{}. Para utilizarlo no es necesario realizar la instalación de ningún componente, tiene documentación integrada para \LaTeX y permite la visualización de los cambios realizados en tiempo real, además de contar ya con los paquetes más utilizados.
+
+También resulta más cómodo al tratarse de una plataforma \textit{online}, ya que tan solo hace falta disponer de un navegador y conexión a Internet para poder trabajar con ella desde cualquier equipo. Otra de las mejores funcionalidades que ofrece es la posibilidad de comprobar el histórico de los archivos modificados y realizar un \textit{rollback} de los mismos.
+
+Se ha utilizado esta herramienta para elaborar la memoria y los anexos en \LaTeX.
+
+\subsection{Joplin}
+A lo largo de la duración del proyecto hará falta tomar notas de varios temas diversos. Para facilitar esta tarea, se ha utilizado \textit{Joplin}\footnote{\url{https://joplinapp.org/}}. Es una plataforma de código abierto que permite gestionar apuntes y notas en forma de \textit{notebooks}.
+
+Entre las principales características que ofrece se encuentra la total privacidad de los datos, la sencilla interfaz que presenta, la facilidad de uso gracias al lenguaje \textit{Markdown} y la sincronización de contenido entre diversos equipos.
+
+Se utilizará principalmente para dejar constancia de los temas comentados durante las reuniones y apuntar información relevante para el proyecto que se vaya encontrando a medida que se desarrolle este trabajo.
+
+\subsection{Super Productivity}
+La gestión del tiempo dedicado se ha llevado a cabo mediante la herramienta de código abierto \textit{Super Productivity}\footnote{\url{https://super-productivity.com/}}. Sus principales funciones consisten en realizar la planificación, seguimiento y gestión de tareas. Permite distribuir tareas a lo largo de diversos proyectos, la asignación de etiquetas personalizadas y tener constancia del tiempo estimado y dedicado para cada una. 
+
+Presenta una interfaz sencilla de utilizar y amigable para el usuario que agiliza el trabajo gracias a la utilización de atajos de teclado. Otra de las características más importantes que tiene esta herramientas es la integración con varias plataformas para la importación de tareas. Por lo que la planificación realizada en GitHub y ZenHub se puede extraer a esta herramienta y realizar un mejor seguimiento del tiempo empleado en cada una de ellas.
