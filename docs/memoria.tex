@@ -9,6 +9,9 @@
 \usepackage{microtype}
 \usepackage{placeins}
 
+%Para el float H de tablaSmallSinColores
+\usepackage{float}
+
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
 \RequirePackage{xtab}
@@ -53,6 +56,18 @@
 		\includegraphics[width=0.9\textwidth]{#1}
 		\caption{#2}\label{fig:#1}
 	\end{figure}
+}
+
+% Imágen con fuente
+\usepackage{graphicx}
+\newcommand{\imagenFuente}[3]{
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[width=0.9\textwidth]{#1}
+		\caption{#2}\label{fig:#1}
+		\caption*{#3}
+	\end{figure}
+	\FloatBarrier
 }
 
 
@@ -130,6 +145,24 @@
    \end{tabular}
    \caption{#1}
    \label{tabla:#3}
+  \end{center}
+ \end{table}
+}
+
+% Tablas pequeñas sin colores y con fuente.
+\newcommand{\tablaSmallSinColoresConFuente}[6]{%
+ \begin{table}[H]
+  \begin{center}
+   \begin{tabular}{#3}
+    \toprule
+    #5
+    \otoprule
+    #6
+    \bottomrule
+   \end{tabular}
+   \caption{#1}
+   Fuente: #2
+   \label{tabla:#4}
   \end{center}
  \end{table}
 }

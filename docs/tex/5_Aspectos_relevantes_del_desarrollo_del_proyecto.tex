@@ -1,7 +1,109 @@
 \capitulo{5}{Aspectos relevantes del desarrollo del proyecto}
 
-Este apartado pretende recoger los aspectos más interesantes del desarrollo del proyecto, comentados por los autores del mismo.
-Debe incluir desde la exposición del ciclo de vida utilizado, hasta los detalles de mayor relevancia de las fases de análisis, diseño e implementación.
-Se busca que no sea una mera operación de copiar y pegar diagramas y extractos del código fuente, sino que realmente se justifiquen los caminos de solución que se han tomado, especialmente aquellos que no sean triviales.
-Puede ser el lugar más adecuado para documentar los aspectos más interesantes del diseño y de la implementación, con un mayor hincapié en aspectos tales como el tipo de arquitectura elegido, los índices de las tablas de la base de datos, normalización y desnormalización, distribución en ficheros3, reglas de negocio dentro de las bases de datos (EDVHV GH GDWRV DFWLYDV), aspectos de desarrollo relacionados con el WWW...
-Este apartado, debe convertirse en el resumen de la experiencia práctica del proyecto, y por sí mismo justifica que la memoria se convierta en un documento útil, fuente de referencia para los autores, los tutores y futuros alumnos.
+Este apartado pretende recoger los aspectos más interesantes del desarrollo del proyecto, además de la experiencia práctica adquirida durante la
+realización del mismo con las diversas tecnologías empleadas.
+
+\section{Extracción de datos}
+
+\subsection{Fuentes de datos}
+
+La información necesaria para conseguir el objetivo de este proyecto está formada por opiniones públicas de personas sobre algún tema o temas en concreto. La manera más sencilla de obtener estos datos es empleando recursos web como foros, blogs y redes sociales. Más concretamente, se ha optado por investigar la disponibilidad de \textit{APIs} públicas de los principales sitios web donde las personas publican sus opiniones.
+
+A continuación, se realiza un pequeño resumen de la información de la que se dispone actualmente sobre las \textit{APIs} de cada plataforma:
+
+\subsubsection{Twitter}
+
+En 2006 se abrió al público la \textit{API REST} \cite{twitterGettingStarted} de Twitter, que actualmente consta ya de su versión \textbf{v2}, aunque coexiste a su vez con algunas partes de la misma aún en la versión \textbf{v1.1} y otras de pago (\textit{Premium v1.1} o \textit{Enterprise}). Está basada en \textit{GraphQL}\footnote{Lenguaje de consultas para \textit{API}s que facilita la gestión de datos y peticiones (\url{https://graphql.org/}).} y devuelve los resultados en formato \textit{JSON}.
+
+Los permisos que se deben asignar son solo de lectura o escritura de contenido. Mientras que el número de peticiones varía en función del \textit{endpoint}, la ventana temporal de restricción se limita a tan solo 15 minutos \cite{twitterRateLimits}. 
+
+Ofrece acceso de lectura, escritura, modificación y borrado de una amplia variedad de recursos, como puede verse en la \autoref{tabla:recursosTwitter}.
+
+\tablaSmallSinColoresConFuente{Recursos disponibles a través de la \textit{API} de Twitter}{\cite{twitterAPIreference}}{l l l}{recursosTwitter}
+{\multicolumn{1}{l}{\textbf{Recurso}} & \multicolumn{1}{l}{\textbf{Versión}} & \multicolumn{1}{l}{\textbf{Descripción}}\\}{
+\textbf{\textit{Tweets}} & v2 & Operaciones \textit{CRUD}. \\
+& v1.1 & \\
+& \textit{Premium} & \\
+& \textit{Enterprise} & \\
+\textbf{\textit{Users}} & v2 & Gestión y búsqueda de usuarios \\
+& v1.1 & y relaciones entre los mismos. \\
+& \textit{Premium} & \\
+& \textit{Enterprise} & \\
+\textbf{\textit{Spaces}} & v2 & Búsqueda de espacios y participantes. \\
+\textbf{\textit{Direct Messages}} & v1.1 & Envío y respuesta a mensajes directos. \\
+\textbf{\textit{Lists}} & v2 & Gestión de listas de contactos. \\
+& v1.1 & \\
+\textbf{\textit{Trends}} & v1.1 & Identificar tendencias por zonas geográficas. \\
+\textbf{\textit{Media}} & v1.1 & Cargar archivos multimedia. \\
+\textbf{\textit{Places}} & v1.1 & Búsqueda de lugares. \\
+}
+
+\subsubsection{Facebook}
+
+La \textit{API} de Facebook originalmente utilizaba \textit{FQL} (\textit{Facebook Query Language}) como lenguaje de consulta, parecido a \textit{SQL}. Sin embargo, en 2010 comenzó la migración hacia \textit{Graph API}\cite{facebookGraphAPI}, actualmente en su versión \textbf{v16.0}. Se organiza en función de colecciones, nodos y campos. Un nodo es un objeto único que representa una clase del diccionario de datos en concreto, mientras que los campos son atributos del mismo y una colección comprende un conjunto de nodos. Toda esta información es presentada en formato \textit{JSON}.
+
+Presenta una gran cantidad de permisos \cite{facebookPermissions} que son requeridos para realizar las acciones de gestión, algunos de los cuales es necesario que sean aprobados por Facebook para su uso. Además, el número de peticiones que se pueden realizar se limita a 200 por hora por cada usuario \cite{facebookRateLimits}.
+
+La lista de nodos que presenta la \textit{API} es muy extensa, aunque en la \autoref{tabla:nodosFacebook} se muestran algunos de ellos que podrían resultar útiles para el desarrollo de este proyecto.
+
+\tablaSmallSinColoresConFuente{Muestra de nodos disponibles en \textit{Graph API} de Facebook}{\cite{facebookAPIreference}}{l l}{nodosFacebook}
+{\multicolumn{1}{l}{\textbf{Nodo}} & \multicolumn{1}{l}{\textbf{Descripción}}\\}{
+\textbf{\textit{Comment}} & Comentarios de los objetos. \\
+\textbf{\textit{Link}} & Enlaces compartidos. \\
+\textbf{\textit{Group}} & Objeto único de tipo grupo. \\
+\textbf{\textit{Likes}} & Lista de personas que han dado \textit{like} a un objeto. \\
+\textbf{\textit{Page}} & Información sobre páginas. \\
+\textbf{\textit{User}} & Representación de un usuario. \\
+}
+
+\subsubsection{Instagram}
+
+Lanzada originalmente en 2014 y actualmente integrada junto a la \textit{Graph API} de Facebook. Dispone de dos versiones, una más básica enfocada solamente al consumo de contenido, y la normal, que permite realizar diversos tipos de acciones sobre la cuenta y llevar a cabo su gestión.
+
+Se dispone de un conjunto de permisos requeridos bastante más reducido que para la \textit{API} de Facebook, aunque el límite de peticiones es el mismo ya que funciona sobre la propia \textit{Graph API}.
+
+Al estar basada también en la misma tecnología, la estructura consta de los mismos elementos mencionados en el apartado anterior. La diferencia serían los nodos principales en los que se distribuye su contenido, como se observa en la \autoref{tabla:nodosInstagram}.
+
+\tablaSmallSinColoresConFuente{Muestra de nodos disponibles en \textit{Graph API} de Instagram}{\cite{instagramAPIreference}}{l l}{nodosInstagram}
+{\multicolumn{1}{l}{\textbf{Nodo}} & \multicolumn{1}{l}{\textbf{Descripción}}\\}{
+\textbf{\textit{Comment}} & Comentarios de los objetos. \\
+\textbf{\textit{Hashtag}} & Representa un \textit{hashtag}. \\
+\textbf{\textit{Multimedia}} & Referencia una foto, vídeo, historia o álbum. \\
+\textbf{\textit{User}} & La cuenta de un usuario. \\
+\textbf{\textit{Page}} & Información sobre páginas. \\
+}
+
+\subsubsection{YouTube}
+
+Introducida en el año 2013, actualmente en su versión \textbf{v3}, y permite la integración de funcionalidades de la plataforma, búsqueda de contenido y análisis demográficos. Cada recurso se representa como un objeto \textit{JSON} sobre el que se pueden ejecutar varias acciones.
+
+Respecto a permisos requeridos, no son tan estrictos como por parte de Meta. No obstante, el número de peticiones se calcula en función de las ``unidades'' que consume cada tipo de petición, teniendo un total básico de 10.000 al día \cite{youtubeRateLimits}.
+
+Cada recurso se representa como un objeto de datos con identificador único. Entre ellos, los más representativos para la realización de este proyecto podrían ser los expuestos en la \autoref{tabla:recursosYouTube}.
+
+\tablaSmallSinColoresConFuente{Recursos disponibles a través de la \textit{API} de YouTube}{\cite{youtubeAPIreference}}{l l}{recursosYouTube}
+{\multicolumn{1}{l}{\textbf{Recurso}} & \multicolumn{1}{l}{\textbf{Descripción}}\\}{
+\textbf{\textit{Caption}} & Representa los subtítulos de un vídeo. \\
+\textbf{\textit{Comment}} & Comentarios de los objetos. \\
+\textbf{\textit{Playlist}} & Colección de vídeos accesibles de forma secuencial. \\
+\textbf{\textit{Search result}} & Información de una búsqueda que apunta a un objeto. \\
+\textbf{\textit{Video}} & Objeto representativo para un vídeo. \\
+}
+
+\subsubsection{Reddit}
+
+Esta \textit{API} fue lanzada en 2011, proporcionando acceso y gestión sobre todas las acciones disponibles desde su interfaz web. También la menos restrictiva de las estudiadas en esta sección, aunque no por ello menos trabajada.
+
+Como ventaja respecto al resto, permite realizar hasta 60 peticiones por minuto \cite{redditRateLimits} a través de todos sus \textit{endpoints}.
+
+Los recursos se representan como objetos tipo \textit{JSON}. En la \autoref{tabla:recursosReddit} se pueden observar las principales estructuras de datos.
+
+\tablaSmallSinColoresConFuente{Recursos disponibles a través de la \textit{API} de Reddit}{\cite{redditAPIreference}}{l l}{recursosReddit}
+{\multicolumn{1}{l}{\textbf{Recurso}} & \multicolumn{1}{l}{\textbf{Descripción}}\\}{
+\textbf{\textit{Comment}} & Comentario de las demás estructuras de datos. \\
+\textbf{\textit{Subreddit}} & Representación de un subforo. \\
+\textbf{\textit{Message}} & Información sobre mensajes. \\
+\textbf{\textit{Account}} & Datos de la cuenta de un usuario. \\
+}
+
+\subsection{Herramientas}
