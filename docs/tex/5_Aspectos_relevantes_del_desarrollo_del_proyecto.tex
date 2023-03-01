@@ -107,3 +107,29 @@ Los recursos se representan como objetos tipo \textit{JSON}. En la \autoref{tabl
 }
 
 \subsection{Herramientas}
+
+\subsubsection{Postman}
+
+Es una plataforma para construir y utilizar \textit{APIs} que simplifica el desarrollo y la colaboración. Cuenta con una versión web y una aplicación de escritorio, además de un repositorio público de colecciones de \textit{APIs} y documentación sobre los posibles tipos de llamadas que se les puede realizar.
+
+Esta herramienta será la utilizada para llevar a cabo una inspección inicial de los distintos \textit{endpoints} que presentan las \textit{APIs} investigadas en la sección anterior. Un ejemplo concreto de ello podría ser el siguiente \textit{workspace} de Twitter \cite{postmanTwitterAPI}, en el que se presentan documentadas las posibles llamadas a realizar.
+
+\subsubsection{\textit{API Wrappers}}
+
+Las interfaces estudiadas en la sección anterior tienen un gran número de usuarios, lo que ha conllevado a la creación de distintas librerías o paquetes en algunos lenguajes de programación que ``envuelven'' y ``atacan'' los \textit{endpoints} de dichas \textit{APIs}. Estos paquetes tienen el objetivo de facilitar al usuario la tarea de crear las consultas y consumir los recursos provenientes de dichas peticiones.
+
+Estas librerías serán utilizadas para construir un primer prototipo para esta etapa de extracción de datos. Más concretamente, se utilizarán las siguientes:
+
+\begin{itemize}
+    \item \textbf{\textit{Python Twitter Search API}.} Cliente en lenguaje \textit{Python} enfocado en utilizar los \textit{endpoints} de búsqueda de \textit{tweets} \cite{twitterSearchAPI}.
+    \item \textbf{\textit{Python-Facebook}.} Una librería simple de \textit{Python} que simplifica el uso de la \textit{Graph API} de Meta, dando soporte tanto para Facebook como para Instagram \cite{facebookAPIsearch}.
+    \item \textbf{\textit{PRAW: The Python Reddit API Wrapper}.} Paquete de \textit{Python} que facilita el acceso a la \textit{API} de Reddit \cite{redditPRAW}.
+\end{itemize}
+
+\subsubsection{Airbyte}
+
+Esta plataforma permite realizar la creación de un \textit{pipeline} de extracción y guardado de datos de forma sencilla y rápida. Presenta una versión de código abierto y distribuida en contenedores \textit{docker}, junto a una interfaz web que simplifica el proceso de gestión.
+
+Permite la creación, definición y configuración tanto de fuentes de datos como de destinos de los mismos. Actualmente cuenta con más de 300 conectores disponibles para distintas aplicaciones e interfaces web \cite{airbyteConnectors}.
+
+Esta herramienta es muy probable que sea la que se termine utilizando tras la fase de prototipado para la fase de ingestión de datos de la herramienta final desarrollada.
