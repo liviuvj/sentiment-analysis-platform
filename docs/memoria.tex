@@ -65,7 +65,7 @@
 		\centering
 		\includegraphics[width=0.9\textwidth]{#1}
 		\caption{#2}\label{fig:#1}
-		\caption*{#3}
+        \caption*{#3}
 	\end{figure}
 	\FloatBarrier
 }
@@ -160,8 +160,7 @@
     #6
     \bottomrule
    \end{tabular}
-   \caption{#1}
-   Fuente: #2
+   \caption[#1]{#1. Fuente:~#2}
    \label{tabla:#4}
   \end{center}
  \end{table}
@@ -390,7 +389,7 @@
 \newcommand{\nombre}{Liviu Viorel Jula Vacar} %%% cambio de comando
 
 % Datos de portada
-\title{Herramienta \textit{open-source} para análisis de sentimientos en redes sociales sobre palabras clave o temas específicos}
+\title{Herramienta \textit{open-source} para análisis de sentimientos en redes sociales}
 \author{\nombre}
 \tutor{Dr. Álvar Arnaiz González}
 \date{\today}
@@ -464,16 +463,16 @@ D. Álvar Arnaiz González
 % Abstract en castellano
 \renewcommand*\abstractname{Resumen}
 \begin{abstract}
-Las opiniones públicas que se realizan en Internet sobre diversos productos, servicios, marcas o lugares pueden influenciar el comportamiento de las personas. La gran mayoría de estas opiniones se forman en redes sociales, foros de discusión y en los diferentes sitios web de reseñas.
+Las opiniones públicas que se realizan en Internet sobre diversos productos, servicios, marcas o lugares pueden influenciar el comportamiento de las personas. La gran mayoría de estas opiniones se difunden en redes sociales, foros de discusión y en los diferentes sitios web de reseñas.
 
-El objetivo de este trabajo será emplear la información disponible públicamente para crear una herramienta que permita realizar un análisis de sentimientos sobre ciertas palabras clave o temas específicos de los que se quiera obtener información. Se realizará un proceso ETL para el procesamiento de los datos y se implementará un \textit{dashboard} que permita visualizar y explorar la información obtenida finalmente.
+El objetivo de este trabajo es emplear la información disponible públicamente para crear una herramienta que permita realizar un análisis de sentimientos sobre ciertas palabras clave o temas específicos de los que se quiera obtener información. Se realizará un proceso \textit{ETL} (\textit{Extract -- Transform -- Load}) para el procesamiento de los datos y se implementará un \textit{dashboard} que permita visualizar y explorar la información obtenida finalmente.
 
-Para conseguir estos objetivos, se emplearán tecnologías \textit{open-source} para el desarrollo de la herramienta y técnicas de procesamiento de lenguaje natural para el análisis de sentimientos basado en aspectos clave.
+Para conseguir estos objetivos, se emplearán tecnologías \textit{open-source} para el desarrollo de la herramienta y técnicas de procesamiento de lenguaje natural para el análisis de sentimientos basado en aspectos (\textit{Aspect-Based Sentiment Analysis}, \textit{ABSA}).
 \end{abstract}
 
 \renewcommand*\abstractname{Descriptores}
 \begin{abstract}
-Aprendizaje automático, procesamiento de lenguaje natural, big data, ETL, \textit{dashboard}, visualización de datos, \textit{open-source}.
+Aprendizaje automático, procesamiento de lenguaje natural, sentiment analysis, big data, ETL, \textit{dashboard}, visualización de datos, \textit{open-source}.
 \end{abstract}
 
 \clearpage
@@ -481,16 +480,16 @@ Aprendizaje automático, procesamiento de lenguaje natural, big data, ETL, \text
 % Abstract en inglés
 \renewcommand*\abstractname{Abstract}
 \begin{abstract}
-Public opinions made on the Internet about various products, services, brands or places can influence people's behavior. The vast majority of these opinions are formed on social media, discussion forums and on the different review websites.
+Public opinions made on the Internet about various products, services, brands or places can influence people's behavior. The vast majority of these opinions are shared on social media, discussion forums and on the different review websites.
 
-The objective of this project will be to make use of publicly available information to create a tool able to perform sentiment analysis on certain keywords or specific topics for which we want to obtain information. An ETL workflow will be used to process the data and a dashboard will be implemented to visualize and explore the final information obtained.
+The aim of this project is to make use of publicly available information to create a tool able to perform sentiment analysis on certain keywords or specific topics for which we want to obtain information. An ETL workflow will be used to process the data and a dashboard will be implemented to visualize and explore the final information obtained.
 
 To achieve these objectives, open-source technologies will be used for the development of the tool and natural language processing techniques for aspect-based sentiment analysis.
 \end{abstract}
 
 \renewcommand*\abstractname{Keywords}
 \begin{abstract}
-Machine learning, natural language processing, big data, ETL, dashboard, data visualization, open-source.
+Machine learning, natural language processing, sentiment analysis, big data, ETL, dashboard, data visualization, open-source.
 \end{abstract}
 
 \clearpage

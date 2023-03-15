@@ -1,46 +1,55 @@
-\capitulo{5}{Aspectos relevantes del desarrollo del proyecto}
+\capitulo{5}{Aspectos relevantes del desarrollo del proyecto} \label{section:relevant_aspects}
 
 Este apartado pretende recoger los aspectos más interesantes del desarrollo del proyecto, además de la experiencia práctica adquirida durante la
 realización del mismo con las diversas tecnologías empleadas.
 
 \section{Extracción de datos} \label{section:data_extraction}
 
+Comenzando con la primera etapa del proceso ETL, el objetivo de la extracción de datos consiste en investigar y explotar los posibles recursos disponibles para recoger toda la información necesaria para el proyecto. Consecuentemente, los requisitos fundamentales de esta etapa consistirán en localizar las fuentes de datos a utilizar y emplear las herramientas necesarias para extraer dichos datos.
+
 \subsection{Fuentes de datos}
 
 La información necesaria para conseguir el objetivo de este proyecto está formada por opiniones públicas de personas sobre algún tema o temas en concreto. La manera más sencilla de obtener estos datos es empleando recursos web como foros, blogs y redes sociales. Más concretamente, se ha optado por investigar la disponibilidad de \textit{APIs} públicas de los principales sitios web donde las personas publican sus opiniones.
 
-A continuación, se realiza un pequeño resumen de la información de la que se dispone actualmente sobre las \textit{APIs} de cada plataforma:
+A continuación, se realiza un pequeño resumen de la información de la que se dispone actualmente sobre las \textit{APIs} de cada plataforma.
 
 \subsubsection{Twitter}
 
-En 2006 se abrió al público la \textit{API REST} \cite{twitterGettingStarted} de Twitter, que actualmente consta ya de su versión \textbf{v2}, aunque coexiste a su vez con algunas partes de la misma aún en la versión \textbf{v1.1} y otras de pago (\textit{Premium v1.1} o \textit{Enterprise}). Está basada en \textit{GraphQL}\footnote{Lenguaje de consultas para \textit{API}s que facilita la gestión de datos y peticiones (\url{https://graphql.org/}).} y devuelve los resultados en formato \textit{JSON}.
+En 2006 se abrió al público la \textit{API REST} \cite{twitterGettingStarted} de Twitter, que actualmente se encuentra ya en su versión \textbf{v2}, aunque coexiste a su vez con algunas partes de la misma aún en la versión \textbf{v1.1} y otras de pago (\textit{Premium v1.1} o \textit{Enterprise}). Está basada en \textit{GraphQL}\footnote{Lenguaje de consultas para \textit{API}s que facilita la gestión de datos y peticiones (\url{https://graphql.org/}).} y devuelve los resultados en formato \textit{JSON}.
 
 Los permisos que se deben asignar son solo de lectura o escritura de contenido. Mientras que el número de peticiones varía en función del \textit{endpoint}, la ventana temporal de restricción se limita a tan solo 15 minutos \cite{twitterRateLimits}. 
 
 Ofrece acceso de lectura, escritura, modificación y borrado de una amplia variedad de recursos, como puede verse en la \autoref{tabla:recursosTwitter}.
 
-\tablaSmallSinColoresConFuente{Recursos disponibles a través de la \textit{API} de Twitter}{\cite{twitterAPIreference}}{l l l}{recursosTwitter}
+\tablaSmallSinColoresConFuente{Recursos disponibles a través de la \textit{API} de Twitter}{\cite{twitterAPIreference}}{@{}p{.3 \textwidth} p{.1 \textwidth} p{.5 \textwidth}@{}}{recursosTwitter}
 {\multicolumn{1}{l}{\textbf{Recurso}} & \multicolumn{1}{l}{\textbf{Versión}} & \multicolumn{1}{l}{\textbf{Descripción}}\\}{
 \textbf{\textit{Tweets}} & v2 & Operaciones \textit{CRUD}. \\
 & v1.1 & \\
 & \textit{Premium} & \\
 & \textit{Enterprise} & \\
+\specialrule{.05em}{.05em}{0em}
 \textbf{\textit{Users}} & v2 & Gestión y búsqueda de usuarios \\
 & v1.1 & y relaciones entre los mismos. \\
 & \textit{Premium} & \\
 & \textit{Enterprise} & \\
+\specialrule{.05em}{.05em}{0em}
 \textbf{\textit{Spaces}} & v2 & Búsqueda de espacios y participantes. \\
+\specialrule{.05em}{.05em}{0em}
 \textbf{\textit{Direct Messages}} & v1.1 & Envío y respuesta a mensajes directos. \\
+\specialrule{.05em}{.05em}{0em}
 \textbf{\textit{Lists}} & v2 & Gestión de listas de contactos. \\
-& v1.1 & \\
+& v1.1 & \\ 
+\specialrule{.05em}{.05em}{0em}
 \textbf{\textit{Trends}} & v1.1 & Identificar tendencias por zonas geográficas. \\
+\specialrule{.05em}{.05em}{0em}
 \textbf{\textit{Media}} & v1.1 & Cargar archivos multimedia. \\
+\specialrule{.05em}{.1em}{.1em}
 \textbf{\textit{Places}} & v1.1 & Búsqueda de lugares. \\
 }
 
 \subsubsection{Facebook}
 
-La \textit{API} de Facebook originalmente utilizaba \textit{FQL} (\textit{Facebook Query Language}) como lenguaje de consulta, parecido a \textit{SQL}. Sin embargo, en 2010 comenzó la migración hacia \textit{Graph API}\cite{facebookGraphAPI}, actualmente en su versión \textbf{v16.0}. Se organiza en función de colecciones, nodos y campos. Un nodo es un objeto único que representa una clase del diccionario de datos en concreto, mientras que los campos son atributos del mismo y una colección comprende un conjunto de nodos. Toda esta información es presentada en formato \textit{JSON}.
+La \textit{API} de Facebook originalmente utilizaba \textit{FQL} (\textit{Facebook Query Language}) como lenguaje de consulta, parecido a \textit{SQL}. Sin embargo, en 2010 comenzó la migración hacia \textit{Graph API} \cite{facebookGraphAPI}, actualmente en su versión \textbf{v16.0}. Se organiza en función de colecciones, nodos y campos. Un nodo es un objeto único que representa una clase del diccionario de datos en concreto, mientras que los campos son atributos del mismo y una colección comprende un conjunto de nodos. Toda esta información es presentada en formato \textit{JSON}.
 
 Presenta una gran cantidad de permisos \cite{facebookPermissions} que son requeridos para realizar las acciones de gestión, algunos de los cuales es necesario que sean aprobados por Facebook para su uso. Además, el número de peticiones que se pueden realizar se limita a 200 por hora por cada usuario \cite{facebookRateLimits}.
 
@@ -77,7 +86,7 @@ Al estar basada también en la misma tecnología, la estructura consta de los mi
 
 Introducida en el año 2013, actualmente en su versión \textbf{v3}, y permite la integración de funcionalidades de la plataforma, búsqueda de contenido y análisis demográficos. Cada recurso se representa como un objeto \textit{JSON} sobre el que se pueden ejecutar varias acciones.
 
-Respecto a permisos requeridos, no son tan estrictos como por parte de Meta. No obstante, el número de peticiones se calcula en función de las ``unidades'' que consume cada tipo de petición, teniendo un total básico de 10.000 al día \cite{youtubeRateLimits}.
+Respecto a permisos requeridos, no son tan estrictos como por parte de Meta. No obstante, el número de peticiones se calcula en función de las ``unidades'' que consume cada tipo de petición, teniendo un total básico de 10\,000 al día \cite{youtubeRateLimits}.
 
 Cada recurso se representa como un objeto de datos con identificador único. Entre ellos, los más representativos para la realización de este proyecto podrían ser los expuestos en la \autoref{tabla:recursosYouTube}.
 
@@ -106,30 +115,5 @@ Los recursos se representan como objetos tipo \textit{JSON}. En la \autoref{tabl
 \textbf{\textit{Account}} & Datos de la cuenta de un usuario. \\
 }
 
-\subsection{Herramientas}
+\subsection{Método de extracción}
 
-\subsubsection{Postman}
-
-Es una plataforma para construir y utilizar \textit{APIs} que simplifica el desarrollo y la colaboración. Cuenta con una versión web y una aplicación de escritorio, además de un repositorio público de colecciones de \textit{APIs} y documentación sobre los posibles tipos de llamadas que se les puede realizar.
-
-Esta herramienta será la utilizada para llevar a cabo una inspección inicial de los distintos \textit{endpoints} que presentan las \textit{APIs} investigadas en la sección anterior. Un ejemplo concreto de ello podría ser el siguiente \textit{workspace} de Twitter \cite{postmanTwitterAPI}, en el que se presentan documentadas las posibles llamadas a realizar.
-
-\subsubsection{\textit{API Wrappers}}
-
-Las interfaces estudiadas en la sección anterior tienen un gran número de usuarios, lo que ha conllevado a la creación de distintas librerías o paquetes en algunos lenguajes de programación que ``envuelven'' y ``atacan'' los \textit{endpoints} de dichas \textit{APIs}. Estos paquetes tienen el objetivo de facilitar al usuario la tarea de crear las consultas y consumir los recursos provenientes de dichas peticiones.
-
-Estas librerías serán utilizadas para construir un primer prototipo para esta etapa de extracción de datos. Más concretamente, se utilizarán las siguientes:
-
-\begin{itemize}
-    \item \textbf{\textit{Python Twitter Search API}.} Cliente en lenguaje \textit{Python} enfocado en utilizar los \textit{endpoints} de búsqueda de \textit{tweets} \cite{twitterSearchAPI}.
-    \item \textbf{\textit{Python-Facebook}.} Una librería simple de \textit{Python} que simplifica el uso de la \textit{Graph API} de Meta, dando soporte tanto para Facebook como para Instagram \cite{facebookAPIsearch}.
-    \item \textbf{\textit{PRAW: The Python Reddit API Wrapper}.} Paquete de \textit{Python} que facilita el acceso a la \textit{API} de Reddit \cite{redditPRAW}.
-\end{itemize}
-
-\subsubsection{Airbyte}
-
-Esta plataforma permite realizar la creación de un \textit{pipeline} de extracción y guardado de datos de forma sencilla y rápida. Presenta una versión de código abierto y distribuida en contenedores \textit{docker}, junto a una interfaz web que simplifica el proceso de gestión.
-
-Permite la creación, definición y configuración tanto de fuentes de datos como de destinos de los mismos. Actualmente cuenta con más de 300 conectores disponibles para distintas aplicaciones e interfaces web \cite{airbyteConnectors}.
-
-Esta herramienta es muy probable que sea la que se termine utilizando tras la fase de prototipado para la fase de ingestión de datos de la herramienta final desarrollada.

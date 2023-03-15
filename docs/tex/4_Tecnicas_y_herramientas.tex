@@ -1,23 +1,23 @@
 \capitulo{4}{Técnicas y herramientas}
 
-Esta parte de la memoria tiene como objetivo presentar las técnicas metodológicas y las herramientas de desarrollo que se han utilizado para llevar a cabo el proyecto. En el caso de algunas de estas herramientas se estudiarán diferentes alternativas, en las que se incluirán comparativas entre las distintas opciones y una justificación de la elección realizadas.
+Esta parte de la memoria tiene como objetivo presentar las técnicas metodológicas y las herramientas de desarrollo que se han utilizado para llevar a cabo el proyecto. En el caso de algunas de estas herramientas se estudiarán diferentes alternativas, en las que se incluirán comparativas entre las distintas opciones y una justificación de la elección realizada.
 
 
 
 \section{Técnicas}
 
-En este apartado se hara una breve descripción sobre las técnicas empleadas a lo largo del proyecto.
+En este apartado se hará una breve descripción sobre las técnicas empleadas a lo largo del proyecto.
 
 \subsection{SCRUM}
-Es un proceso de desarrollo software enfocado hacia las metodologías ágiles. Consiste en segmentar un proyecto en varios requisitos que se han de cumplir y posteriormente subdividir estos en tareas. El desarrollo se realiza mediante \textit{sprints}, iteraciones incrementales de normalmente dos semanas de duración, en los que se planifican las tareas a realizar durante dicho periodo.
+Es un proceso de desarrollo software ubicado dentro de las metodologías ágiles. Consiste en segmentar un proyecto en varios requisitos que se han de cumplir y posteriormente subdividir estos en tareas. El desarrollo se realiza mediante \textit{sprints}, iteraciones incrementales de normalmente dos semanas de duración, en los que se planifican las tareas a realizar durante dicho periodo.
 
 \subsection{Procesamiento de Lenguaje Natural}
-El término \textit{NLP} (\textit{Natural Language Processing}) se refiere al conjunto de métodos dentro de la inteligencia artificial que trabajan con recursos textuales o sonoros. Se ponen en práctica metodologías de estadística, lingüística y \textit{machine learning} para permitir crear programas que puedan interpretar dicho tipo de información.
+El término \textit{NLP} (\textit{Natural Language Processing}) se refiere al conjunto de métodos, dentro de la inteligencia artificial, que trabajan con recursos textuales o sonoros. Se ponen en práctica metodologías de estadística, lingüística y \textit{machine learning} para permitir crear programas que puedan interpretar dicho tipo de información \cite{chowdhary2020natural}.
 
 \subsection{Sentiment Analysis}
-El análisis de sentimientos es una técnica en la que se busca identificar y extraer información subjetiva a partir de recursos textuales. Las principales maneras de realizar este tipo de análisis siguen dos rutas.
+El análisis de sentimientos es una técnica en la que se busca identificar y extraer información subjetiva a partir de recursos textuales. Las principales maneras de realizar este tipo de análisis suelen seguir dos rutas.
 
-La primera, utilizando reglas y diccionarios de palabras a las que se les asigna distintas puntuaciones según el sentimiento asociado a cada palabra. La segunda, y la que mejores resultados proporciona actualmente, emplea técnicas de \textit{NLP} para extraer características de los datos y comprender el contexto de la información proporcionada. Esto permite realizar clasificaciones y predicciones más acertadas ya que el resultado no se limita simplemente a un subconjunto de palabras, sino al sentido que se les da a las mismas también.
+La primera, utilizando reglas y diccionarios de palabras a las que se les asignan distintas puntuaciones según el sentimiento asociado a cada palabra. La segunda, y la que mejores resultados proporciona actualmente \cite{mishev2020evaluation}, emplea técnicas de \textit{NLP} para extraer características de los datos y comprender el contexto de la información proporcionada. Esto permite realizar clasificaciones y predicciones más acertadas ya que el resultado no se limita simplemente a un subconjunto de palabras, sino al sentido que se les da a las mismas también.
 
 \section{Herramientas}
 
@@ -32,7 +32,9 @@ Para facilitar el trabajo de la gestión del proyecto se ha utilizado \textit{Ze
 
 Se ha elegido esta herramienta ya que, además de permitir realizar toda la gestión del proyecto, cuenta con una extensión web desde la que se puede acceder al panel de control directamente desde el propio repositorio de GitHub. Por lo que todas las operaciones de planificación de tareas se llevan a cabo desde el mismo lugar y facilita el trabajo del desarrollador.
 
-\subsection{Entorno de desarrollo integrado (IDE)}
+\subsection{Entorno de desarrollo integrado}
+
+Un \textit{Integrated Development Environment} (\textit{IDE}) es, como indica el propio nombre, un conjunto de herramientas que componen un espacio de trabajo completo para desarrollar \textit{software}. Suele estar compuesto de las herramientas necesarias para editar, compilar, ejecutar y probar código, facilitando así la labor del desarrollador.
 
 \subsubsection{Herramientas consideradas:}
 
@@ -56,19 +58,21 @@ Se han escogido una serie de extensiones del \textit{Marketplace} que presenta l
 
 \begin{itemize}
     \item \textbf{Python:} Extensión principal para dar soporte al lenguaje de programación Python para el correcto desarrollo de código (\textit{linting}, formato de código, exploración de variables, depuración, etc.).
-    \item \textbf{Python Docstring Generator:} Facilita y Asiste en la creación de comentarios tipo \textit{docstring} para funciones en Python.
+    \item \textbf{Python Docstring Generator:} Facilita y asiste en la creación de comentarios tipo \textit{docstring} para funciones en Python.
     \item \textbf{Pylance:} Servidor de lenguae que añade soporte adicional a Python.
     \item \textbf{Trailing Whitespace:} Resalta y recorta los espacios en blanco sobrantes.
     \item \textbf{Visual Studio IntelliCode:} Emplea IA para añadir desarrollo predictivo y autocompletado de código.
     \item \textbf{Docker:} Facilita la creación y gestión de contenedores a través del IDE.
 \end{itemize}
 
-\subsection{Editor \LaTeX}
+\subsection{Editor \LaTeX{}}
+
+La elaboración de esta memoria está basada en la plantilla \LaTeX{} provista como ejemplo por los Coordinadores del Máster y disponible públicamente\footnote{\url{https://github.com/bbaruque/plantillaTFM_MUINBDES.git}}. Para facilitar la edición y gestión de esta plantilla, se ha decidido utilizar una herramienta adecuada para ello. 
 
 \subsubsection{Herramientas consideradas:}
 
 \begin{itemize}
-    \item \textbf{MiK\TeX{} + Texmaker:} Herramientas que realizan la traducción de \LaTeX{} a texto y permiten gestionar y editar este tipo de archivos, respectivamente.
+    \item \textbf{MiK\TeX{} + \TeX{}:} Herramientas que realizan la traducción de \LaTeX{} a texto y permiten gestionar y editar este tipo de archivos, respectivamente.
     \item \textbf{Overleaf:} Plataforma en línea que facilita la gestión y edición de documentos con formato \LaTeX{}.
 \end{itemize}
 
@@ -78,14 +82,14 @@ Se han escogido una serie de extensiones del \textit{Marketplace} que presenta l
     \item \textbf{Overleaf}
 \end{itemize}
 
-Overleaf es un editor en línea\footnote{\url{https://es.overleaf.com/}} de \LaTeX{}. Para utilizarlo no es necesario realizar la instalación de ningún componente, tiene documentación integrada para \LaTeX y permite la visualización de los cambios realizados en tiempo real, además de contar ya con los paquetes más utilizados.
+Overleaf es un editor en línea\footnote{\url{https://es.overleaf.com/}} de \LaTeX{}. Para utilizarlo no es necesario realizar la instalación de ningún componente, tiene documentación integrada para \LaTeX{} y permite la visualización de los cambios realizados en tiempo real, además de contar ya con los paquetes más utilizados.
 
 También resulta más cómodo al tratarse de una plataforma \textit{online}, ya que tan solo hace falta disponer de un navegador y conexión a Internet para poder trabajar con ella desde cualquier equipo. Otra de las mejores funcionalidades que ofrece es la posibilidad de comprobar el histórico de los archivos modificados y realizar un \textit{rollback} de los mismos.
 
-Se ha utilizado esta herramienta para elaborar la memoria y los anexos en \LaTeX.
+Se ha utilizado esta herramienta para elaborar la memoria y los anexos en \LaTeX{}.
 
 \subsection{Joplin}
-A lo largo de la duración del proyecto hará falta tomar notas de varios temas diversos. Para facilitar esta tarea, se ha utilizado \textit{Joplin}\footnote{\url{https://joplinapp.org/}}. Es una plataforma de código abierto que permite gestionar apuntes y notas en forma de \textit{notebooks}.
+A lo largo de la duración del proyecto hará falta tomar notas de diversos temas. Para facilitar esta tarea, se ha utilizado \textit{Joplin}\footnote{\url{https://joplinapp.org/}}. Es una plataforma de código abierto que permite gestionar apuntes y notas en forma de \textit{notebooks}.
 
 Entre las principales características que ofrece se encuentra la total privacidad de los datos, la sencilla interfaz que presenta, la facilidad de uso gracias al lenguaje \textit{Markdown} y la sincronización de contenido entre diversos equipos.
 
@@ -95,3 +99,35 @@ Se utilizará principalmente para dejar constancia de los temas comentados duran
 La gestión del tiempo dedicado se ha llevado a cabo mediante la herramienta de código abierto \textit{Super Productivity}\footnote{\url{https://super-productivity.com/}}. Sus principales funciones consisten en realizar la planificación, seguimiento y gestión de tareas. Permite distribuir tareas a lo largo de diversos proyectos, la asignación de etiquetas personalizadas y tener constancia del tiempo estimado y dedicado para cada una. 
 
 Presenta una interfaz sencilla de utilizar y amigable para el usuario que agiliza el trabajo gracias a la utilización de atajos de teclado. Otra de las características más importantes que tiene esta herramientas es la integración con varias plataformas para la importación de tareas. Por lo que la planificación realizada en GitHub y ZenHub se puede extraer a esta herramienta y realizar un mejor seguimiento del tiempo empleado en cada una de ellas.
+
+\subsection{Postman}
+
+Es una plataforma\footnote{\url{https://www.postman.com/}} para construir y utilizar \textit{APIs} que simplifica el desarrollo y la colaboración. Cuenta con una versión web y una aplicación de escritorio, además de un repositorio público de colecciones de \textit{APIs} y documentación sobre los posibles tipos de llamadas que se les puede realizar.
+
+Esta herramienta será la utilizada para llevar a cabo una inspección inicial de los distintos \textit{endpoints} que presentan las \textit{APIs} investigadas en la sección anterior. Un ejemplo concreto de ello podría ser el siguiente \textit{workspace} de Twitter \cite{postmanTwitterAPI}, en el que se presentan documentadas las posibles llamadas a realizar.
+
+\subsection{Herramienta de extracción de datos}
+
+Para facilitar la labor de ejecución de consultas contra las \textit{APIs} de las distintas plataformas web, se ha decidido emplear librerías de código ya habilitadas para ello.
+
+\subsubsection{\textit{API Wrappers}}
+
+Las interfaces estudiadas en la sección anterior tienen un gran número de usuarios, lo que ha conllevado a la creación de distintas librerías o paquetes en algunos lenguajes de programación que ``envuelven'' y ``atacan'' los \textit{endpoints} de dichas \textit{APIs}. Estos paquetes tienen el objetivo de facilitar al usuario la tarea de crear las consultas y consumir los recursos provenientes de dichas peticiones.
+
+Estas librerías iban a ser utilizadas inicialmente para construir un primer prototipo para esta etapa de extracción de datos. Más concretamente, se utilizarían las siguientes:
+
+\begin{itemize}
+    \item \textbf{\textit{Python Twitter Search API}.} Cliente en lenguaje \textit{Python} enfocado en utilizar los \textit{endpoints} de búsqueda de \textit{tweets} \cite{twitterSearchAPI}.
+    \item \textbf{\textit{Python-Facebook}.} Una librería simple de \textit{Python} que simplifica el uso de la \textit{Graph API} de Meta, dando soporte tanto para Facebook como para Instagram \cite{facebookAPIsearch}.
+    \item \textbf{\textit{PRAW: The Python Reddit API Wrapper}.} Paquete de \textit{Python} que facilita el acceso a la \textit{API} de Reddit \cite{redditPRAW}.
+\end{itemize}
+
+No obstante, tras comenzar a trabajar con ellas se observaron fallos de dependencias y partes deprecadas. Esto originó inconsistencias entre las versiones de las \textit{APIs} actuales y el código de dichas librerías, además de provocar contratiempos en la evaluación del \textit{sprint} correspondiente. Por estas razones, se terminó descartando esta opción y utilizando la que se propone a continuación. 
+
+\subsubsection{Airbyte}
+
+Esta plataforma\footnote{\url{https://airbyte.com/}} permite realizar la creación de un \textit{pipeline} de extracción y guardado de datos de forma sencilla y rápida. Presenta una versión de código abierto y distribuida en contenedores \textit{docker}, junto a una interfaz web que simplifica el proceso de gestión.
+
+Permite la creación, definición y configuración tanto de fuentes de datos como de destinos de los mismos. Actualmente cuenta con más de 300 conectores disponibles para distintas aplicaciones e interfaces web \cite{airbyteConnectors}.
+
+Esta herramienta es la que se ha terminado utilizando en la fase de prototipado para la etapa de ingestión de datos de la herramienta final desarrollada.

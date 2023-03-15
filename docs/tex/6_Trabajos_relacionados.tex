@@ -1,16 +1,20 @@
-\capitulo{6}{Trabajos relacionados}
+\capitulo{6}{Trabajos relacionados} \label{section:related_works}
 
 En este apartado se describirán otras herramientas similares ya existentes que cumplen un propósito similar al planteado en este proyecto. También se escribirá sobre los principales artículos científicos que comprenden el \textit{state-of-the-art} relacionado con las técnicas de procesamiento de lenguaje natural utilizadas.
 
 \section{Herramientas similares}
 
+A continuación se detallan las características de las principales plataformas que existen actualmente que cumplen con funciones similares a las planteadas en este proyecto. Se han categorizado según supongan o no algún coste económico para su utilización.
+
 \subsection{Herramientas de pago}
+
+Comenzando con las opciones de pago, por ser más establecidas y conocidas que las gratuitas.
 
 \subsubsection{Brand24}
 
 Es una plataforma\footnote{\url{https://brand24.com/}} que monitoriza las menciones sobre la marca del cliente tanto en la web como en redes sociales. Utiliza técnicas NLP para analizar en tiempo real los datos de diversas fuentes como blogs, foros, redes sociales, vídeos...
 
-Una de las ventajas competitivas que ofrece es mostrar la influencia que ha tenido cada mención. Como desventaja, cabe destacar el limitado número de menciones que permite monitorizar en sus servicios de suscripción. El rango de precios comprende desde los \$49 mensuales del paquete básico hasta los \$348 del paquete ejecutivo.
+Una de las ventajas competitivas que ofrece es su capacidad de mostrar la influencia que ha tenido cada mención. Como desventaja, cabe destacar el limitado número de menciones que permite monitorizar en sus servicios de suscripción. El rango de precios comprende desde los \$49 mensuales del paquete básico hasta los \$348 del paquete ejecutivo.
 
 \subsubsection{MonkeyLearn}
 
@@ -26,11 +30,13 @@ Las principales ventajas que ofrece son la gran cantidad de idiomas que soporta 
 
 \subsection{Herramientas gratuitas}
 
+A continuación, las opciones que no requieren realizar gasto económico alguno para utilizar sus funcionalidades básicas.
+
 \subsubsection{Social Searcher}
 
 Es una herramienta sencilla\footnote{\url{https://www.social-searcher.com/}} que ofrece búsqueda por palabras clave, etiquetas o usuarios y muestra unos análisis básicos sobre los resultados obtenidos. Muestra un \textit{dashboard} con varias pestañas en las que se realizan distintos tipos de análisis, además de gráficos diversos que categorizan las menciones en temas y clasifican las opiniones de los usuarios.
 
-La principal ventaja de esta herramienta es que permite aprovechar sus servicios de manera gratuita y sin límite de consultas, aunque tenga también planes de pago. Como desventaja, las funcionalidades que ofrece la versión gratis son bastante básicas. 
+La principal ventaja de esta herramienta es que permite aprovechar sus servicios de manera gratuita y sin límite de consultas, aunque tenga también planes de pago. Como desventaja, las funcionalidades que ofrece la versión gratuita son bastante básicas. 
 
 \subsubsection{Tweet Sentiment Viz}
 
@@ -40,13 +46,15 @@ Como principal ventaja, es que funciona bastante bien dentro de unos límites pr
 
 \section{Artículos científicos}
 
+A continuación, se detallan los artículos científicos que más relevancia han tenido en relación a 
+
 \subsection{BERT: Bidirectional Encoder Representations from Transformers}
 
 Se trata de un modelo\footnote{\url{https://arxiv.org/abs/1810.04805}} que utiliza una red neuronal ya entrenada para generar \textit{word embeddings} que son utilizadas posteriormente como características en modelos \textit{NLP}.
 
-\textit{BERT} se basa en \textit{transformers} (mecanismos de atención que ''aprenden`` correlaciones entre las palabras de un texto). Estos \textit{transformers} presentan dos componentes, un \textit{encoder} que procesa los datos de entrada y un \textit{decoder} que se encarga de realizar las predicciones correspondientes. Sin embargo, como el objetivo es construir un modelo de lenguaje, tan solo hace falta la primera parte de estos, el codificador.
+\textit{BERT} se basa en \textit{transformers} (mecanismos de atención que ``aprenden'' correlaciones entre las palabras de un texto). Estos \textit{transformers} presentan dos componentes, un \textit{encoder} que procesa los datos de entrada y un \textit{decoder} que se encarga de realizar las predicciones correspondientes. Sin embargo, como el objetivo es construir un modelo de lenguaje, tan solo hace falta la primera parte de estos, el codificador.
 
-Mientras que los modelos hasta el momento tomaban una dirección de lectura secuencial de los datos (bien de izquierda a derecha o bien al revés), el codificador del \textit{transformer} es capaz de leer cada palabra del texto a la vez. Esto permite al modelo analizar el contexto general en el que se presenta cada palabra y no teniendo en cuenta solamente una dirección. De esta manera, se considera un modelo ''bidireccional``, aunque en realidad no tenga una dirección como tal.
+Mientras que los modelos hasta el momento tomaban una dirección de lectura secuencial de los datos (bien de izquierda a derecha o bien al revés), el codificador del \textit{transformer} es capaz de leer cada palabra del texto a la vez. Esto permite al modelo analizar el contexto general en el que se presenta cada palabra y no teniendo en cuenta solamente una dirección. De esta manera, se considera un modelo ``bidireccional'', aunque en realidad no tenga una dirección como tal.
 
 Generalmente, los modelos de lenguaje se entrenan intentando predecir una secuencia de palabras dentro de un texto, lo que los convierte en unidireccionales. Por ello, \textit{BERT} emplea dos estrategias para mantener su habilidad bidireccional:
 
@@ -55,4 +63,4 @@ Generalmente, los modelos de lenguaje se entrenan intentando predecir una secuen
     \item \textbf{\textit{Next Sentence Prediction (NSP)}.} La segunda estrategia consiste en entrenar el modelo mediante pares de frases. La mitad de los datos de entrada se divide de tal manera que la segunda frase de cada par es la que va a continuación de la primera frase en el texto original. Mientras que en la otra mitad de los datos la segunda frase se escoge al azar del texto original. De tal manera, se asume que el modelo será capaz de distinguir correctamente qué frase tiene sentido a continuación de otra. Se utilizan una serie de \textit{tokens} para indicar el inicio y final de cada frase.
 \end{itemize}
 
-Ambas estrategias se ponen en práctica y se entrenan a la vez para conseguir minimizar la \textit{loss function} del modelo.
+Ambas estrategias se ponen en práctica y se entrenan a la vez para conseguir minimizar la ``función de pérdida'' o \textit{loss function} del modelo.
