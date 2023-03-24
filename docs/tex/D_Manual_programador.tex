@@ -2,9 +2,162 @@
 
 \section{Introducción}
 
+En esta sección se incluye la documentación técnica necesaria para entender la organización de directorios, la manera de instalar, configurar y ejecutar el proyecto, y los pasos a seguir para continuar con futuros desarrollos.
+
+
 \section{Estructura de directorios}
 
 \section{Manual del programador}
+
+En esta sección se describirán todos los elementos necesarios y la metodología a seguir para realizar futuros desarrollos.
+
+\subsection{Configuración de Airbyte}
+
+En este apartado se detallarán los métodos de configuración de la herramienta de extracción de datos.
+
+\subsubsection{Configuración de la fuente de datos}
+
+A continuación, se va a crear un ejemplo de fichero de configuración para una de las fuentes de datos seleccionada.
+
+\begin{itemize}
+    
+    \item \textbf{Utilizando la API.}
+    
+    \begin{enumerate}
+        
+        \item \textbf{Consultar la definición específica de la fuente de datos a configurar.} Para ello es necesario consultar el \textit{endpoint} \verb|/v1/source_definitions/get|, lo que resultaría en una respuesta como la siguiente en el caso de escoger Twitter como fuente de datos (abreviada debido a su extensión real):
+
+        \begin{verbatim}
+        {
+          "sourceDefinitionId": "...",
+          "documentationUrl": "...",
+          "connectionSpecification": {
+            "type": "object",
+            "title": "Twitter Spec",
+            "$schema": "...",
+            "required": [
+              "api_key",
+              "query"
+            ],
+            "properties": {...},
+            ...
+          },
+          "jobInfo": {...}
+          }
+        }
+        \end{verbatim}
+        
+        \item \textbf{Mandar la petición de creación de fuente de datos.} Completando el \textit{payload} de la petición hacia \verb|/v1/sources/create| con las propiedades correspondientes obtenidas del paso anterior. 
+        
+        \item \textbf{Comprobar la conexión con la fuente de datos.} Mandando una petición a \verb|/v1/sources/check_connection|.
+    
+    \end{enumerate}
+    
+    \item \textbf{Utilizando la interfaz gráfica.} Navegando a la sección \textit{Sources} y seleccionando el tipo de fuente a configurar, se muestra un formulario de edición que permite realizar las mismas operaciones ejecutadas anteriormente mediante la \textit{API}. En la \autoref{fig:airbyte_source_config} se puede observar dicho formulario.
+
+    \imagen{airbyte_source_config}{Configuración de la fuente de datos}
+    
+\end{itemize}
+
+\subsubsection{Configuración del destino de los datos}
+
+A continuación, se va a crear un ejemplo de fichero de configuración para uno de los destinos de datos seleccionados.
+
+\begin{itemize}
+    
+    \item \textbf{Utilizando la API.}
+    
+    \begin{enumerate}
+        
+        \item \textbf{Consultar la definición específica del destino de datos a configurar.} Para ello es necesario consultar el \textit{endpoint} \\ \verb|/v1/destination_definition_specifications/get|, lo que resultaría en una respuesta como la siguiente en el caso de escoger un fichero \textit{CSV} local como destino de datos (abreviada debido a su extensión real):
+
+        \begin{verbatim}
+        {
+            "destinationDefinitionId": "...",
+            "documentationUrl": "...",
+            "connectionSpecification": {
+                "type": "object",
+                "title": "CSV Destination Spec",
+                "$schema": "...",
+                "required": [
+                    "destination_path"
+                ],
+                "properties": {...},
+                ...
+            },
+            "jobInfo": {...},
+            "supportedDestinationSyncModes": [
+                "overwrite",
+                "append"
+            ]
+        }
+        \end{verbatim}
+        
+        \item \textbf{Mandar la petición de creación de destino de datos.} Completando el \textit{payload} de la petición hacia \verb|/v1/destinations/create| con las propiedades correspondientes obtenidas del paso anterior. 
+        
+        \item \textbf{Comprobar la conexión con el destino de datos.} Mandando una petición a \verb|/v1/destinations/check_connection|.
+    
+    \end{enumerate}
+    
+    \item \textbf{Utilizando la interfaz gráfica.} Navegando a la sección \textit{Destinations} y seleccionando el tipo de fuente a configurar, se muestra un formulario de edición que permite realizar las mismas operaciones ejecutadas anteriormente mediante la \textit{API}. En la \autoref{fig:airbyte_destination_config} se puede observar dicho formulario.
+
+    \imagen{airbyte_destination_config}{Configuración de la fuente de datos}
+    
+\end{itemize}
+
+\subsubsection{Configuración de la conexión entre fuente y destino}
+
+A continuación, se va a crear un ejemplo de fichero de configuración para una de las conexiones de datos seleccionada.
+
+\begin{itemize}
+    
+    \item \textbf{Utilizando la API.}
+    
+    \begin{enumerate}
+        
+        \item \textbf{Crear la conexión entre fuente y destino.} Para ello es necesario mandar una petición al \textit{endpoint} \verb|/v1/connections/create| con un \textit{payload} como el siguiente (abreviado debido a que es bastante extenso):
+
+        \begin{verbatim}
+        {
+          "name": "Twitter-API <> Local-CSV",
+          "namespaceDefinition": "destination",
+          "sourceId": "...",
+          "destinationId": "...",
+          "syncCatalog": {
+            "streams": [
+              {
+                "stream": {
+                  "name": "...",
+                  "supportedSyncModes": [
+                    "full_refresh", "incremental"
+                  ]
+                },
+                "config": {
+                  "syncMode": "full_refresh",
+                  "destinationSyncMode": "append",
+                  "aliasName": "...",
+                  "selected": true
+                }
+              }
+            ]
+          },
+          "scheduleType": "manual",
+          "status": "active",
+          "geography": "auto",
+          "notifySchemaChanges": true,
+          "nonBreakingChangesPreference": "ignore"
+        }
+        \end{verbatim}
+        
+        \item \textbf{Ejecutar una sincronización manual de la conexión.} Mandando una petición hacia \verb|/v1/connections/sync|.
+    
+    \end{enumerate}
+    
+    \item \textbf{Utilizando la interfaz gráfica.} Navegando a la sección \textit{Connections} y seleccionando las fuentes y destinos de datos para los que configurar la conexión. Se muestra un formulario de edición que permite realizar las mismas operaciones ejecutadas anteriormente mediante la \textit{API}. En la \autoref{fig:airbyte_connection_config} se puede observar dicho formulario.
+
+    \imagen{airbyte_connection_config}{Configuración de la fuente de datos}
+    
+\end{itemize}
 
 \section{Compilación, instalación y ejecución del proyecto}
 
