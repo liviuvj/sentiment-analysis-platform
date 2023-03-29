@@ -124,3 +124,13 @@ Esta plataforma de código abierto se ha instalado en la máquina local mediante
 También presenta una \textit{API} propia~\cite{airbyteAPI} desde la que es posible gestionar las configuraciones de dichos recursos sin necesidad de acceder a su interfaz web.
 
 \imagenConFuente{airbyte_architecture}{Visión general de la arquitectura de \textit{Airbyte}}{\cite{airbyteOverview}}
+
+\section{Carga de datos}
+
+Una vez completada la extracción de los datos, resulta necesario persistirlos para su posterior uso. La herramienta seleccionada para realizar esta tarea es \textit{MongoDB}~\cite{mongodbArchitecture}.
+
+Esta base de datos no relacional basada en documentos almacena los datos en un \textit{JSON} optimizado llamado \textit{BSON}. Teniendo en cuenta que los datos extraídos mediante las \textit{APIs} que se han detallado en el apartado anterior se encuentran en su totalidad en formato \textit{JSON}, su carga en esta base de datos resulta íntegra y directa, eliminando cualquier necesidad de transformación intermedia para ser ajustados a un esquema concreto.
+
+\textit{MongoDB} facilita el desarrollo al ofrecer una alta flexibilidad de almacenamiento de documentos no estructurados con diferentes tipos de datos en una misma colección. Esta característica resulta de gran importancia para el caso de uso del proyecto, debido a que las consultas realizadas a los distintos servicios web no siempre van a poder encontrar toda la información solicitada en los parámetros de la petición.
+
+Presenta también capacidades de alta disponibilidad y escalabilidad gracias a la replicación y particionamiento de los datos (\textit{sharding}), cumpliendo con las partes \textit{C} (Consistencia) y \textit{P} (Tolerante a particiones) del \textit{Teorema CAP}.

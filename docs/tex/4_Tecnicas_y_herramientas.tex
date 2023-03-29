@@ -124,10 +124,33 @@ Estas librerías iban a ser utilizadas inicialmente para construir un primer pro
 
 No obstante, tras comenzar a trabajar con ellas se observaron fallos de dependencias y partes deprecadas. Esto originó inconsistencias entre las versiones de las \textit{APIs} actuales y el código de dichas librerías, además de provocar contratiempos en la evaluación del \textit{sprint} correspondiente. Por estas razones, se terminó descartando esta opción y utilizando la que se propone a continuación. 
 
-\subsubsection{Airbyte}
+\subsubsection{Herramienta elegida: Airbyte}
 
 Esta plataforma\footnote{\url{https://airbyte.com/}} permite realizar la creación de un \textit{pipeline} de extracción y guardado de datos de forma sencilla y rápida. Presenta una versión de código abierto y distribuida en contenedores \textit{docker}, junto a una interfaz web que simplifica el proceso de gestión.
 
 Permite la creación, definición y configuración tanto de fuentes de datos como de destinos de los mismos. Actualmente cuenta con más de 300 conectores disponibles para distintas aplicaciones e interfaces web \cite{airbyteConnectors}.
 
 Esta herramienta es la que se ha terminado utilizando en la fase de prototipado para la etapa de ingestión de datos de la herramienta final desarrollada.
+
+\subsection{Herramienta de carga de datos}
+
+Los datos adquiridos mediante la herramienta de extracción de datos han de ser cargados en alguna herramienta y poder ser consultados posteriormente cuando sea necesario. Además, el sistema seleccionado para esta tarea no puede utilizar un esquema de datos estricto ya que se está trabajando con datos no estructurados.
+
+Para cumplir con estos requisitos, se ha investigado viabilidad de las siguientes opciones.
+
+\subsubsection{Herramientas consideradas:}
+
+\begin{itemize}
+    \item \textbf{\textit{Apache HDFS} (\textit{Hadoop Distributed File System}).} Sistema de ficheros distribuido escalable horizontalmente, tolerante a fallos y de alto rendimiento para procesar grandes conjuntos de datos. Complejo de configurar correctamente para conseguir eficiencia óptima~\cite{hdfsArchitecture}.
+    \item \textbf{\textit{Apache Haudi}.} Plataforma \textit{data lakehouse} \textit{open-source} de procesamiento de datos tanto en \textit{streaming} como en \textit{batch}. Permite ingestión de datos eficiente, versionado y actualización de datos, con soporte para transacciones \textit{ACID}. Actualmente aún presenta poca documentación y soporte, además de requerir bastantes recursos \textit{hardware} para conseguir un rendimiento óptimo~\cite{hudiOverview}.
+    \item \textbf{\textit{Apache Cassandra}.} Base de datos \textit{NoSQL} columnar enfocada al procesamiento de grandes conjuntos de datos con alto rendimiento y tolerante a fallos, con gran eficiencia para escritura y replicación de datos. Presenta soporte limitado para realizar transacciones complejas y requiere definir previamente el esquema de los datos a cargar para conseguir el rendimiento óptimo~\cite{cassandraOverview}.
+    \item \textbf{\textit{MongoDB}.} Base de datos \textit{NoSQL} orientada a documentos escalable y flexible que permite la ingestión y consulta eficientes de estructuras de datos complejas en formato \textit{JSON}. Presenta soporte limitado para modelado de datos relacional y para transacciones complejas~\cite{mongodbArchitecture}.
+\end{itemize}
+
+\subsubsection{Herramienta elegida:}
+
+\begin{itemize}
+    \item \textbf{\textit{MongoDB}}\footnote{\url{https://www.mongodb.com/}}
+\end{itemize}
+
+Se ha seleccionado esta herramienta por la sencilla integración y facilidad de uso que presenta para el caso de uso concreto de este proyecto. Los datos extraídos procedentes de las \textit{APIs} seleccionadas se presentan en su totalidad en formato \textit{JSON}, por lo que se pueden cargar directamente en esta base de datos sin realizar ninguna transformación intermedia. 
