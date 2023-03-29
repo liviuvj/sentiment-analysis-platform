@@ -10,6 +10,10 @@ git clone --depth 1 https://github.com/airbytehq/airbyte.git
 cd airbyte
 ./run-ab-platform.sh
 
-# Configure data extraction pipeline
-cd ..
+# Run MongoDB instance
+cd ../../mongodb
+docker compose up -d
+
+# Configure data extraction and data loading pipeline
+cd ../extraction
 python config.py

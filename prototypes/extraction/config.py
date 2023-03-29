@@ -390,6 +390,60 @@ class DestinationConfig(BaseConfig):
         print(response["destinationId"])
         return response["destinationId"]
 
+    def create_mongodb_destination(
+        self,
+        destination_definition_id: str,
+        destination_name: str,
+        destination_path: str,
+    ) -> str:
+        """
+        Creates a MongoDB destination with the specified arguments.
+
+        Args:
+            destination_definition_id (str): Destination definition ID.
+            destination_name (str): Name of the destination.
+            destination_path (str): Path to the destination.
+
+        Returns:
+            str: ID of the created destination.
+        """
+        url = self.BASE_URL + "/destinations/create"
+
+        payload = json.dumps(
+            {
+                "workspaceId": self.workspace_id,
+                "name": destination_name,
+                "destinationDefinitionId": destination_definition_id,
+                "connectionConfiguration": {
+                    "database": "twitter_data",
+                    "auth_type": {
+                        "password": "**********",
+                        "username": "mongoroot",
+                        "authorization": "login/password"
+                    },
+                    "instance_type": {
+                        "tls": false,
+                        "host": "localhost",
+                        "port": 27017,
+                        "instance": "standalone"
+                    },
+                    "tunnel_method": {
+                        "tunnel_method": "NO_TUNNEL"
+                    }
+                },
+            }
+        )
+
+        headers = {"Content-Type": "application/json"}
+
+        response = requests.post(
+            url=url, data=payload, headers=headers, auth=self.BASIC_AUTH
+        ).json()
+
+        print(response["destinationId"])
+        return response["destinationId"]
+
+
 
 def main():
     # Read credentials
@@ -414,19 +468,19 @@ def main():
     assert airbyte.check_connection_to_source(source_id) == "succeeded"
 
     # Get destination definition ID
-    destination_definition = airbyte.list_latest_destination_definitions("Local CSV")
+    destination_definition = airbyte.list_latest_destination_definitions("MongoDB")
     destination_definition_id = destination_definition["destinationDefinitionId"]
 
     # Configure data destination
     destination = DestinationConfig("airbyte", "password", workspace_id)
-    destination_id = destination.create_csv_destination(
-        destination_definition_id, "LocalCSVfile", "twitter_data"
+    destination_id = destination.create_mongodb_destination(
+        destination_definition_id, "LocalMongoDB", "twitter_data"
     )
     assert airbyte.check_connection_to_destination(destination_id) == "succeeded"
 
     # Configure data connection
     connection_id = twitter.create_connection(
-        "Twitter-to-CSV", source_id, destination_id
+        "Twitter-to-MongoDB", source_id, destination_id
     )
 
     # The next line will trigger a manual sync of the connection established above

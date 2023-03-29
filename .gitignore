@@ -2,3 +2,4 @@
 .venv
 .credentials.yml
 airbyte
+prototypes/mongodb/data/*
