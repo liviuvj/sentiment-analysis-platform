@@ -1,0 +1,15 @@
+services:
+  spark:
+    entrypoint:
+    - sleep
+    - infinity
+    image: custom-spark:3.2.3
+    init: true
+    ports:
+      - "4040:4040"
+    volumes:
+    - ./:/opt/transformation
+    - type: bind
+      source: /var/run/docker.sock
+      target: /var/run/docker.sock
+

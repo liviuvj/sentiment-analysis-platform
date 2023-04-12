@@ -4,3 +4,5 @@
 airbyte
 prototypes/mongodb/data/*
 prototypes/extraction/__*
+prototypes/transformation/.metals
+prototypes/transformation/.vscode
