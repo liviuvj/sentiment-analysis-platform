@@ -134,3 +134,11 @@ Esta base de datos no relacional basada en documentos almacena los datos en un \
 \textit{MongoDB} facilita el desarrollo al ofrecer una alta flexibilidad de almacenamiento de documentos no estructurados con diferentes tipos de datos en una misma colección. Esta característica resulta de gran importancia para el caso de uso del proyecto, debido a que las consultas realizadas a los distintos servicios web no siempre van a poder encontrar toda la información solicitada en los parámetros de la petición.
 
 Presenta también capacidades de alta disponibilidad y escalabilidad gracias a la replicación y particionamiento de los datos (\textit{sharding}), cumpliendo con las partes \textit{C} (Consistencia) y \textit{P} (Tolerante a particiones) del \textit{Teorema CAP}.
+
+\section{Transformación de los datos}
+
+Una vez finalizada la carga inicial de los datos en \textit{MongoDB}, se procede con su procesamiento. Para ello, se ha utilizado \textit{Spark} con el lenguaje \textit{Scala}, ya que presenta una gran velocidad de cómputo ideal al trabajar con grandes cantidades de datos.
+
+Esta tarea contempla la lectura de los datos realizando una limpieza inicial de los mismos, de manera que se recogen únicamente los datos necesarios y se elimina la compleja estructura de datos de la que se han extraído. Posteriormente se seleccionan los campos que serán exportados nuevamente a una colección de \textit{MongoDB} de datos limpios.
+
+Estos datos estarán ya listos para servir de entrada a los algoritmos de \textit{sentiment analysis} que serán ejecutados a continuación.
