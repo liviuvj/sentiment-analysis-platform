@@ -3,3 +3,4 @@
 .credentials.yml
 airbyte
 prototypes/mongodb/data/*
+prototypes/extraction/__*
