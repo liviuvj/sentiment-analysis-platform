@@ -1,0 +1,20 @@
+version: '3'
+services:
+  transformers:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint:
+    - sleep
+    - infinity
+    init: true
+    volumes:
+    - ./:/opt/nlp-tasks
+    - type: bind
+      source: /var/run/docker.sock
+      target: /var/run/docker.sock
+
+networks:
+  default:
+    external:
+      name: etl_network
