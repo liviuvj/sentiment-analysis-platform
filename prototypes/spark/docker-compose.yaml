@@ -1,9 +1,19 @@
+version: '3'
+
+x-logging: &default-logging
+  options:
+    max-size: "100m"
+    max-file: "5"
+  driver: json-file
+
 services:
+
   spark:
     entrypoint:
     - sleep
     - infinity
     image: custom-spark:3.2.3
+    logging: *default-logging
     init: true
     ports:
       - "4040:4040"
@@ -13,3 +23,7 @@ services:
       source: /var/run/docker.sock
       target: /var/run/docker.sock
 
+networks:
+  default:
+    external:
+      name: etl_network

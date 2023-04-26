@@ -22,3 +22,8 @@ services:
 volumes:
   mongodb_data:
   mongodb_config:
+
+networks:
+  default:
+    external:
+      name: etl_network
