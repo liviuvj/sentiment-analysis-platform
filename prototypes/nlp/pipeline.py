@@ -12,12 +12,19 @@ collection = db["clean_tweets"]
 documents = collection.find()
 
 # Get tweet texts
-tweet_texts = [doc["text"] for doc in documents]
+tweet_texts = [doc for doc in documents if doc["language"] == "en"]
 
-# Create sentiment analysis pipeline
-classifier = pipeline("sentiment-analysis")
+# Create sentiment analysis pipelines
+sentiment_classifier = pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment-latest")
+emotion_classifier = pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-emotion")
+topic_classifier = pipeline("sentiment-analysis", model="cardiffnlp/tweet-topic-21-multi")
 
-# Run classifier on tweets
-results = classifier(["We are very happy to show you the 🤗 Transformers library.", "We hope you don't hate it."])
-for result in results:
-    print(f"label: {result['label']}, with score: {round(result['score'], 4)}")
+def pipe(x):
+    x["sentiment"] = sentiment_classifier(x["text"])[0]["label"]
+    x["emotion"] = emotion_classifier(x["text"])[0]["label"]
+    x["topic"] = topic_classifier(x["text"])[0]["label"]
+    return x
+
+for doc in tweet_texts:
+    print(pipe(doc))
+    break
