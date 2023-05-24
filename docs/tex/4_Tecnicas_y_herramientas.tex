@@ -160,3 +160,14 @@ Se ha seleccionado esta herramienta por la sencilla integración y facilidad de 
 Apache Spark\footnote{\url{https://spark.apache.org/}} es un sistema de procesamiento de datos distribuido y de código abierto. Spark es capaz de procesar grandes volúmenes de datos de manera rápida, eficiente y escalable.
 
 Permite procesar datos en memoria, lo que lo hace más rápido que otros sistemas de procesamiento de datos como Hadoop MapReduce, que requieren que los datos se escriban en disco entre las operaciones. Sus principales características se centran en el rendimiento, escalabilidad, facilidad de uso y flexibilidad.
+
+\subsection{Base de datos para procesamiento analítico de datos en línea}
+
+Los datos extraídos y los inferidos a través de los modelos de procesamiento de lenguaje natural empleados han de ser persistidos posteriormente para su posterior explotación de manera visual. Por tanto, para llevar a cabo esta tarea de forma óptima, resulta necesario emplear una base de datos enfocada al procesamiento analítico en línea (\textit{OLAP}) de los datos, en lugar de emplear modelos enfocados al procesamiento de transacciones en línea (\textit{OLPT}) comunes.
+
+\subsubsection{Herramientas consideradas:}
+
+\begin{itemize}
+    \item \textbf{\textit{Apache Druid}}\footnote{\url{https://druid.apache.org/}}
+    \item \textbf{\textit{ClickHouse}}\footnote{\url{https://clickhouse.com/}}
+\end{itemize}
