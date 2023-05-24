@@ -138,6 +138,66 @@ Durante la duración de este \textit{Sprint} se realizará el procesamiento del 
 
 \end{itemize}
 
+\subsection{\textit{Sprint} 5 (12/04/2023 -- 26/04/2023)}
+
+Durante la duración de este \textit{Sprint} se concluirá la parte del procesamiento de datos y se comenzará la inferencia de los modelos de Procesamiento de Lenguaje Natural.
+
+\begin{itemize}
+
+    \item \textbf{Gestión del \textit{Sprint} (2h).} Se realizará el planteamiento de las tareas a llevar a cabo a lo largo de este \textit{sprint}.
+
+    \item \textbf{Mejora del conector base de Airbyte (8h).} Previamente se modificó el conector base de Twitter para adaptarlo a la consulta realizada. Ahora se van a implementar unas mejoras adicionales que permitan mejor su integración con el código base de Airbyte.
+
+    \item \textbf{Mejora del procesamiento del conjunto de datos (8h).} Previamente se comenzó con el procesamiento del conjunto de datos. Ahora se van a implementar mejoras sobre esta funcionalidad para permitir adaptarse a los nuevos cambios desarrollados para el conector.
+
+    \item \textbf{Abrir PR al repositorio oficial de Airbyte con las mejoras desarrolladas (8h).} Las mejoras desarrolladas para el conector de Twitter pueden resultar de utilidad para los demás miembros de la comunidad que utilizan la herramienta Airbyte. Por ello, se va a crear un \textit{Pull Request} con los cambios realizados para que sean añadidos al repositorio oficial.
+
+    \item \textbf{Comenzar con la inferencia de los modelos NLP (1h).} Una vez se han procesado y limpiado los datos correspondientes, se puede comenzar con la inferencia de los modelos NLP sobre los mismos.
+
+\end{itemize}
+
+\subsection{\textit{Sprint} 6 (26/04/2023 -- 10/05/2023)}
+
+Durante la duración de este \textit{Sprint} se continuará con la inferencia de los modelos de Procesamiento de Lenguaje Natural.
+
+\begin{itemize}
+
+    \item \textbf{Gestión del \textit{Sprint} (2h).} Se realizará el planteamiento de las tareas a llevar a cabo a lo largo de este \textit{sprint}.
+
+    \item \textbf{Continuación de la mejora del procesamiento de datos (4h).} Siguiendo con lo comentado en el \textit{sprint} anterior, se va a incluir el procesamiento de algunos datos adicionales.
+
+    \item \textbf{Tarea NLP: \textit{Sentiment analysis} (4h).} Como continuación de lo comenzado en el \textit{sprint} anterior, se va a proceder con una de las tareas de NLP planteadas inicialmente: el análisis de sentimiento.
+
+    \item \textbf{Tarea NLP: \textit{Topic classification} (4h).} Otra de las principales tareas NLP planteadas inicialmente será la tratada a continuación, la clasificación de temas.
+
+    \item \textbf{Tarea NLP: \textit{Emotion classification} (4h).} Otra tarea NLP adicional que podría resultar interesante será la clasificación de emociones, que se diferencia de la clasificación de sentimientos en que la primera indica la emoción (alegre, triste, enfadado) de un texto y la segunda solamente la positividad o negatividad del texto.
+
+    \item \textbf{Tarea NLP: \textit{Named entity recognition} (4h).} Otra tarea NLP que puede resultar de gran interés para el proyecto es el reconocimiento de entidades (\textit{NER}).
+
+\end{itemize}
+
+\subsection{\textit{Sprint} 7 (10/05/2023 -- 24/05/2023)}
+
+Durante la duración de este \textit{Sprint} se mejorarán las tareas de inferencia de los modelos de Procesamiento de Lenguaje Natural y se investigará la manera óptima para persistir los datos obtenidos hasta el momento.
+
+\begin{itemize}
+
+    \item \textbf{Gestión del \textit{Sprint} (2h).} Se realizará el planteamiento de las tareas a llevar a cabo a lo largo de este \textit{sprint}.
+
+    \item \textbf{Mejora de la etapa de transformación (8hh).} Se van a desarrollar unas mejoras para la etapa de procesamiento de los datos que permitirán obtener una mayor calidad en la información final.
+
+    \item \textbf{Mejora de tarea NLP: \textit{Sentiment analysis} (4h).} Se va a proceder a desarrollar mejoras para la tarea NLP que se encarga del análisis de sentimientos.
+
+    \item \textbf{Mejora de tarea NLP: \textit{Topic classification} (4h).} Se va a proceder a desarrollar mejoras para la tarea NLP que se encarga de la clasificación de temas.
+
+    \item \textbf{Mejora de tarea NLP: \textit{Emotion classification} (4h).} Se va a proceder a desarrollar mejoras para la tarea NLP que se encarga de la clasificación de emociones.
+
+    \item \textbf{Mejora de tarea NLP: \textit{Named entity recognition} (4h).} Se va a proceder a desarrollar mejoras para la tarea NLP que se encarga del reconocimiento de entidades.
+
+    \item \textbf{Investigar base de datos \textit{OLAP} (4h).} Los datos extraídos durante las fases anteriores y los inferidos a través de los modelos NLP empleados han de ser persistidos nuevamente para su posterior explotación de manera visual. Por tanto, para llevar a cabo esta tarea de forma óptima, será necesario investigar una base de datos enfocada al procesamiento analítico en línea (\textit{OLAP}) de los datos, en lugar de emplear modelos enfocados al procesamiento de transacciones en línea (\textit{OLPT}) comunes.
+
+\end{itemize}
+
 \section{Estudio de viabilidad}
 
 \subsection{Viabilidad económica}
