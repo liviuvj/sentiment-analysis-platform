@@ -163,11 +163,21 @@ Permite procesar datos en memoria, lo que lo hace más rápido que otros sistema
 
 \subsection{Base de datos para procesamiento analítico de datos en línea}
 
-Los datos extraídos y los inferidos a través de los modelos de procesamiento de lenguaje natural empleados han de ser persistidos posteriormente para su posterior explotación de manera visual. Por tanto, para llevar a cabo esta tarea de forma óptima, resulta necesario emplear una base de datos enfocada al procesamiento analítico en línea (\textit{OLAP}) de los datos, en lugar de emplear modelos enfocados al procesamiento de transacciones en línea (\textit{OLPT}) comunes.
+Los datos extraídos y los inferidos a través de los modelos de procesamiento de lenguaje natural empleados han de ser persistidos posteriormente para su consiguiente explotación de manera visual. Por tanto, para llevar a cabo esta tarea de forma óptima, resulta necesario emplear una base de datos enfocada al procesamiento analítico en línea (\textit{OLAP}) de los datos, en lugar de emplear modelos enfocados al procesamiento de transacciones en línea (\textit{OLPT}) comunes.
 
 \subsubsection{Herramientas consideradas:}
 
 \begin{itemize}
-    \item \textbf{\textit{Apache Druid}}\footnote{\url{https://druid.apache.org/}}
-    \item \textbf{\textit{ClickHouse}}\footnote{\url{https://clickhouse.com/}}
+    \item \textbf{\textit{ClickHouse}.} Sistema gestor de base de datos \textit{OLAP}\footnote{\url{https://clickhouse.com/}} basado en arquitectura \textit{share-nothing}, compresión de datos y posibilidad de consultas en lenguaje SQL nativo. Utiliza un concepto de vistas materializadas que se gestionan automáticamente para asegurar un rendimiento óptimo de las consultas en cualquier momento.
+    
+    \item \textbf{\textit{Apache Druid}.} Base de datos \textit{OLAP}\footnote{\url{https://druid.apache.org/}} distribuida, escalable y autobalanceada. Al contrario que ClickHouse, presenta una arquitectura modular en la que las consultas, datos y nodos de almacenamiento se encuentran separados unos de otros. A pesar de esto, realiza una gestión óptima de datos en \textit{streaming} y permite priorizar consultas.
 \end{itemize}
+
+\subsubsection{Herramienta elegida:}
+
+\begin{itemize}
+    \item \textbf{\textit{ClickHouse}}
+\end{itemize}
+
+La herramienta \textit{ClickHouse} ha elegido teniendo en cuenta los requisitos de este proyecto concreto. De esta manera, se permitirá una baja latencia y un buen rendimiento para las consultas realizadas. Además, la gestión y configuración no resultará tan complicada como la exigida por \textit{Apache Druid}, que necesita de varios servicios y componentes para funcionar correctamente. Por lo que el coste computacional y de mantenimiento sería mayor en comparación con la herramienta elegida.
+
