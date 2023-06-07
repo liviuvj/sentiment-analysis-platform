@@ -1,0 +1,46 @@
+version: '3'
+x-logging: &default-logging
+  options:
+    max-size: "100m"
+    max-file: "5"
+  driver: json-file
+services:
+  clickhouse:
+    logging: *default-logging
+    # user: ${UID}:${GID}
+    image: yandex/clickhouse-server
+    container_name: ${CLICKHOUSE_CONTAINER_NAME}
+    ports:
+      - ${CLICKHOUSE_PORT_HTTP} # HTTP port
+      - ${CLICKHOUSE_PORT_NATIVE} # Native protocol port
+    volumes:
+      - ${CLICKHOUSE_DATA}:/var/lib/clickhouse
+      - ${CLICKHOUSE_LOGS}:/var/log/clickhouse-server
+    environment:
+      - CLICKHOUSE_CONFIG=/etc/clickhouse-server/config.xml
+      - CLICKHOUSE_USER=${CLICKHOUSE_USER}
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD}
+      # - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1
+      - CLICKHOUSE_UID=1000
+      - CLICKHOUSE_GID=1000
+    restart: unless-stopped
+
+  # nginx:
+  #   image: nginx
+  #   container_name: nginx
+  #   ports:
+  #     - 443:443 # HTTPS port
+  #   volumes:
+  #     - ./nginx/conf.d:/etc/nginx/conf.d # Nginx configuration
+  #     - ./nginx/ssl:/etc/nginx/ssl # SSL certificate
+  #   networks:
+  #     - clickhouse-network
+  #   restart: unless-stopped
+
+networks:
+  default:
+    external:
+      name: etl_network
+
+# networks:
+#   clickhouse-network:

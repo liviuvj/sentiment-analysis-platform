@@ -3,6 +3,10 @@
 .credentials.yml
 airbyte
 prototypes/mongodb/data/*
+prototype/clickhouse/ck_data/*
+prototype/clickhouse/ck_logs/*
+prototype/clickhouse/data/*
+prototype/clickhouse/clickhouse/*
 prototypes/extraction/__*
 prototypes/transformation/.metals
 prototypes/transformation/.vscode
