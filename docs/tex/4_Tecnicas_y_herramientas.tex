@@ -155,7 +155,7 @@ Para cumplir con estos requisitos, se ha investigado viabilidad de las siguiente
 
 Se ha seleccionado esta herramienta por la sencilla integración y facilidad de uso que presenta para el caso de uso concreto de este proyecto. Los datos extraídos procedentes de las \textit{APIs} seleccionadas se presentan en su totalidad en formato \textit{JSON}, por lo que se pueden cargar directamente en esta base de datos sin realizar ninguna transformación intermedia. 
 
-\subsection{Spark}
+\subsection{Apache Spark}
 
 Apache Spark\footnote{\url{https://spark.apache.org/}} es un sistema de procesamiento de datos distribuido y de código abierto. Spark es capaz de procesar grandes volúmenes de datos de manera rápida, eficiente y escalable.
 
@@ -181,3 +181,22 @@ Los datos extraídos y los inferidos a través de los modelos de procesamiento d
 
 La herramienta \textit{ClickHouse} ha elegido teniendo en cuenta los requisitos de este proyecto concreto. De esta manera, se permitirá una baja latencia y un buen rendimiento para las consultas realizadas. Además, la gestión y configuración no resultará tan complicada como la exigida por \textit{Apache Druid}, que necesita de varios servicios y componentes para funcionar correctamente. Por lo que el coste computacional y de mantenimiento sería mayor en comparación con la herramienta elegida.
 
+\subsection{Herramienta analítica de visualización de datos}
+
+Una vez que se tiene todos los datos extraídos, procesados, transformados e inferidos persistidos en el sistema \textit{OLAP}, se encuentran ya disponibles para su explotación visual. Para ello, es necesario utilizar una herramienta de visualización compatible con el sistema \textit{OLAP} empleado, capaz de explotar visualmente y de manera eficaz los datos obtenidos para asegurar un buen entendimiento de los mismos.
+
+\subsubsection{Herramientas consideradas:}
+
+\begin{itemize}
+    \item \textbf{\textit{Metabase}.} Herramienta de exploración y visualización de datos\footnote{\url{https://www.metabase.com/}} rápida, ligera y con una interfaz sencilla. Permite la creación de gráficos simples a través de la formulación de preguntas interactivas. Posee numerosos recursos de visualización de datos y conectores para las principales bases de datos. 
+    
+    \item \textbf{\textit{Apache Superset}.} Plataforma de visualización y exploración de datos moderna\footnote{\url{https://superset.apache.org/}} e intuitiva que permite la gestión de \textit{dashboards}, roles y consultas asíncronas. Ofrece gran cantidad de recursos tanto para visualización de datos como conectores a bases de datos.
+\end{itemize}
+
+\subsubsection{Herramienta elegida:}
+
+\begin{itemize}
+    \item \textbf{\textit{Apache Superset}}
+\end{itemize}
+
+La herramienta \textit{Apache Superset} presenta todas las características necesarias para una correcta gestión y visualización de los datos. Permite la asignación de roles y permisos de usuario, gestión de \textit{dashboards} y gráficos individuales, construcción de consultas tanto en lenguaje \textit{SQL} nativo como de manera interactiva y visual, más de 40 tipos de visualizaciones distintas y más de 30 conectores para distintas bases de datos.
