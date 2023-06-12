@@ -46,21 +46,22 @@ Como principal ventaja, es que funciona bastante bien dentro de unos límites pr
 
 \section{Artículos científicos}
 
-A continuación, se detallan los artículos científicos que más relevancia han tenido en relación a 
+A continuación, se detallan los artículos científicos que más relevancia han tenido en relación a los objetivos establecidos para este proyecto.
 
 \subsection{BERT: Bidirectional Encoder Representations from Transformers}
 
-Se trata de un modelo\footnote{\url{https://arxiv.org/abs/1810.04805}} que utiliza una red neuronal ya entrenada para generar \textit{word embeddings} que son utilizadas posteriormente como características en modelos \textit{NLP}.
+Se trata de un modelo~\cite{devlin2019bert} que utiliza una red neuronal ya entrenada para generar \textit{word embeddings} que son utilizadas posteriormente como características en modelos \textit{NLP}.
 
-\textit{BERT} se basa en \textit{transformers} (mecanismos de atención que ``aprenden'' correlaciones entre las palabras de un texto). Estos \textit{transformers} presentan dos componentes, un \textit{encoder} que procesa los datos de entrada y un \textit{decoder} que se encarga de realizar las predicciones correspondientes. Sin embargo, como el objetivo es construir un modelo de lenguaje, tan solo hace falta la primera parte de estos, el codificador.
+\textit{BERT} se basa en \textit{transformers} (mecanismos de atención que <<aprenden>> correlaciones entre las palabras de un texto). Estos \textit{transformers} presentan dos componentes, un \textit{encoder} que procesa los datos de entrada y un \textit{decoder} que se encarga de realizar las predicciones correspondientes. Sin embargo, como el objetivo es construir un modelo de lenguaje, tan solo hace falta la primera parte de estos, el codificador.
 
-Mientras que los modelos hasta el momento tomaban una dirección de lectura secuencial de los datos (bien de izquierda a derecha o bien al revés), el codificador del \textit{transformer} es capaz de leer cada palabra del texto a la vez. Esto permite al modelo analizar el contexto general en el que se presenta cada palabra y no teniendo en cuenta solamente una dirección. De esta manera, se considera un modelo ``bidireccional'', aunque en realidad no tenga una dirección como tal.
+Mientras que los modelos hasta el momento tomaban una dirección de lectura secuencial de los datos (bien de izquierda a derecha o bien al revés), el codificador del \textit{transformer} es capaz de leer cada palabra del texto a la vez. Esto permite al modelo analizar el contexto general en el que se presenta cada palabra y no teniendo en cuenta solamente una dirección. De esta manera, se considera un modelo <<bidireccional>>, aunque en realidad no tenga una dirección como tal.
 
 Generalmente, los modelos de lenguaje se entrenan intentando predecir una secuencia de palabras dentro de un texto, lo que los convierte en unidireccionales. Por ello, \textit{BERT} emplea dos estrategias para mantener su habilidad bidireccional:
 
 \begin{itemize}
-    \item \textbf{\textit{Masked LM (MLM)}.} La primera estrategia que se utiliza es ocultar mediante un \textit{token} a forma de máscara aproximadamente un 15\% de las palabras del texto de entrada del codificador. Posteriormente, el modelo intentará predecir las palabras que faltan basándose en el contexto que las rodea.
-    \item \textbf{\textit{Next Sentence Prediction (NSP)}.} La segunda estrategia consiste en entrenar el modelo mediante pares de frases. La mitad de los datos de entrada se divide de tal manera que la segunda frase de cada par es la que va a continuación de la primera frase en el texto original. Mientras que en la otra mitad de los datos la segunda frase se escoge al azar del texto original. De tal manera, se asume que el modelo será capaz de distinguir correctamente qué frase tiene sentido a continuación de otra. Se utilizan una serie de \textit{tokens} para indicar el inicio y final de cada frase.
+    \item \textbf{\textit{Masked LM (MLM)}.} La primera estrategia que se utiliza es ocultar, mediante un \textit{token}, a forma de máscara aproximadamente un 15\% de las palabras del texto de entrada del codificador. Posteriormente, el modelo intentará predecir las palabras que faltan basándose en el contexto que las rodea.
+    
+    \item \textbf{\textit{Next Sentence Prediction (NSP)}.} La segunda estrategia consiste en entrenar el modelo mediante pares de frases. La mitad de los datos de entrada se divide de tal manera que la segunda frase de cada par es la que va a continuación de la primera frase en el texto original. Mientras que en la otra mitad de los datos, la segunda frase se escoge al azar del texto original. De esta manera, se asume que el modelo será capaz de distinguir correctamente qué frase tiene sentido a continuación de otra. Se utilizan una serie de \textit{tokens} para indicar el inicio y final de cada frase.
 \end{itemize}
 
-Ambas estrategias se ponen en práctica y se entrenan a la vez para conseguir minimizar la ``función de pérdida'' o \textit{loss function} del modelo.
+Ambas estrategias se ponen en práctica y se entrenan a la vez para conseguir minimizar la <<función de pérdida>> o \textit{loss function} del modelo.

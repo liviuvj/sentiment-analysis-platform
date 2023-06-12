@@ -15,7 +15,7 @@ En esta sección se describirán todos los elementos necesarios y la metodologí
 
 En este apartado se detallarán los métodos de configuración de la herramienta de extracción de datos.
 
-\subsubsection{Configuración de la fuente de datos}
+\subsubsection{Configuración del origen de datos}
 
 A continuación, se va a crear un ejemplo de fichero de configuración para una de las fuentes de datos seleccionada.
 
@@ -47,15 +47,15 @@ A continuación, se va a crear un ejemplo de fichero de configuración para una 
         }
         \end{verbatim}
         
-        \item \textbf{Mandar la petición de creación de fuente de datos.} Completando el \textit{payload} de la petición hacia \verb|/v1/sources/create| con las propiedades correspondientes obtenidas del paso anterior. 
+        \item \textbf{Enviar la petición de creación de fuente de datos.} Completando el \textit{payload} de la petición hacia \verb|/v1/sources/create| con las propiedades correspondientes obtenidas del paso anterior. 
         
-        \item \textbf{Comprobar la conexión con la fuente de datos.} Mandando una petición a \verb|/v1/sources/check_connection|.
+        \item \textbf{Comprobar la conexión con la fuente de datos.} Enviando una petición a \verb|/v1/sources/check_connection|.
     
     \end{enumerate}
     
     \item \textbf{Utilizando la interfaz gráfica.} Navegando a la sección \textit{Sources} y seleccionando el tipo de fuente a configurar, se muestra un formulario de edición que permite realizar las mismas operaciones ejecutadas anteriormente mediante la \textit{API}. En la \autoref{fig:airbyte_source_config} se puede observar dicho formulario.
 
-    \imagen{airbyte_source_config}{Configuración de la fuente de datos}
+    \imagen{airbyte_source_config}{Configuración del origen de datos en Airbyte: Twitter}
     
 \end{itemize}
 
@@ -93,15 +93,15 @@ A continuación, se va a crear un ejemplo de fichero de configuración para uno 
         }
         \end{verbatim}
         
-        \item \textbf{Mandar la petición de creación de destino de datos.} Completando el \textit{payload} de la petición hacia \verb|/v1/destinations/create| con las propiedades correspondientes obtenidas del paso anterior. 
+        \item \textbf{Enviar la petición de creación de destino de datos.} Completando el \textit{payload} de la petición hacia \verb|/v1/destinations/create| con las propiedades correspondientes obtenidas del paso anterior. 
         
-        \item \textbf{Comprobar la conexión con el destino de datos.} Mandando una petición a \verb|/v1/destinations/check_connection|.
+        \item \textbf{Comprobar la conexión con el destino de datos.} Enviando una petición a \verb|/v1/destinations/check_connection|.
     
     \end{enumerate}
     
     \item \textbf{Utilizando la interfaz gráfica.} Navegando a la sección \textit{Destinations} y seleccionando el tipo de fuente a configurar, se muestra un formulario de edición que permite realizar las mismas operaciones ejecutadas anteriormente mediante la \textit{API}. En la \autoref{fig:airbyte_destination_config} se puede observar dicho formulario.
 
-    \imagen{airbyte_destination_config}{Configuración de la fuente de datos}
+    \imagen{airbyte_destination_config}{Configuración del destino de datos en Airbyte: CSV Local}
     
 \end{itemize}
 
@@ -155,7 +155,7 @@ A continuación, se va a crear un ejemplo de fichero de configuración para una 
     
     \item \textbf{Utilizando la interfaz gráfica.} Navegando a la sección \textit{Connections} y seleccionando las fuentes y destinos de datos para los que configurar la conexión. Se muestra un formulario de edición que permite realizar las mismas operaciones ejecutadas anteriormente mediante la \textit{API}. En la \autoref{fig:airbyte_connection_config} se puede observar dicho formulario.
 
-    \imagen{airbyte_connection_config}{Configuración de la fuente de datos}
+    \imagen{airbyte_connection_config}{Configuración de la conexión entre origen y destino de los datos en Airbyte}
     
 \end{itemize}
 
