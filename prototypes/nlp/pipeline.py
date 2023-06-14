@@ -1,11 +1,10 @@
 from transformers import pipeline
 from pymongo import MongoClient
-from clickhouse_driver import Client as ClickClient
 from datetime import datetime
+from connectors import ClickHouseConnector
 
 # Connecto to MongoDB
 mongo_client = MongoClient("mongodb://mongoroot:mongopassword@mongo-db:27017/raw_tweets?authSource=admin")
-click_client = ClickClient(host='clickhouse', port=9000, user='ck_user', password='ck_password')
 
 # Select database and collections
 db = mongo_client["raw_twitter"]
@@ -18,18 +17,19 @@ collection_urls = db["clean_urls"].find()
 collection_hashtags = db["clean_hashtags"].find()
 
 # Remove MongoDB ID
-def remove_mongo_id(collection):
+def clean(collection):
     for object in collection:
+        # Convert field to daterime
         dt = datetime.strptime(object["created_at"], "%Y-%m-%dT%H:%M:%S.%fZ")
         object["created_at"] = dt
-        # object.pop("_id")
+
+        # Remove MongoDB id
+        object.pop("_id")
+
         yield object
 
-# Get data
-tweets = collection_tweets.find()
-
 # Get tweet texts
-tweets_english = [doc for doc in tweets if doc["language"] == "en"]
+tweets_english = [doc for doc in collection_tweets if doc["language"] == "en"]
 
 # Create analysis pipelines
 sentiment_classifier = pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment-latest")
@@ -61,19 +61,31 @@ for id, entity in enumerate(ner_classifier(data_iterator(tweets_english))):
 # Define OLAP DB params
 db_name = 'twitter'
 table_name = 'tweets'
-columns = ['tweet_id', 'user_id', 'created_at', 'language', 'text', 'retweet_count', 'reply_count', 'like_count', 'quote_count', 'sentiment', 'emotion', 'topic', 'entity']
-data_types = ['String', 'String', 'Datetime', 'FixedString(2)', 'String', 'Int32', 'Int32', 'Int32', 'Int32', 'String', 'String', 'String', 'String']
+tweets_params = {
+    "tweet_id": "String",
+    "user_id": "String",
+    "created_at": "Datetime",
+    "language": "FixedString(2)",
+    "text": "String",
+    "retweet_count": "Int32",
+    "reply_count": "Int32",
+    "like_count": "Int32",
+    "quote_count": "Int32",
+    "sentiment": "String",
+    "emotion": "String",
+    "topic": "String",
+    "entity": "String",
+}
 
-# Export data to OLAP DB
-click_client.execute("CREATE DATABASE IF NOT EXISTS " + db_name)
-click_client.execute("USE " + db_name)
+# Create ClickHouse client
+ck_client = ClickHouseConnector(host="clickhouse", port=9000, user="ck_user", password="ck_password")
 
-click_client.execute('CREATE TABLE IF NOT EXISTS ' + table_name + \
-                     ' (' + str(", ".join([f"{col} {data_type}" for col, data_type in zip(columns, data_types)])) + ')' + \
-                     ' ENGINE = MergeTree() PRIMARY KEY ' + columns[0] + ' ORDER BY ' + columns[0])
+# Create database
+ck_client.create_database(db_name)
+ck_client.use_database(db_name)
 
-click_client.execute("SHOW TABLES")
-# click_client.execute("DROP TABLE IF EXISTS " + table_name)
+# Create table
+ck_client.create_table(table_name, tweets_params, "tweet_id", "tweet_id")
 
-click_client.execute("INSERT INTO " + table_name + "(" + ", ".join(columns) + ")" + "VALUES",
-                     tweets_english[:5])
+# Insert data
+ck_client.insert_into_table(table_name, list(tweets_params.keys()), clean(tweets_english))
