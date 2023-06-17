@@ -1,4 +1,6 @@
 from sys import stdout
+from datetime import datetime
+
 import logging
 
 def get_logger(
@@ -25,3 +27,23 @@ def get_logger(
     logger.addHandler(consoleHandler)
 
     return logger
+
+def convert_date(data: list[dict], field: str) -> dict:
+    """
+    Method for converting a datetime string to a datetime object.
+
+    Args:
+        data (list[dict]): Data to convert from `str` to `datetime`.
+        field (str): The name of the field that contains the date.
+
+    Yields:
+        dict: Data with the field converted to datetime object.
+    """
+
+    for obj in data:
+
+        # Convert field to daterime
+        dt = datetime.strptime(obj[field], "%Y-%m-%dT%H:%M:%S.%fZ")
+        obj[field] = dt
+
+        yield obj

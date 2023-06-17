@@ -7,7 +7,6 @@ x-logging: &default-logging
 services:
   clickhouse:
     logging: *default-logging
-    # user: ${UID}:${GID}
     image: yandex/clickhouse-server
     container_name: ${CLICKHOUSE_CONTAINER_NAME}
     ports:
@@ -20,27 +19,11 @@ services:
       - CLICKHOUSE_CONFIG=/etc/clickhouse-server/config.xml
       - CLICKHOUSE_USER=${CLICKHOUSE_USER}
       - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD}
-      # - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1
       - CLICKHOUSE_UID=1000
       - CLICKHOUSE_GID=1000
     restart: unless-stopped
-
-  # nginx:
-  #   image: nginx
-  #   container_name: nginx
-  #   ports:
-  #     - 443:443 # HTTPS port
-  #   volumes:
-  #     - ./nginx/conf.d:/etc/nginx/conf.d # Nginx configuration
-  #     - ./nginx/ssl:/etc/nginx/ssl # SSL certificate
-  #   networks:
-  #     - clickhouse-network
-  #   restart: unless-stopped
 
 networks:
   default:
     external:
       name: etl_network
-
-# networks:
-#   clickhouse-network:

@@ -1,12 +1,15 @@
 # Python Virtual Environment
 .venv
 .credentials.yml
-airbyte
-prototypes/mongodb/data/*
-prototype/clickhouse/ck_data/*
-prototype/clickhouse/ck_logs/*
-prototype/clickhouse/data/*
-prototype/clickhouse/clickhouse/*
 prototypes/extraction/__*
-prototypes/transformation/.metals
-prototypes/transformation/.vscode
+prototypes/extraction/airbyte
+prototypes/mongodb/data/*
+prototypes/clickhouse/ck_data/*
+prototypes/clickhouse/ck_logs/*
+prototypes/clickhouse/data/*
+prototypes/clickhouse/clickhouse/*
+prototypes/extraction/__*
+prototypes/spark/.metals
+prototypes/spark/.vscode
+prototypes/nlp/__*
+prototypes/nlp/nlp-tasks/__*

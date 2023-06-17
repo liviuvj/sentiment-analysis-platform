@@ -1,18 +1,21 @@
 version: '3'
+x-logging: &default-logging
+  options:
+    max-size: "100m"
+    max-file: "5"
+  driver: json-file
 services:
   transformers:
+    logging: *default-logging
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint:
-    - sleep
-    - infinity
     init: true
     volumes:
-    - ./:/opt/nlp-tasks
-    - type: bind
-      source: /var/run/docker.sock
-      target: /var/run/docker.sock
+    - ./nlp-tasks:/opt/nlp-tasks
+    environment:
+      - PYTHONUNBUFFERED=1
+    entrypoint: python -u "/opt/nlp-tasks/pipeline.py"
 
 networks:
   default:

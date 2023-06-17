@@ -1,9 +1,55 @@
 from utils import get_logger
 from clickhouse_driver import Client as ClickHouseClient
+from pymongo import MongoClient
+from pymongo.errors import ServerSelectionTimeoutError
 
 log = get_logger("connectors")
 
 
+class MongoDBConnector:
+    def __init__(self, host: str, port: int, username: str, password: str) -> None:
+        """
+        Connector for MongoDB.
+
+        Args:
+            host (str): Host of the MongoDB instance
+            port (int): Port to connect to the host
+            username (str): MongoDB database username
+            password (str): MongoDB database password
+        """
+
+        self.host = host
+        self.port = port
+        self.username = username
+        self.password = password
+
+    def get_connection(self) -> MongoClient:
+        """
+        Method for establishing the connection with MongoDB.
+
+        Returns:
+            MongoClient: The client MongoDB.
+        """
+
+        try:
+            connection_query = "mongodb://{user}:{pass}@{host}:{port}".format(
+                **{
+                    "user": self.username,
+                    "pass": self.password,
+                    "host": self.host,
+                    "port": self.port,
+                }
+            )
+
+            client = MongoClient(connection_query)
+            client.server_info()
+
+            log.info("Established connection to MongoDB")
+
+            return client
+
+        except ServerSelectionTimeoutError as e:
+            log.error("Error connecting to MongoDB:", e)
 
 class ClickHouseConnector:
     def __init__(self, host: str, port: str, user: str, password: str) -> None:
@@ -23,7 +69,7 @@ class ClickHouseConnector:
         self.password = password
         self.client = self.connect()
 
-    def connect(self):
+    def connect(self) -> ClickHouseClient:
         """
         Method for establishing the connection with ClickHouse.
 
@@ -79,7 +125,7 @@ class ClickHouseConnector:
             log.error("Error using database:", e)
 
     def create_table(
-        self, table_name: str, columns: dict, pk: str, ordered_by: str
+        self, table_name: str, columns: dict, pk: str = None, ordered_by: str = None
     ) -> None:
         """
         Creates a table with the specified parameters.
@@ -88,15 +134,23 @@ class ClickHouseConnector:
             table_name (str): Name of the table.
             columns (dict): Dictionary with the column names as keys and data types as values.
                 Example: `{"id": "Int32", "name": "String"}`.
-            pk (str): Primary key of the table, needs to exist in the columns parameter as well.
-            ordered_by (str): Column(s) for ordering the table, needs to exist in the columns parameter as well.
+            pk (str, optional): Primary key of the table, needs to exist in the columns parameter as well.
+                If not provided, takes first key of `columns`.
+            ordered_by (str, optional): Column(s) for ordering the table, needs to exist in the columns parameter as well.
+                If not provided, takes first key of `columns`.
         """
 
         try:
-            if not pk in columns or ordered_by not in columns:
+            if (pk and not pk in columns) or (ordered_by and ordered_by not in columns):
                 raise Exception(
                     "PRIMARY KEY or ORDERED BY column not in provided columns for the table"
                 )
+
+            if not pk:
+                pk = list(columns.keys())[0]
+
+            if not ordered_by:
+                ordered_by = list(columns.keys())[0]
 
             cols = ", ".join([f"{col} {columns[col]}" for col in columns])
             params = {
@@ -119,7 +173,9 @@ class ClickHouseConnector:
         except Exception as e:
             log.error("Error creating table:", e)
 
-    def insert_into_table(self, table_name: str, columns: list, values: list[list]) -> None:
+    def insert_into_table(
+        self, table_name: str, columns: list, values: list[list]
+    ) -> None:
         """
         Inserts values into table.
 
@@ -137,7 +193,7 @@ class ClickHouseConnector:
             num_inserted_rows = self.client.execute(query.format(**params), values)
 
             log.info(
-                "Inserted '%s' rows into table '%s'", *[num_inserted_rows, table_name]
+                "Inserted %s rows into table '%s'", *[num_inserted_rows, table_name]
             )
 
         except Exception as e:
