@@ -8,6 +8,7 @@ prototypes/clickhouse/ck_data/*
 prototypes/clickhouse/ck_logs/*
 prototypes/clickhouse/data/*
 prototypes/clickhouse/clickhouse/*
+prototypes/clickhouse/logs/*
 prototypes/extraction/__*
 prototypes/spark/.metals
 prototypes/spark/.vscode

@@ -50,8 +50,6 @@ Este \textit{Sprint} inicial se dedicará a la preparación del entorno de traba
 
 \end{itemize}
 
-\imagen{sprint0}{Gráfico \textit{burn-down} del \textit{Sprint} 0}
-
 \subsection{\textit{Sprint} 1 (15/02/2023 -- 01/03/2023)}
 
 Durante la duración de este \textit{Sprint} se investigarán las \textit{APIs} de las posibles plataformas de las que se va a extraer la información textual y las herramientas disponibles para realizar la primera etapa del proceso \textit{ETL}. También se comenzará a realizar una primera prueba concepto utilizando los recursos investigados.
@@ -76,8 +74,6 @@ Durante la duración de este \textit{Sprint} se investigarán las \textit{APIs} 
 
 En este \textit{sprint} tuvo lugar un error de cálculo a la hora de planificar las tareas a realizar. La investigación inicial sobre los recursos de extracción de datos indicó como viable la utilización de los \textit{API wrappers} mencionados en la \autoref{section:data_extraction} cuando resultó no ser así. Por ello, la estimación inicial de crear un prototipo para la etapa de extracción de datos durante este \textit{sprint} se vio afectada, teniendo que completar su creación durante el siguiente \textit{sprint}. Esto se puede ver reflejado en la \autoref{fig:sprint1}.
 
-\imagen{sprint1}{Gráfico \textit{burn-down} del \textit{Sprint} 1}
-
 \subsection{\textit{Sprint} 2 (01/03/2023 -- 15/03/2023)}
 
 Durante la duración de este \textit{Sprint} se investigará la documentación de la herramienta de extracción de datos elegida y se terminará la creación del prototipo planteado inicialmente en el anterior \textit{sprint}.
@@ -97,8 +93,6 @@ Durante la duración de este \textit{Sprint} se investigará la documentación d
     \item \textbf{Documentar prototipo de extracción de datos (4h).} Tras la creación del prototipo de extracción de datos, será necesario documentar el procedimiento también en la memoria del proyecto para que quede constancia del funcionamiento del mismo.
 
 \end{itemize}
-
-\imagen{sprint2}{Gráfico \textit{burn-down} del \textit{Sprint} 2}
 
 \subsection{\textit{Sprint} 3 (15/03/2023 -- 29/03/2023)}
 
@@ -213,6 +207,26 @@ Durante la duración de este \textit{Sprint}, el objetivo principal será invest
     \item \textbf{Investigar herramienta de visualización (4h).} Una vez que se tienen todos los datos extraídos, procesados, transformados e inferidos persistidos en el sistema \textit{OLAP}, se encuentran listos para su puesta en explotación. Para ello, se ha de investigar una herramienta de visualización compatible con la tecnología empleada y acorde a los requisitos de uso, que pueda explotar visualmente y de manera eficaz los datos obtenidos.
 
     \item \textbf{Investigar documentación para la herramienta de visualización elegida (8h).} Tras la selección de una herramienta de visualización compatible con el sistema \textit{OLAP} elegido para las tareas de análisis visual, se procederá a investigar su documentación para poder realizar la integración y despliegue correctos, además de comprobar las posibilidades de configuración para las visualizaciones disponibles.
+
+\end{itemize}
+
+\subsection{\textit{Sprint} 9 (07/06/2023 -- 21/06/2023)}
+
+Durante la duración de este \textit{Sprint}, el objetivo principal será desplegar e integrar la herramienta escogida para la visualización de los datos obtenidos hasta el momento, además de la realización de algunas mejoras para los procesos de las anteriores etapas.
+
+\begin{itemize}
+
+    \item \textbf{Gestión del \textit{Sprint} (2h).} Se realizará el planteamiento de las tareas a llevar a cabo a lo largo de este \textit{sprint}.
+
+    \item \textbf{Aplicar correcciones sobre la memoria del proyecto (2h).} Se procederá a implementar las correcciones provistas a modo de \textit{feedback} por el tutor.
+
+    \item \textbf{Mejorar integración del sistema \textit{OLAP} (4h).} Tras realizar la integración inicial con la herramienta \textit{OLAP ClickHouse}, se procederá a mejorar la configuración de las interacciones con esta base de datos para expandir sus posibilidades de integración con los demás componentes del proyecto.
+
+    \item \textbf{Mejora y automatización de pipeline \textit{NLP} (8h).} Actualmente, el flujo de ejecución de las tareas \textit{NLP} se realiza de manera manual. Para poder ser utilizado de manera óptima, se va a proceder a mejorar este pipeline para permitir automatizar su ejecución. Además, el \textit{docker} correspondiente solamente necesita estar en ejecución mientras se ejecute esta parte del flujo, por lo que se va a asegurar que en cuanto se termine esta etapa se finalice también la ejecución del \textit{docker}.
+
+    \item \textbf{Desplegar e integrar herramienta de visualización (8h).} Tras consultar la documentación necesaria para poner en marcha la herramienta de visualización seleccionada, se procederá a realizar el despliegue y configuración de \textit{Apache Superset} para su correcta integración junto a los demás componentes del proyecto.
+
+    \item \textbf{Crear diseño inicial de los dashboards (8h).} Tras desplegar y configurar \textit{Apache Superset}, será necesario diseñar unos \textit{dashboards} para poder explotar los datos obtenidos. Para conseguir este objetivo, se comenzará a bocetar un diseño inicial de la forma que podrían adoptar los datos para interpretarlos y obtener información de calidad a partir de los mismos.
 
 \end{itemize}
 
