@@ -204,3 +204,23 @@ Una vez que se tiene todos los datos extraídos, procesados, transformados e inf
 \end{itemize}
 
 La herramienta \textit{Apache Superset} presenta todas las características necesarias para una correcta gestión y visualización de los datos. Permite la asignación de roles y permisos de usuario, gestión de \textit{dashboards} y gráficos individuales, construcción de consultas tanto en lenguaje \textit{SQL} nativo como de manera interactiva y visual, más de 40 tipos de visualizaciones distintas y más de 30 conectores para distintas bases de datos.
+
+\subsection{Herramienta de orquestación de procesos}
+
+Debido a la compleja arquitectura que presenta este proyecto, es necesario un método para gestionar todo el flujo de acciones que se lleva a cabo a través de los distintos componentes. Para ello, es necesario utilizar una herramienta que permita la orquestación de todos los procesos a ejecutar.
+
+\subsubsection{Herramientas consideradas:}
+
+\begin{itemize}
+    \item \textbf{\textit{Apache Airflow}.} Plataforma de orquestación\footnote{\url{https://airflow.apache.org/}} que permite autorizar, programar y monitorizar flujos de trabajo de manera programática. Utiliza una gestión de flujos de trabajo mediante grafos acíclicos dirigidos (\textit{DAGs}) que se pueden observar en funcionamiento a través de una sencilla interfaz web. Presenta un amplio y extensible catálogo de integraciones con distintos tipos de tareas preestablecidas.
+    
+    \item \textbf{\textit{Luigi}.} Paquete de Python\footnote{\url{https://github.com/spotify/luigi}} capaz de construir flujos de trabajo complejos con datos en \textit{batch}. Gestiona la resolución de dependencias, \textit{workflows}, visualización y fallos. Tiene soporte para el ecosistema \textit{Hadoop} y funcionalidades para integrar diversas tareas en un solo \textit{pipeline}.
+\end{itemize}
+
+\subsubsection{Herramienta elegida:}
+
+\begin{itemize}
+    \item \textbf{\textit{Apache Airflow}}
+\end{itemize}
+
+La herramienta \textit{Apache Airflow} presenta una arquitectura modular y una cola de mensajes para la gestión de los nodos, lo que facilita su escalabilidad en situaciones necesarias. Además, permite la creación de \textit{data pipelines} de manera dinámica y programática, lo que mejora la definición de flujos de trabajo y su parametrización. La aplicación web que presenta es otro punto a favor, ya que permite monitorizar, programar y gestionar \textit{pipelines} de una manera sencilla.
