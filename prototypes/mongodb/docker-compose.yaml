@@ -11,7 +11,7 @@ services:
     container_name: ${MONGODB_CONTAINER_NAME}
     restart: unless-stopped
     ports:
-      - ${MONGODB_PORT}
+      - ${MONGODB_PORT}:27017
     environment:
       - MONGODB_INITDB_ROOT_USERNAME=${MONGODB_ROOT_USER}
       - MONGODB_INITDB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
