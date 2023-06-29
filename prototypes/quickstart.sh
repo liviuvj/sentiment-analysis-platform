@@ -41,10 +41,24 @@ git clone https://github.com/apache/superset.git
 # Run Superset platform
 cd superset
 docker-compose -f docker-compose-non-dev.yml pull
-docker-compose -f docker-compose-non-dev.yml up
+docker-compose -f docker-compose-non-dev.yml up -d
+cd ..
 
 # Wait until container is ready and add it to the bridge network
 until [ "$( docker container inspect -f '{{.State.Status}}' superset_app )" = "running" ]; do
     sleep 0.1;
 done;
 docker network connect etl_bridge superset_app
+
+# Fetch Airflow
+cd airflow
+curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.6.2/docker-compose.yaml'
+
+# Run configuration script
+./config_airflow.sh
+
+# Initialize database
+docker compose up airflow-init
+
+# Run Airflow platform
+docker compose up -d

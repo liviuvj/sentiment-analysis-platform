@@ -14,3 +14,5 @@ prototypes/spark/.metals
 prototypes/spark/.vscode
 prototypes/nlp/__*
 prototypes/nlp/nlp-tasks/__*
+prototypes/airflow/logs/*
+prototypes/airflow/dags/__*
