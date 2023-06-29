@@ -12,16 +12,15 @@ services:
     entrypoint:
     - sleep
     - infinity
-    image: custom-spark:3.2.3
+    build:
+      context: .
+      dockerfile: Dockerfile
     logging: *default-logging
     init: true
     ports:
-      - "4040:4040"
+      - $SPARK_PORT:4040
     volumes:
-    - ./:/opt/transformation
-    - type: bind
-      source: /var/run/docker.sock
-      target: /var/run/docker.sock
+    - ./spark-tasks:/opt/spark-tasks
 
 networks:
   default:

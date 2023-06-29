@@ -10,6 +10,7 @@ val rawUsersDF = rawDF.select(explode($"_airbyte_data.includes.users") as "user_
 // Create tweets Dataframe
 val tweetsDF = rawDataDF.select(
     $"tweet_data.id".alias("tweet_id"),
+    lit("movie").alias("search_query"),
     $"tweet_data.author_id".alias("user_id"),
     $"tweet_data.created_at".alias("created_at"),
     $"tweet_data.lang".alias("language"),
