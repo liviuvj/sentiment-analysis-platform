@@ -1,3 +1,5 @@
+import sys
+
 from tasks import TaskPipeline, TaskTwitterInput, TaskTwitterOutput
 from connectors import MongoDBConnector, ClickHouseConnector
 from utils import convert_date, get_logger
@@ -109,9 +111,19 @@ def run_pipeline_twitter(
 
 
 def main():
+    # Parse arguments
+    in_db_username = sys.argv[1]
+    in_db_password = sys.argv[2]
+    in_db_host = sys.argv[3]
+    in_db_port = sys.argv[4]
+    out_db_username = sys.argv[5]
+    out_db_password = sys.argv[6]
+    out_db_host = sys.argv[7]
+    out_db_port = sys.argv[8]
+
     # Create input and output tasks
-    twitter_in = TaskTwitterInput()
-    twitter_out = TaskTwitterOutput()
+    twitter_in = TaskTwitterInput(in_db_username, in_db_password, in_db_host, in_db_port)
+    twitter_out = TaskTwitterOutput(out_db_username, out_db_password, out_db_host, out_db_port)
 
     # Create Task Pipeline
     nlp_pipeline = TaskPipeline()

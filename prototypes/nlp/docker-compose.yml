@@ -12,7 +12,7 @@ services:
       dockerfile: Dockerfile
     init: true
     volumes:
-    - ./nlp-tasks:/opt/nlp-tasks
+    - $NLP_TASKS_PATH:/opt/nlp-tasks
     environment:
       - PYTHONUNBUFFERED=1
     entrypoint: python -u "/opt/nlp-tasks/pipeline.py"

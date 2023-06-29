@@ -40,8 +40,10 @@ class TaskPipeline:
     #
     # TODO: not all sources might come with this format,
     # consider moving out this function
-    def data_iterator(self, data):
-        for d in data:
+    def data_iterator(self, data, log_iterations=1000):
+        for i, d in enumerate(data, start=1):
+            if not i % log_iterations:
+                log.info(f"\t> Iterated over {i} instances")
             yield d["text"]
 
     def task_sentiment_classification(self, data):
@@ -86,12 +88,28 @@ class TaskPipeline:
 
 
 class TaskTwitterInput:
-    def __init__(self) -> None:
+    def __init__(
+        self, db_username: str, db_password: str, db_host: str, db_port: int
+    ) -> None:
+        """
+        Task that defines parameters for the input source of Twitter data.
+
+        Args:
+            db_username (str): Database username.
+            db_password (str): Database password.
+            db_host (str): Database host.
+            db_port (int): Database port.
+        """
+
         # Connection credentials
-        self.database_host = "mongo-db"
-        self.database_port = 27017
-        self.database_username = "mongoroot"
-        self.database_password = "mongopassword"
+        self.database_username = db_username
+        self.database_password = db_password
+        self.database_host = db_host
+        self.database_port = db_port
+        # self.database_host = "mongo-db"
+        # self.database_port = 27017
+        # self.database_username = "mongoroot"
+        # self.database_password = "mongopassword"
 
         # Database and collection names
         self.database_name = "raw_twitter"
@@ -105,12 +123,28 @@ class TaskTwitterInput:
 
 
 class TaskTwitterOutput:
-    def __init__(self) -> None:
+    def __init__(
+        self, db_username: str, db_password: str, db_host: str, db_port: int
+    ) -> None:
+        """
+        Task that defines parameters for the output destination of Twitter data.
+
+        Args:
+            db_username (str): Database username.
+            db_password (str): Database password.
+            db_host (str): Database host.
+            db_port (int): Database port.
+        """
+
         # Connection credentials
-        self.database_host = "clickhouse"
-        self.database_port = 9000
-        self.database_username = "ck_user"
-        self.database_password = "ck_password"
+        self.database_username = db_username
+        self.database_password = db_password
+        self.database_host = db_host
+        self.database_port = db_port
+        # self.database_host = "clickhouse"
+        # self.database_port = 9000
+        # self.database_username = "ck_user"
+        # self.database_password = "ck_password"
 
         # Database name
         self.database_name = "twitter"
@@ -121,6 +155,7 @@ class TaskTwitterOutput:
             "name": "tweets",
             "columns": {
                 "tweet_id": "String",
+                "search_query": "String",
                 "user_id": "String",
                 "created_at": "Datetime",
                 "language": "FixedString(2)",
@@ -169,13 +204,15 @@ class TaskTwitterOutput:
             "columns": {"tweet_id": "String", "domain": "String", "entity": "String"},
         }
 
-        self.urls = {"name": "urls", "columns": {"tweet_id": "String", "display_url": "String"}}
+        self.urls = {
+            "name": "urls",
+            "columns": {"tweet_id": "String", "display_url": "String"},
+        }
 
         self.hashtags = {
             "name": "hashtags",
             "columns": {"tweet_id": "String", "tag": "String"},
         }
-
 
 
 # Get tweet texts
