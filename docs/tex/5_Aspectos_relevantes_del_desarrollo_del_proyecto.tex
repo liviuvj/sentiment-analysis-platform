@@ -47,6 +47,8 @@ Ofrece acceso de lectura, escritura, modificación y borrado de una amplia varie
 \textbf{\textit{Places}} & v1.1 & Búsqueda de lugares. \\
 }
 
+
+
 \subsubsection{Facebook}
 
 La \textit{API} de Facebook originalmente utilizaba \textit{FQL} (\textit{Facebook Query Language}) como lenguaje de consulta, parecido a \textit{SQL}. Sin embargo, en 2010 comenzó la migración hacia \textit{Graph API} \cite{facebookGraphAPI}, actualmente en su versión \textbf{v16.0}. Se organiza en función de colecciones, nodos y campos. Un nodo es un objeto único que representa una clase del diccionario de datos en concreto, mientras que los campos son atributos del mismo y una colección comprende un conjunto de nodos. Toda esta información es presentada en formato \textit{JSON}.
@@ -124,6 +126,40 @@ Esta plataforma de código abierto se ha instalado en la máquina local mediante
 También presenta una \textit{API} propia~\cite{airbyteAPI} desde la que es posible gestionar las configuraciones de dichos recursos sin necesidad de acceder a su interfaz web.
 
 \imagenConFuente{airbyte_architecture}{Visión general de la arquitectura de \textit{Airbyte}}{\cite{airbyteOverview}}
+
+Inicialmente se comenzó utilizando el conector básico para Twitter que ya presentaba esta herramienta. Tras comprobar su funcionamiento y las posibilidades de extracción de datos que ofrecía, resultó no ofrecer los datos suficientes que se esperaba.
+
+Por ello, al tratarse de una herramienta \textit{open-source}, se procedió a realizar un desarrollo propio y modificar el código base de dicho conector. Se ampliaron así las posibilidades de parametrización y extracción de datos que ofrecía, mejorando así su facilidad de uso y extensibilidad de opciones. Dicho conector está disponible para su uso como una imagen \textit{Docker} que se puede agregar como un nuevo conector en Airbyte, disponible en el siguiente enlace: \url{https://hub.docker.com/r/liviuvj/airbyte-source-twitter/tags}.
+
+\imagen{airbyte_twitter_connector_og}{Configuración básica del conector original de Airbyte para Twitter}
+
+En la \autoref{fig:airbyte_twitter_connector_og} se pueden observar las opciones básicas de configuración del conector, mientras que en la \autoref{fig:airbyte_twitter_connector_custom} se puede comprobar la cantidad de opciones extendidas que se han implementado.
+
+Además, se ha conservado el flujo de datos básico que ya presentaba el conector y se ha añadido un flujo de datos avanzado, en el que se permite la extracción de todas las opciones de configuración documentadas en la \textit{API} de Twitter para la ejecución de consultas y peticiones.
+
+El código de dicho desarrollo se puede comprobar en el \textit{Pull Request} realizado al repositorio oficial de la herramienta Airbyte y su correspondiente \textit{issue} documentada, accediendo al siguiente enlace: \url{https://github.com/airbytehq/airbyte/pull/25534}.
+
+\imagen{airbyte_twitter_connector_custom}{Configuración ampliada del conector mejorado de Airbyte para Twitter}
+
+\subsection{Cambios críticos en las APIs investigadas}
+
+Al comienzo del proyecto se decidió utilizar inicialmente la \textit{API} de Twitter para realizar la extracción de datos. Las razones tras esta decisión se basaron en que presenta una mayor facilidad de uso que el resto de las \textit{APIs} mencionadas, además de que la herramienta de extracción Airbyte ya disponía de un conector básico para ello. Consecuentemente, la siguiente fuente de datos que se había planteado utilizar para el proyecto sería la \textit{API} de Reddit, por presentar mayor facilidad de extracción de datos enfocados a temas concretos que Facebook o Instagram.
+
+Después de terminar las tareas de integración y mejora del conector de Airbyte para Twitter se dirigió el enfoque hacia las demás etapas del proyecto, dejando así por finalizada esta parte. Tras la inclusión, despliegue y configuración de la herramienta de orquestación de procesos Apache Airflow, se procedió a la realización de pruebas mediante la ejecución completa de la \textit{pipeline ETL} para comprobar el correcto funcionamiento del proyecto, surgiendo así problemas en la etapa de extracción de datos.
+
+Al comprobar el origen de los errores, se descubrieron los cambios críticos que había sufrido recientemente la \textit{API} de Twitter~\cite{karissa2023}~\cite{stokel2023}. El acceso básico sin coste que existía anteriormente permitía realizar hasta 500\,000 peticiones de manera mensual a una multitud de diversos \textit{endpoints}. Actualmente, el acceso de dicho plan (\textit{Free}) sin coste ha quedado altamente restringido, permitiendo tan solo realizar publicaciones en la propia cuenta del desarrollador. El siguiente plan (\textit{Basic}), que permite el acceso al \textit{endpoint} de búsqueda de \textit{tweets} presenta un coste de \$100 mensuales, limitando a 10\,000 el número de peticiones de lectura que se pueden realizar. El siguiente plan que se aproxima al número original de peticiones es el \textit{Pro}, con un coste de \$5\,000 mensuales y restringiendo el acceso a 300\,000 peticiones de búsqueda.
+
+Al comprobar la siguiente opción investigada inicialmente a utilizar como segunda fuente de datos, se descubrió que la \textit{API} de Reddit también está sufriendo cambios muy restrictivos~\cite{watercutter2023}. Los usuarios y desarrolladores de la plataforma han organizado numerosas protestas~\cite{antonio2023} para intentar evitar estos hechos. El nuevo plan básico y sin coste ofrece entre 10 y 100 peticiones por minuto, dependiendo del tipo de cuenta y acceso concedido.
+
+\subsection{Conjunto de datos de demostración}
+
+Por las razones explicadas en la sección anterior, las mejoras implementadas en el conector de Airbyte para Twitter se han vuelto poco usables. También se ha descartado el desarrollo de un nuevo conector para Reddit que dependa de la baja cadencia de peticiones posibles a realizar.
+
+Teniendo esto en cuenta y el poco margen temporal restante para la finalización del proyecto, se ha decidido investigar el uso de un posible conjunto de datos a modo de demostración de uso del proyecto, ya que resulta poco viable utilizar las \textit{APIs} investigadas.
+
+El conjunto de datos seleccionado finalmente ha sido \textit{Game of Thrones S8 (Twitter)}~\cite{got8}, de la plataforma de \textit{data science} Kaggle\footnote{\url{https://www.kaggle.com}}. Se trata de un \textit{dataset} sobre la serie de televisión del mismo nombre, que el autor recolectó mediante un \textit{script} en el lenguaje R de manera diaria a lo largo de un mes durante el estreno de su octava temporada.
+
+Este conjunto de datos en formato \textit{CSV} presenta más de 760\,000 registros y 88 atributos distintos, con información tanto sobre los usuarios como las publicaciones realizadas por los mismos. Lo que resulta de gran utilidad ya que se puede reconstruir la misma estructura de datos que el primer \textit{data pipeline} realizado mediante la \textit{API} de Twitter.
 
 \section{Carga de datos}
 
