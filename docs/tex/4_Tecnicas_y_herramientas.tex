@@ -70,7 +70,7 @@ La elaboración de esta memoria está basada en la plantilla \LaTeX{} provista c
 \subsubsection{Herramientas consideradas:}
 
 \begin{itemize}
-    \item \textbf{MiK\TeX{} + \TeX{}:} Herramientas que realizan la traducción de \LaTeX{} a texto y permiten gestionar y editar este tipo de archivos, respectivamente.
+    \item \textbf{MiK\TeX{} + \TeX{}:} Herramientas que realizan la traducción de \LaTeX{} a \textit{PDF} y permiten gestionar y editar este tipo de archivos, respectivamente.
     \item \textbf{Overleaf:} Plataforma en línea que facilita la gestión y edición de documentos con formato \LaTeX{}.
 \end{itemize}
 
@@ -96,7 +96,7 @@ Se utilizará principalmente para dejar constancia de los temas comentados duran
 \subsection{Super Productivity}
 La gestión del tiempo dedicado se ha llevado a cabo mediante la herramienta de código abierto \textit{Super Productivity}\footnote{\url{https://super-productivity.com/}}. Sus principales funciones consisten en realizar la planificación, seguimiento y gestión de tareas. Permite distribuir tareas a lo largo de diversos proyectos, la asignación de etiquetas personalizadas y tener constancia del tiempo estimado y dedicado para cada una. 
 
-Presenta una interfaz sencilla de utilizar y amigable para el usuario que agiliza el trabajo gracias a la utilización de atajos de teclado. Otra de las características más importantes que tiene esta herramientas es la integración con varias plataformas para la importación de tareas. Por lo que la planificación realizada en GitHub y ZenHub se puede extraer a esta herramienta y realizar un mejor seguimiento del tiempo empleado en cada una de ellas.
+Presenta una interfaz sencilla de utilizar y amigable para el usuario que agiliza el trabajo gracias a la utilización de atajos de teclado. Otra de las características más importantes que tiene esta herramienta es la integración con varias plataformas para la importación de tareas. Por lo que la planificación realizada en GitHub y ZenHub se puede extraer a esta herramienta y realizar un mejor seguimiento del tiempo empleado en cada una de ellas.
 
 \subsection{Docker}
 
@@ -126,7 +126,7 @@ Estas librerías iban a ser utilizadas inicialmente para construir un primer pro
     \item \textbf{\textit{PRAW: The Python Reddit API Wrapper}.} Paquete de \textit{Python} que facilita el acceso a la \textit{API} de Reddit \cite{redditPRAW}.
 \end{itemize}
 
-No obstante, tras comenzar a trabajar con ellas se observaron fallos de dependencias y partes deprecadas. Esto originó inconsistencias entre las versiones de las \textit{APIs} actuales y el código de dichas librerías, además de provocar contratiempos en la evaluación del \textit{sprint} correspondiente. Por estas razones, se terminó descartando esta opción y utilizando la que se propone a continuación. 
+No obstante, tras comenzar a trabajar con ellas se observaron fallos de dependencias y partes \textit{deprecadas}. Esto originó inconsistencias entre las versiones de las \textit{APIs} actuales y el código de dichas librerías, además de provocar contratiempos en la evaluación del \textit{sprint} correspondiente. Por estas razones, se terminó descartando esta opción y utilizando la que se propone a continuación. 
 
 \subsubsection{Herramienta elegida: Airbyte}
 
@@ -145,7 +145,7 @@ Para cumplir con estos requisitos, se ha investigado viabilidad de las siguiente
 \subsubsection{Herramientas consideradas:}
 
 \begin{itemize}
-    \item \textbf{\textit{Apache HDFS} (\textit{Hadoop Distributed File System}).} Sistema de ficheros distribuido escalable horizontalmente, tolerante a fallos y de alto rendimiento para procesar grandes conjuntos de datos. Complejo de configurar correctamente para conseguir eficiencia óptima~\cite{hdfsArchitecture}.
+    \item \textbf{\textit{Apache HDFS} (\textit{Hadoop Distributed File System}).} Sistema de ficheros distribuido escalable horizontalmente, tolerante a fallos y de alto rendimiento para procesar grandes conjuntos de datos. Complejo de configurar correctamente para conseguir la eficiencia óptima~\cite{hdfsArchitecture}.
     \item \textbf{\textit{Apache Haudi}.} Plataforma \textit{data lakehouse} \textit{open-source} de procesamiento de datos tanto en \textit{streaming} como en \textit{batch}. Permite ingestión de datos eficiente, versionado y actualización de datos, con soporte para transacciones \textit{ACID}. Actualmente aún presenta poca documentación y soporte, además de requerir bastantes recursos \textit{hardware} para conseguir un rendimiento óptimo~\cite{hudiOverview}.
     \item \textbf{\textit{Apache Cassandra}.} Base de datos \textit{NoSQL} columnar enfocada al procesamiento de grandes conjuntos de datos con alto rendimiento y tolerante a fallos, con gran eficiencia para escritura y replicación de datos. Presenta soporte limitado para realizar transacciones complejas y requiere definir previamente el esquema de los datos a cargar para conseguir el rendimiento óptimo~\cite{cassandraOverview}.
     \item \textbf{\textit{MongoDB}.} Base de datos \textit{NoSQL} orientada a documentos escalable y flexible que permite la ingestión y consulta eficientes de estructuras de datos complejas en formato \textit{JSON}. Presenta soporte limitado para modelado de datos relacional y para transacciones complejas~\cite{mongodbArchitecture}.
@@ -183,7 +183,7 @@ Los datos extraídos y los inferidos a través de los modelos de procesamiento d
     \item \textbf{\textit{ClickHouse}}
 \end{itemize}
 
-La herramienta \textit{ClickHouse} ha elegido teniendo en cuenta los requisitos de este proyecto concreto. De esta manera, se permitirá una baja latencia y un buen rendimiento para las consultas realizadas. Además, la gestión y configuración no resultará tan complicada como la exigida por \textit{Apache Druid}, que necesita de varios servicios y componentes para funcionar correctamente. Por lo que el coste computacional y de mantenimiento sería mayor en comparación con la herramienta elegida.
+La herramienta \textit{ClickHouse} se ha elegido teniendo en cuenta los requisitos de este proyecto concreto. De esta manera, permitirá una baja latencia y un buen rendimiento para las consultas realizadas. Además, la gestión y configuración no resultará tan complicada como la exigida por \textit{Apache Druid}, que necesita de varios servicios y componentes para funcionar correctamente. Por lo que el coste computacional y de mantenimiento sería mayor en comparación con la herramienta elegida.
 
 \subsection{Herramienta analítica de visualización de datos}
 
