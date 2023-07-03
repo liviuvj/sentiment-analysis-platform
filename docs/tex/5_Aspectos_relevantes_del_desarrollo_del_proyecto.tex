@@ -159,7 +159,21 @@ Teniendo esto en cuenta y el poco margen temporal restante para la finalización
 
 El conjunto de datos seleccionado finalmente ha sido \textit{Game of Thrones S8 (Twitter)}~\cite{got8}, de la plataforma de \textit{data science} Kaggle\footnote{\url{https://www.kaggle.com}}. Se trata de un \textit{dataset} sobre la serie de televisión del mismo nombre, que el autor recolectó mediante un \textit{script} en el lenguaje R de manera diaria a lo largo de un mes durante el estreno de su octava temporada.
 
-Este conjunto de datos en formato \textit{CSV} presenta más de 760\,000 registros y 88 atributos distintos, con información tanto sobre los usuarios como las publicaciones realizadas por los mismos. Lo que resulta de gran utilidad ya que se puede reconstruir la misma estructura de datos que el primer \textit{data pipeline} realizado mediante la \textit{API} de Twitter.
+Este conjunto de datos en formato \textit{CSV} presenta más de 760\,000 registros y 88 atributos distintos, con información tanto sobre los usuarios como las publicaciones realizadas por los mismos. Lo que resulta de gran utilidad ya que se puede reconstruir una estructura de datos similar a la del primer \textit{data pipeline} realizado mediante la \textit{API} de Twitter.
+
+Para comprobar de mejor manera los datos disponibles y la usabilidad de los mismos se ha realizado un análisis exploratorio, al que se puede acceder a través del \textit{Jupyter Notebook}\footnote{\url{https://colab.research.google.com/drive/1d_obU9idFqjsDi7ezeFs1CORxTUAgh7V}} que se deja disponible.
+
+La primera parte de dicho análisis consiste en comprobar la posibilidad de crear una estructura de datos parecida a la diseñada originalmente para el flujo de datos de la \textit{API} de Twitter, consiguiendo completar dicho esquema de datos en una gran medida.
+
+La segunda parte se centra en buscar palabras clave que puedan servir a modo de tópico o tema de interés sobre el que se pueda obtener más información mediante el análisis de sentimientos. Para ello, se comprueba el interés de los usuarios sobre diversos personajes y temas, de los que se han escogido los siguientes para formar particiones más pequeñas y manejables del conjuntos de datos total:
+
+\begin{itemize}
+    \item \textbf{\textit{dataset\_movie}.} Partición compuesta de 7\,252 registros que contienen la palabra clave <<\textit{movie}>> en la publicación.
+    \item \textbf{\textit{dataset\_got}.} Partición compuesta de 690\,768 registros que contienen la palabra clave <<\textit{Game of Thrones}>> en la publicación.
+    \item \textbf{\textit{dataset\_season8}.} Partición compuesta de 34\,079 registros que contienen la palabra clave <<\textit{season 8}>> en la publicación.
+    \item \textbf{\textit{dataset\_daenerys}.} Partición compuesta de 8\,909 registros que contienen la palabra clave <<\textit{Daenerys}>> en la publicación.
+    \item \textbf{\textit{dataset\_jon}.} Partición compuesta de 12\,454 registros que contienen la palabra clave <<\textit{Jon}>> en la publicación.
+\end{itemize}
 
 \section{Carga de datos}
 
