@@ -10,6 +10,7 @@ val rawUsersDF = rawDF.select(explode($"_airbyte_data.includes.users") as "user_
 // Create tweets Dataframe
 val tweetsDF = rawDataDF.select(
     $"tweet_data.id".alias("tweet_id"),
+    lit("twitter").alias("source"),
     lit("movie").alias("search_query"),
     $"tweet_data.author_id".alias("user_id"),
     $"tweet_data.created_at".alias("created_at"),
@@ -74,7 +75,15 @@ val hashtagsDF = rawDataDF.select(
 
 // Clean DataFrames by dropping null values and duplicates
 val cleanTweetsDF = tweetsDF.dropDuplicates
-val cleanUsersDF = usersDF.dropDuplicates
+val cleanUsersDF = usersDF.groupBy("user_id").
+    agg(max("tweet_count").as("tweet_count")).
+    join(usersDF, Seq("user_id", "tweet_count")).
+    dropDuplicates("user_id").
+    select(
+        "user_id", "name", "username", "description",
+        "location", "followers_count", "following_count",
+        "tweet_count", "listed_count"
+    )
 val cleanMentionsDF = mentionsDF.na.drop.dropDuplicates
 val cleanAnnotationsDF = annotationsDF.na.drop.dropDuplicates
 val cleanContextAnnotationsDF = contextAnnotationsDF.na.drop.dropDuplicates

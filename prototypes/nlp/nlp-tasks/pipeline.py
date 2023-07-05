@@ -1,6 +1,9 @@
 import sys
 
-from tasks import TaskPipeline, TaskTwitterInput, TaskTwitterOutput
+from tasks import (
+    TaskPipeline, TaskTwitterInput, TaskTwitterOutput,
+    TaskDatasetInput, TaskDatasetOutput
+    )
 from connectors import MongoDBConnector, ClickHouseConnector
 from utils import convert_date, get_logger
 
@@ -110,43 +113,130 @@ def run_pipeline_twitter(
     )
 
 
+def run_pipeline_dataset(
+    input_task, output_task, input_client, output_client, nlp_pipeline
+):
+    log.info("Starting Dataset Pipeline...")
+
+    # Fetch Dataset database
+    input_db = input_client[input_task.database_name]
+
+    # MongoDB query to remove the unusable _ID field
+    query_filter = {"_id": 0}
+
+    # Fetch input collections
+    collection_tweets = input_db[input_task.tweets].find({}, query_filter)
+    collection_users = input_db[input_task.users].find({}, query_filter)
+    collection_mentions = input_db[input_task.mentions].find({}, query_filter)
+    collection_urls = input_db[input_task.urls].find({}, query_filter)
+    collection_hashtags = input_db[input_task.hashtags].find({}, query_filter)
+
+    # Get tweet texts
+    tweets = [doc for doc in collection_tweets]
+
+    # Execute all NLP tasks on the data
+    nlp_pipeline.run_all_tasks(tweets)
+
+    # Create output database
+    output_client.create_database(output_task.database_name)
+    output_client.use_database(output_task.database_name)
+
+    # Create tables
+    log.info("Creating output tables...")
+    output_client.create_table(
+        output_task.tweets["name"], output_task.tweets["columns"]
+    )
+    output_client.create_table(output_task.users["name"], output_task.users["columns"])
+    output_client.create_table(
+        output_task.mentions["name"], output_task.mentions["columns"]
+    )
+    output_client.create_table(output_task.urls["name"], output_task.urls["columns"])
+    output_client.create_table(
+        output_task.hashtags["name"], output_task.hashtags["columns"]
+    )
+
+    # Insert data into tables
+    output_client.insert_into_table(
+        output_task.tweets["name"],
+        list(output_task.tweets["columns"].keys()),
+        convert_date(tweets, "created_at"),
+    )
+
+    users = [user for user in collection_users]
+    output_client.insert_into_table(
+        output_task.users["name"],
+        list(output_task.users["columns"].keys()),
+        users,
+    )
+
+    mentions = [mention for mention in collection_mentions]
+    output_client.insert_into_table(
+        output_task.mentions["name"],
+        list(output_task.mentions["columns"].keys()),
+        mentions,
+    )
+
+    urls = [url for url in collection_urls]
+    output_client.insert_into_table(
+        output_task.urls["name"],
+        list(output_task.urls["columns"].keys()),
+        urls,
+    )
+
+    hashtags = [hashtag for hashtag in collection_hashtags]
+    output_client.insert_into_table(
+        output_task.hashtags["name"],
+        list(output_task.hashtags["columns"].keys()),
+        hashtags,
+    )
+
+
 def main():
     # Parse arguments
-    in_db_username = sys.argv[1]
-    in_db_password = sys.argv[2]
-    in_db_host = sys.argv[3]
-    in_db_port = sys.argv[4]
-    out_db_username = sys.argv[5]
-    out_db_password = sys.argv[6]
-    out_db_host = sys.argv[7]
-    out_db_port = sys.argv[8]
+    task_name = sys.argv[1]
+    in_db_username = sys.argv[2]
+    in_db_password = sys.argv[3]
+    in_db_host = sys.argv[4]
+    in_db_port = sys.argv[5]
+    out_db_username = sys.argv[6]
+    out_db_password = sys.argv[7]
+    out_db_host = sys.argv[8]
+    out_db_port = sys.argv[9]
 
     # Create input and output tasks
-    twitter_in = TaskTwitterInput(in_db_username, in_db_password, in_db_host, in_db_port)
-    twitter_out = TaskTwitterOutput(out_db_username, out_db_password, out_db_host, out_db_port)
+    input_task, output_task = None, None
+
+    if task_name == "twitter":
+        input_task = TaskTwitterInput(in_db_username, in_db_password, in_db_host, in_db_port)
+        output_task = TaskTwitterOutput(out_db_username, out_db_password, out_db_host, out_db_port)
+    elif task_name == "dataset":
+        input_task = TaskDatasetInput(in_db_username, in_db_password, in_db_host, in_db_port)
+        output_task = TaskDatasetOutput(out_db_username, out_db_password, out_db_host, out_db_port)
 
     # Create Task Pipeline
     nlp_pipeline = TaskPipeline()
 
-    # Connect to MongoDB
-    mongo_client = MongoDBConnector(
-        twitter_in.database_host,
-        twitter_in.database_port,
-        twitter_in.database_username,
-        twitter_in.database_password,
+    # Connect to the input database: MongoDB
+    input_client = MongoDBConnector(
+        input_task.database_host,
+        input_task.database_port,
+        input_task.database_username,
+        input_task.database_password,
     ).get_connection()
 
-    # Connect to ClickHouse
-    ck_client = ClickHouseConnector(
-        twitter_out.database_host,
-        twitter_out.database_port,
-        twitter_out.database_username,
-        twitter_out.database_password,
+    # Connect to the output database: ClickHouse
+    output_client = ClickHouseConnector(
+        output_task.database_host,
+        output_task.database_port,
+        output_task.database_username,
+        output_task.database_password,
     )
 
-    # Run Twitter pipeline
-    run_pipeline_twitter(twitter_in, twitter_out, mongo_client, ck_client, nlp_pipeline)
-
+    # Run pipeline
+    if task_name == "twitter":
+        run_pipeline_twitter(input_task, output_task, input_client, output_client, nlp_pipeline)
+    elif task_name == "dataset":
+        run_pipeline_dataset(input_task, output_task, input_client, output_client, nlp_pipeline)
 
 if __name__ == "__main__":
     main()

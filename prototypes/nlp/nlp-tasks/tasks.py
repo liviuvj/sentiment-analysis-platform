@@ -37,9 +37,6 @@ class TaskPipeline:
         self.ner_classifier = pipeline("sentiment-analysis", model=ner_model)
 
     # Create iterator for the data
-    #
-    # TODO: not all sources might come with this format,
-    # consider moving out this function
     def data_iterator(self, data, log_iterations=1000):
         for i, d in enumerate(data, start=1):
             if not i % log_iterations:
@@ -155,6 +152,7 @@ class TaskTwitterOutput:
             "name": "tweets",
             "columns": {
                 "tweet_id": "String",
+                "source": "String",
                 "search_query": "String",
                 "user_id": "String",
                 "created_at": "Datetime",
@@ -215,41 +213,116 @@ class TaskTwitterOutput:
         }
 
 
-# Get tweet texts
-# tweets_english = [doc for doc in collection_tweets if doc["language"] == "en"]
+class TaskDatasetInput:
+    def __init__(
+        self, db_username: str, db_password: str, db_host: str, db_port: int
+    ) -> None:
+        """
+        Task that defines parameters for the input source of Twitter data.
 
-# Define OLAP DB params
-# db_name = "twitter"
-# table_name = "tweets"
-# tweets_params = {
-#     "tweet_id": "String",
-#     "user_id": "String",
-#     "created_at": "Datetime",
-#     "language": "FixedString(2)",
-#     "text": "String",
-#     "retweet_count": "Int32",
-#     "reply_count": "Int32",
-#     "like_count": "Int32",
-#     "quote_count": "Int32",
-#     "sentiment": "String",
-#     "emotion": "String",
-#     "topic": "String",
-#     "entity": "String",
-# }
+        Args:
+            db_username (str): Database username.
+            db_password (str): Database password.
+            db_host (str): Database host.
+            db_port (int): Database port.
+        """
 
-# # Create ClickHouse client
-# ck_client = ClickHouseConnector(
-#     host="clickhouse", port=9000, user="ck_user", password="ck_password"
-# )
+        # Connection credentials
+        self.database_username = db_username
+        self.database_password = db_password
+        self.database_host = db_host
+        self.database_port = db_port
+        # self.database_host = "mongo-db"
+        # self.database_port = 27017
+        # self.database_username = "mongoroot"
+        # self.database_password = "mongopassword"
 
-# # Create database
-# ck_client.create_database(db_name)
-# ck_client.use_database(db_name)
+        # Database and collection names
+        self.database_name = "raw_dataset"
+        self.tweets = "clean_tweets"
+        self.users = "clean_users"
+        self.mentions = "clean_mentions"
+        self.urls = "clean_urls"
+        self.hashtags = "clean_hashtags"
 
-# # Create table
-# ck_client.create_table(table_name, tweets_params, "tweet_id", "tweet_id")
 
-# # Insert data
-# ck_client.insert_into_table(
-#     table_name, list(tweets_params.keys()), clean(tweets_english)
-# )
+class TaskDatasetOutput:
+    def __init__(
+        self, db_username: str, db_password: str, db_host: str, db_port: int
+    ) -> None:
+        """
+        Task that defines parameters for the output destination of Twitter data.
+
+        Args:
+            db_username (str): Database username.
+            db_password (str): Database password.
+            db_host (str): Database host.
+            db_port (int): Database port.
+        """
+
+        # Connection credentials
+        self.database_username = db_username
+        self.database_password = db_password
+        self.database_host = db_host
+        self.database_port = db_port
+        # self.database_host = "clickhouse"
+        # self.database_port = 9000
+        # self.database_username = "ck_user"
+        # self.database_password = "ck_password"
+
+        # Database name
+        self.database_name = "twitter"
+
+        # Table definitions
+
+        self.tweets = {
+            "name": "tweets",
+            "columns": {
+                "tweet_id": "String",
+                "search_query": "String",
+                "source": "String",
+                "user_id": "String",
+                "created_at": "Datetime",
+                "language": "FixedString(2)",
+                "text": "String",
+                "retweet_count": "Int32",
+                "like_count": "Int32",
+                "sentiment": "String",
+                "emotion": "String",
+                "topic": "String",
+                "entity": "String",
+            },
+        }
+
+        self.users = {
+            "name": "users",
+            "columns": {
+                "user_id": "String",
+                "name": "String",
+                "username": "String",
+                "description": "String",
+                "followers_count": "Int32",
+                "following_count": "Int32",
+                "tweet_count": "Int32",
+                "listed_count": "Int32",
+            },
+        }
+
+        self.mentions = {
+            "name": "mentions",
+            "columns": {
+                "tweet_id": "String",
+                "user_id": "String",
+                "username": "String",
+            },
+        }
+
+        self.urls = {
+            "name": "urls",
+            "columns": {"tweet_id": "String", "display_url": "String"},
+        }
+
+        self.hashtags = {
+            "name": "hashtags",
+            "columns": {"tweet_id": "String", "tag": "String"},
+        }

@@ -43,7 +43,10 @@ def convert_date(data: list[dict], field: str) -> dict:
     for obj in data:
 
         # Convert field to daterime
-        dt = datetime.strptime(obj[field], "%Y-%m-%dT%H:%M:%S.%fZ")
+        try:
+            dt = datetime.strptime(obj[field], "%Y-%m-%dT%H:%M:%S.%fZ")
+        except Exception as e:
+            dt = datetime.strptime(obj[field], "%Y-%m-%d %H:%M:%S")
         obj[field] = dt
 
         yield obj
