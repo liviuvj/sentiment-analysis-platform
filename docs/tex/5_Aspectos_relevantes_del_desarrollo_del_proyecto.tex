@@ -192,3 +192,33 @@ Una vez finalizada la carga inicial de los datos en \textit{MongoDB}, se procede
 Esta tarea contempla la lectura de los datos realizando una limpieza inicial de los mismos, de manera que se recogen únicamente los datos necesarios y se elimina la compleja estructura de datos de la que se han extraído. Posteriormente se seleccionan los campos que serán exportados nuevamente a una colección de \textit{MongoDB} de datos limpios.
 
 Estos datos estarán ya listos para servir de entrada a los algoritmos de \textit{sentiment analysis} que serán ejecutados a continuación.
+
+\section{Visualización de los datos}
+
+En esta sección se detallarán los aspectos relevantes de la herramienta seleccionada para la visualización de los datos.
+
+\section{Orquestación de los procesos}
+
+La arquitectura implementada en este proyecto resulta compleja no solamente a nivel de integración de las herramientas empleadas, sino también de la comunicación realizada entre ellas y los procesos que intervienen entre cada una.
+
+Debido a estas razones, surge la necesidad de emplear una herramienta capaz de gestionar todo el flujo de acciones que se lleva a cabo entre los distintos componentes del proyecto. Para lograr este objetivo, se ha seleccionado \textit{Apache Airflow} como orquestador de procesos.
+
+En las siguientes secciones se desarrollan los aspectos que mayor influencia han tenido para la integración de esta etapa.
+
+\subsection{Configuración y despliegue}
+
+La documentación de \textit{Apache Airflow} indica de la disponibilidad de un <<entorno \textit{dockerizado} listo para producción>>, aunque dicha afirmación no resulta del todo cierta. Para la correcta configuración y despliegue de esta herramienta ha resultado necesaria la creación de un \textit{script} que automatice de la manera más abstracta posible para el usuario la parametrización y despliegue iniciales de la plataforma.
+
+\subsection{Acceso seguro al \textit{Docker socket}}
+
+Teniendo en cuenta los objetivos del proyecto sobre la creación de una plataforma segura y autocontenida, se ha realizado el despliegue completo de la plataforma en contenedores \textit{Docker}.
+
+Debido a esto, las etapas de procesamiento e inferencia de los datos se realizan en contenedores <<desechables>>, en el sentido de que solamente resulta necesario que estén activos durante el tiempo necesario para realizar sus operaciones. De esta manera, esta parte del flujo de datos se vuelve más dinámica y eficiente, utilizando únicamente los recursos necesarios durante el tiempo requerido y liberándolos nuevamente tras finalizar dichas tareas.
+
+Para realizar dicho despliegue y borrado dinámico de contenedores, \textit{Apache Airflow} necesita acceso al \textit{docker socket}.
+
+\subsection{Integración y flujos de datos}
+
+La orquestación de los procesos y comunicación entre los numerosos componentes del proyecto ha requerido la creación de distintos flujos de datos utilizando diversas tareas y configuraciones.
+
+Teniendo en cuenta la cantidad de fuentes de datos seleccionadas finalmente para el proyecto, se han diseñado dos \textit{data pipelines}. Un flujo de datos con un \textit{DAG} normal para los datos provenientes de la \textit{API} de Twitter y otro flujo de datos que genera de manera dinámica los \textit{DAGs} necesarios para todos los subconjuntos de datos del \textit{dataset} explicado en anteriores apartados.  
