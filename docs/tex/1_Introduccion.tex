@@ -6,40 +6,12 @@ No obstante, para llegar a obtener conocimiento a partir de todos esos datos en 
 
 En los siguientes apartados se describe el planteamiento del proyecto, la estructura de la memoria y los materiales adjuntos a la misma.
 
-\section{Planteamiento del proyecto}
-
-El proyecto está formado por varios componentes, todos ellos de código abierto, que se encargan de diferentes tareas. Todos los componentes de la plataforma están completamente <<\textit{dockerizados}>>, es decir, empaquetados y aislados en contenedores \textit{Docker} independientes y desplegables en cualquier máquina.
-
-Con estas decisiones de diseño se elimina la dependencia entre componentes, creando así una arquitectura modular para la plataforma. Por lo que resulta adaptable a distintos casos de uso o a la utilización de distintos componentes a los integrados actualmente para cada parte del proyecto, creando así una plataforma configurable según las necesidades que se planteen. 
-
-En la \autoref{fig:platform-architecture-basic} se puede observar la arquitectura planteada del proyecto.
-
-\imagen{platform-architecture-basic}{Vista básica de la arquitectura del proyecto}
-
-El primero es \textit{Airbyte}, una herramienta que permite la extracción de datos desde distintos orígenes, como \textit{APIs}, bases de datos o archivos disponibles en la \textit{web}. Se ha utilizado para la ingestión de datos desde \textit{API} y desde \textit{Google Drive}.
-
-El segundo es \textit{MongoDB}, una base de datos no relacional orientada a documentos. Se encarga de almacenar los datos en bruto de todas las fuentes de datos, actuando de esta manera como un \textit{Data Lake} para la plataforma.
-
-El tercero es \textit{Apache Spark}, un \textit{framework} de computación distribuida que permite procesar grandes volúmenes de datos de forma paralela y eficiente. Su labor en el proyecto se centra en el preprocesamiento de los datos extraídos, tanto su limpieza y filtrado como el enriquecimiento mediante <<metadatos>>.
-
-El cuarto es \textit{HuggingFace Transformers}, una librería del lenguaje de programación Python que ofrece modelos preentrenados de procesamiento del lenguaje natural (\textit{NLP, Natural Language Processing}) basados en \textit{Deep Neural Networks}. Esta libtería se utiliza para aplicar técnicas de \textit{NLP} sobre los datos preprocesados, desde la clasificación de sentimientos hasta la detección de entidades. 
-
-El quinto es \textit{ClickHouse}, una base de datos columnar orientada al procesamiento analítico de datos en línea (\textit{OLAP, On-Line Analytical Processing}) que permite realizar consultas rápidas y complejas sobre los datos. Su labor es ejercer de \textit{Data Warehouse} del proyecto, puesto que almacenará los datos finales enriquecidos tras las etapas anteriores. .
-
-El sexto es \textit{Apache Superset}, una herramienta de visualización de datos que permite crear cuadros de mando interactivos y personalizados con gráficos, mapas o tablas. Su labor consistirá en permitir a los usuarios la creación y visualización de \textit{dashboards} para explotar la información obtenida hasta el momento, como exploración de datos, métricas resultantes y análisis de sentimientos.
-
-El séptimo es \textit{Apache Airflow}, una plataforma de orquestación de flujos de trabajo que permite automatizar y programar tareas. Este componente se ha utilizado para gestionar las \textit{data pipelines} diseñadas y organizar las interacciones entre los demás componentes, como el despliegue dinámico de \textit{Spark} y \textit{Transformers} solamente cuando resulte necesario, permitiendo así la optimización de los recursos.
-
-El octavo es una interfaz web como desarrollo propio y a medida para este proyecto. Tiene como objetivo servir de punto de acceso centralizado a las demás aplicaciones web que ofrecen las distintas herramientas empleadas.
-
-El planteamiento de esta plataforma ofrece una solución \textit{big data} modular e integral para el análisis de sentimientos. La combinación de los componentes descritos ha sido elegida por formar una plataforma con tecnologías modernas, flexibles y altamente escalables que permitan explotar de manera eficiente los datos y obtener el valor esperado.
-
 \section{Estructura de la memoria}
 
 La memoria está organizada de la siguiente manera:
 
 \begin{itemize}
-    \item \textbf{Introducción:} Planteamiento del proyecto, la estructuración de la memoria y los materiales adjuntos a la misma.
+    \item \textbf{Introducción:} La estructuración de la memoria, los materiales adjuntos a la misma y el planteamiento del proyecto.
     \item \textbf{Objetivos del proyecto:} Descripción de los objetivos definidos inicialmente que se han intentado cumplir en su totalidad.
     \item \textbf{Conceptos teóricos:} Explicación de temas a tener en cuenta para el desarrollo del proyecto y de los modelos de \textit{Deep Learning} empleados.
     \item \textbf{Técnicas y herramientas:} Que se han utilizado para la realización del proyecto y facilitar algunas labores de programación, desarrollo o gestión.
@@ -98,3 +70,31 @@ Además de la memoria y de los anexos, se proporcionan también los siguientes m
     \end{itemize}
     
 \end{itemize}
+
+\section{Planteamiento del proyecto}
+
+El proyecto está formado por varios componentes, todos ellos de código abierto, que se encargan de diferentes tareas. Todos los componentes de la plataforma están completamente <<\textit{dockerizados}>>, es decir, empaquetados y aislados en contenedores \textit{Docker} independientes y desplegables en cualquier máquina.
+
+Con estas decisiones de diseño se elimina la dependencia entre componentes, creando así una arquitectura modular para la plataforma. Por lo que resulta adaptable a distintos casos de uso o a la utilización de distintos componentes a los integrados actualmente para cada parte del proyecto, creando así una plataforma configurable según las necesidades que se planteen. 
+
+En la \autoref{fig:platform-architecture-basic} se puede observar la arquitectura planteada del proyecto.
+
+\imagen{platform-architecture-basic}{Vista básica de la arquitectura del proyecto}
+
+El primero es \textit{Airbyte}, una herramienta que permite la extracción de datos desde distintos orígenes, como \textit{APIs}, bases de datos o archivos disponibles en la \textit{web}. Se ha utilizado para la ingestión de datos desde \textit{API} y desde \textit{Google Drive}.
+
+El segundo es \textit{MongoDB}, una base de datos no relacional orientada a documentos. Se encarga de almacenar los datos en bruto de todas las fuentes de datos, actuando de esta manera como un \textit{Data Lake} para la plataforma.
+
+El tercero es \textit{Apache Spark}, un \textit{framework} de computación distribuida que permite procesar grandes volúmenes de datos de forma paralela y eficiente. Su labor en el proyecto se centra en el preprocesamiento de los datos extraídos, tanto su limpieza y filtrado como el enriquecimiento mediante <<metadatos>>.
+
+El cuarto es \textit{HuggingFace Transformers}, una librería del lenguaje de programación Python que ofrece modelos preentrenados de procesamiento del lenguaje natural (\textit{NLP, Natural Language Processing}) basados en \textit{Deep Neural Networks}. Esta librería se utiliza para aplicar técnicas de \textit{NLP} sobre los datos preprocesados, desde la clasificación de sentimientos hasta la detección de entidades. 
+
+El quinto es \textit{ClickHouse}, una base de datos columnar orientada al procesamiento analítico de datos en línea (\textit{OLAP, On-Line Analytical Processing}) que permite realizar consultas rápidas y complejas sobre los datos. Su labor es ejercer de \textit{Data Warehouse} del proyecto, puesto que almacenará los datos finales enriquecidos tras las etapas anteriores. .
+
+El sexto es \textit{Apache Superset}, una herramienta de visualización de datos que permite crear cuadros de mando interactivos y personalizados con gráficos, mapas o tablas. Su labor consistirá en permitir a los usuarios la creación y visualización de \textit{dashboards} para explotar la información obtenida hasta el momento, como exploración de datos, métricas resultantes y análisis de sentimientos.
+
+El séptimo es \textit{Apache Airflow}, una plataforma de orquestación de flujos de trabajo que permite automatizar y programar tareas. Este componente se ha utilizado para gestionar las \textit{data pipelines} diseñadas y organizar las interacciones entre los demás componentes, como el despliegue dinámico de \textit{Spark} y \textit{Transformers} solamente cuando resulte necesario, permitiendo así la optimización de los recursos.
+
+El octavo es una interfaz web como desarrollo propio y a medida para este proyecto. Tiene como objetivo servir de punto de acceso centralizado a las demás aplicaciones web que ofrecen las distintas herramientas empleadas.
+
+El planteamiento de esta plataforma ofrece una solución \textit{big data} modular e integral para el análisis de sentimientos. La combinación de los componentes descritos ha sido elegida por formar una plataforma con tecnologías modernas, flexibles y altamente escalables que permitan explotar de manera eficiente los datos y obtener el valor esperado.

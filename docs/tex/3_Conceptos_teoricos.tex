@@ -10,7 +10,7 @@ En la última década, la cantidad de datos generados cada minuto ha aumentado m
 
 \imagenConFuente{data-decade}{Diferencia entre la cantidad de datos generados por minuto entre 2013 y 2022 de algunas plataformas}{\cite{domoVS}}
 
-\imagenConFuente{data-never-sleeps}{Cantidad de datos generados cada minuto 2021 en Internet}{\cite{domoInfo}}
+\imagenConFuente{data-never-sleeps}{Cantidad de datos generados cada minuto durante el año 2021 en Internet}{\cite{domoInfo}}
 
 A causa de esto, el término \textit{Big Data} se ha convertido en un tema cada vez más recurrente e importante en la tecnología. Se trata de un fenómeno que ha generado la necesidad de evolucionar las técnicas y herramientas tradicionales a otras metodologías capaces no solo de almacenar toda esta cantidad de datos, sino también de explotarla de manera eficiente.
 
@@ -53,6 +53,36 @@ Resulta de igual relevancia comentar las técnicas con las que se trabajan los d
 Finalmente, es fundamental destacar la importancia de la seguridad en el ámbito de los datos, sobre todo al tratar con información de carácter personal. En la actualidad, los datos sobre uno mismo resultan ser lo más valioso que puede poseer una persona, puesto que pueden representar en gran parte la propia identidad. Es crucial el establecimiento de una <<gobernanza de datos>>, de manera que solamente las personas adecuadas puedan tener acceso a información privilegiada, y cada individuo al mínimo necesario para poder llevar a cabo su función.
 
 \section{Proceso ETL}
+
+En secciones anteriores se ha explicado cómo el \textit{Big Data} implica un aumento del volumen, velocidad y variedad de los datos, entre otras características. Ello supone también la utilización de distintas fuentes de datos, que suelen incrementar de igual manera con el tiempo.
+
+Para llevar a cabo dicha gestión, se pone en funcionamiento un proceso \textit{ETL}, (\textit{Extract--Transform--Load}). Este proceso tendrá como objetivo dirigir los datos en bruto desde los orígenes de datos hasta los destinos de los mismos, transformándolos por el camino según corresponda para asegurar la obtención de información valiosa y fiable~\cite{databricksETL}.
+
+\subsection{Descripción del proceso}
+
+Como bien se ha indicado, este proceso presenta tres etapas específicas y necesarias. Cada una cuenta con sus propias características y requisitos, lo que lo convierten en uno de los procesos críticos al trabajar con datos. A continuación se detalla el funcionamiento de estas etapas:
+
+\imagenConFuente{etl-process}{Ilustración básica de un proceso \textit{ETL}}{\cite{databricksETL}}
+
+\begin{itemize}
+    \item \textbf{Extracción.} La primera etapa del proceso se encarga de realizar la extracción de datos desde las fuentes de datos seleccionadas, \textit{APIs}, bases de datos, registros de sensores, etc. Esta información extraída puede estar formada por distintos tipos de datos y estar tanto en formato estructurado como semi-estructurado o no estructurado. Además, según el funcionamiento del origen de datos, esta extracción podría ser posible realizarla de manera parcial (extrayendo únicamente registros filtrados o los modificados recientemente) o de manera total (extrayendo todos los registros, necesitando posteriormente un identificador o algún método para compararlos con los extraídos previamente y eliminar duplicados).
+
+    \item \textbf{Transformación.} La segunda etapa se centra en el procesamiento de los datos en bruto mediante tareas de limpieza, transformaciones y enriquecimiento de los datos. Tras la finalización de esta parte del proceso, los datos finales obtenidos han de estar correctamente integrados y resultar fiables, almacenándose en un sistema intermedio o de \textit{staging}. Por ello, en este punto deberán estar cumpliendo los requisitos de calidad de datos propuestos y estar disponibles para ser posteriormente utilizados o procesados y enriquecidos en mayor profundidad para fines particulares de la aplicación que los explotará en última instancia. 
+
+    \item \textbf{Carga.} Finalmente, la última etapa del proceso consiste en mover los datos finales, ya fiables y de calidad, al sistema o base de datos de la aplicación que los va a explotar y utilizar.
+\end{itemize}
+
+Cabe destacar también el proceso \textit{ELT} (\textit{Extract--Load--Transform})~\cite{ibmETL}, que actúa de manera similar al original \textit{ETL}. En lugar de procesar los datos extraídos y mantenerlos en un área de \textit{staging} para su posterior uso, en el proceso \textit{ELT} los datos se cargan directamente en el sistema o base de datos destino. Por lo que cada aplicación deberá realizar sus propias transformaciones según sea necesario a partir de los datos disponibles tras realizar la carga de los mismos. El proceso \textit{ELT} puede producir mejores resultados en conjuntos de datos no estructurados y de gran volumen.  
+
+\subsection{Desafíos}
+
+La aplicación de un proceso \textit{ETL} o \textit{ELT} se formaliza con la creación de una \textit{data pipeline}, un conjunto de tareas y acciones encargadas de gestionar la totalidad del proceso. El desarrollo y mantenimiento de las \textit{data pipelines} supone numerosos retos a la hora de tratar con grandes volúmenes de datos.
+
+Comenzando por la infraestructura necesaria para ejecutar dichos procesos, los sistemas sobre los que se desarrollan estos flujos de datos han de cumplir con las necesidades específicas de cada proyecto. Distintas tareas pueden necesitar de una serie de recursos distintos, de menor a mayor capacidad computacional o espacio de almacenamiento. Estos sistemas necesitan ser escalables para permitir la flexibilidad de mantener las \textit{data pipelines} disponibles y en correcto estado ante cambios imprevistos en los datos o en los requisitos.
+
+Igualmente y de manera general, al ser cada proyecto distinto y presentar diferentes requerimientos, los desarrollos realizados para un flujo de datos no tienen por qué ser traspasables a otro proyecto. De esta manera, las aplicaciones que actúan como origen o destino de datos, y las propias herramientas que se encargan del procesamiento de los mismos, pueden estar en continuo desarrollo y evolución. Por consiguiente, surge también la necesidad de un mantenimiento continuo sobre las \textit{data pipelines} creadas para sustentar la correcta fiabilidad de las mismas.
+
+Resulta importante destacar de igual manera la posibilidad de cambios de contexto en los datos. Lo que puede provocar que durante cierta ventana temporal los datos extraídos puedan variar en gran medida respecto a lo establecido por defecto previamente. Esto podría no significar exclusivamente que los nuevos datos sean erróneos, sino que simplemente han modificado sus valores normales. Por ello, también será imprescindible ajustar las métricas de calidad de datos para asegurar que la información obtenida siga siendo fiable.
 
 \section{Arquitectura SoMABiT}
 
