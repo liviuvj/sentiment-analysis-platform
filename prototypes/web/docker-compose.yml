@@ -1,0 +1,23 @@
+version: '3'
+
+x-logging: &default-logging
+  options:
+    max-size: "100m"
+    max-file: "5"
+  driver: json-file
+
+services:
+  app:
+    image: python:latest
+    logging: *default-logging
+    init: true
+    restart: unless-stopped
+    ports:
+      - 5000:5000
+    volumes:
+    - ./app:/app
+    working_dir: /app
+    entrypoint: ./entrypoint.sh
+
+networks:
+  default:

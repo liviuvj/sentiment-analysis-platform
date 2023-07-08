@@ -1,8 +1,6 @@
-# Sentiment analysis platform
-
-<h2 align="center">
-    Big Data Sentiment Analysis Platform
-</h2>
+<div align="center">
+    <img src="./docs/img/bisentys-logo.png" alt="Bid Data Platform for Sentiment Analysis" width="550"/>
+</div>
 
 <h3 align="center">
     <br><b>Author</b>
@@ -19,5 +17,5 @@
 This project focuses on building a Big Data Platform for Sentiment Analysis completely dockerized and modular. The following diagram describes the technologies used in the architecture of the platform:
 
 <div align="center">
-    <img src="./docs/img/platform-architecture-basic.png" alt="DraftGAN Logo" width="550"/>
+    <img src="./docs/img/platform-architecture-basic.png" alt="BISENTYS Logo" width="550"/>
 </div>

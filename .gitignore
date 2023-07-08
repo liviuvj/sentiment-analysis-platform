@@ -16,3 +16,4 @@ prototypes/nlp/__*
 prototypes/nlp/nlp-tasks/__*
 prototypes/airflow/logs/*
 prototypes/airflow/dags/__*
+prototypes/web/app/__*

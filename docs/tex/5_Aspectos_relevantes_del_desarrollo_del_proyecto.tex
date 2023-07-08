@@ -161,7 +161,7 @@ El conjunto de datos seleccionado finalmente ha sido \textit{Game of Thrones S8 
 
 Este conjunto de datos en formato \textit{CSV} presenta más de 760\,000 registros y 88 atributos distintos, con información tanto sobre los usuarios como las publicaciones realizadas por los mismos. Lo que resulta de gran utilidad ya que se puede reconstruir una estructura de datos similar a la del primer \textit{data pipeline} realizado mediante la \textit{API} de Twitter.
 
-Para comprobar de mejor manera los datos disponibles y la usabilidad de los mismos se ha realizado un análisis exploratorio, al que se puede acceder a través del \textit{Jupyter Notebook}\footnote{\url{https://colab.research.google.com/drive/1d_obU9idFqjsDi7ezeFs1CORxTUAgh7V}} que se deja disponible.
+Para comprobar de mejor manera los datos disponibles y la usabilidad de los mismos se ha realizado un análisis exploratorio, al que se puede acceder a través del \textit{Jupyter Notebook}\footnote{\url{https://colab.research.google.com/drive/1d_obU9idFqjsDi7ezeFs1CORxTUAgh7V\#offline=true&sandboxMode=true}} que se deja disponible.
 
 La primera parte de dicho análisis consiste en comprobar la posibilidad de crear una estructura de datos parecida a la diseñada originalmente para el flujo de datos de la \textit{API} de Twitter, consiguiendo completar dicho esquema de datos en una gran medida.
 
@@ -222,3 +222,15 @@ Para realizar dicho despliegue y borrado dinámico de contenedores, \textit{Apac
 La orquestación de los procesos y comunicación entre los numerosos componentes del proyecto ha requerido la creación de distintos flujos de datos utilizando diversas tareas y configuraciones.
 
 Teniendo en cuenta la cantidad de fuentes de datos seleccionadas finalmente para el proyecto, se han diseñado dos \textit{data pipelines}. Un flujo de datos con un \textit{DAG} normal para los datos provenientes de la \textit{API} de Twitter y otro flujo de datos que genera de manera dinámica los \textit{DAGs} necesarios para todos los subconjuntos de datos del \textit{dataset} explicado en anteriores apartados.  
+
+\section{Interfaz web de acceso centralizado}
+
+Como se ha explicado en los apartados anteriores, la mayoría de los componentes utilizados para crear esta plataforma poseen una interfaz web que permite monitorizar y gestionar el servicio correspondiente.
+
+La modularidad que ofrece esta arquitectura invita a posibles extensiones de funcionalidades o a la incorporación de distintas herramientas o nuevos servicios. Esto implica también la posibilidad de que haya más interfaces web a las que acceder según con qué parte de la plataforma se quiera trabajar, en caso de que se tenga los permisos suficientes para ello.
+
+Por estas razones, se ha decidido crear un punto único de acceso centralizado a todas las interfaces de gestión y monitorización en forma de página web. De esta manera, se agiliza el acceso al resto de interfaces que ofrece la plataforma actualmente en caso de que se necesite trabajar de manera paralela en varios puntos de la misma.
+
+El desarrollo de la página web se ha realizado mediante el \textit{framework Flask} con el objetivo de que esta interfaz sea una aplicación web ligera con las funcionalidades básicas y necesarias. El diseño se ha realizado a medida, \textit{responsive} (adaptable a cualquier dispositivo) y teniendo en cuenta un estilo minimalista acorde a las necesidades de un punto web de acceso centralizado.
+
+\imagen{web-app}{Aplicación web desarrollada como punto de acceso centralizado}
