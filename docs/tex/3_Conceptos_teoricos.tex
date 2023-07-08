@@ -1,3 +1,61 @@
 \capitulo{3}{Conceptos teóricos}
 
-En aquellos proyectos que necesiten para su comprensión y desarrollo de unos conceptos teóricos de una determinada materia o de un determinado dominio de conocimiento, debe existir un apartado que sintetice dichos conceptos.
+En las siguientes secciones se detallarán los principales conceptos teóricos que se tratan en este proyecto. No obstante, debido a la naturaleza práctica de este trabajo, el enfoque central se desarrolla en mejor medida en la \autoref{section:relevant_aspects}. Por esta razón, los apartados a continuación expondrán temas relevantes a la construcción de la plataforma \textit{big data} para análisis de sentimientos desarrollada en este proyecto.
+
+\section{Big Data}
+
+La gran cantidad de datos que se genera diariamente a nivel mundial en Internet, y de manera pública, convierten a esta red en una inmensa fuente de información en bruto a la espera de ser procesada y explotada para la obtención de conocimiento.
+
+En la última década, la cantidad de datos generados cada minuto ha aumentado más de un 90\% en algunas plataformas como \textit{YouTube} o \textit{Instagram} (véase \autoref{fig:data-decade}). En la \autoref{fig:data-never-sleeps} se puede observar el gran aumento en el volumen de los datos y la velocidad a la que se generan, teniendo en cuenta también la variedad de los distintos tipos de formato que pueden tomar en cada una de estas plataformas. 
+
+\imagenConFuente{data-decade}{Diferencia entre la cantidad de datos generados por minuto entre 2013 y 2022 de algunas plataformas}{\cite{domoVS}}
+
+\imagenConFuente{data-never-sleeps}{Cantidad de datos generados cada minuto 2021 en Internet}{\cite{domoInfo}}
+
+A causa de esto, el término \textit{Big Data} se ha convertido en un tema cada vez más recurrente e importante en la tecnología. Se trata de un fenómeno que ha generado la necesidad de evolucionar las técnicas y herramientas tradicionales a otras metodologías capaces no solo de almacenar toda esta cantidad de datos, sino también de explotarla de manera eficiente.
+
+\subsection{Características}
+
+Para entender correctamente qué es el \textit{Big Data}~\cite{oracleData}, es necesario conocer sus características y sus diferencias respecto a los datos normales y corrientes.
+
+\subsubsection{Principales características}
+
+A continuación, se describen las principales características del \textit{Big Data}, comúnmente conocidas como <<Las 3 Vs del \textit{Big Data}>>. 
+
+\begin{itemize}
+    \item \textbf{Volumen.} Como se ha comentado anteriormente, una de las mayores diferencias es la gran cantidad de datos que implica. En este sentido, se habla en el nivel de \textit{terabytes} e incluso cientos de \textit{petabytes} de datos. Estos pueden ser recogidos de distintos orígenes, como por ejemplo flujos de acciones o \textit{clicks} de los usuarios en una aplicación web, sensores de equipos industriales en fábricas, monitorización de equipos médicos de alta sensibilidad, etc.  
+
+    \item \textbf{Velocidad.} Otra de las características principales es la velocidad a la que se producen o utilizan estos datos. Los sensores que monitorizan equipos de alta importancia pueden estar generando un flujo continuo de cientos o miles de registros cada segundo, siendo necesario su análisis en tiempo real para evitar consecuencias graves en ciertos escenarios o actuar con la máxima certeza posible.
+    
+    \item \textbf{Variedad.} Mientras que los datos tradicionales suelen estar estructurados y habituarse en gran parte al esquema de una base de datos relacional, el \textit{Big Data} no suele adecuarse en este ámbito. Los datos son en su mayoría no estructurados o semi-estructurados, con una gran variedad de tipos (texto, audio, vídeo, ...) que pueden presentar poca densidad (lo que quiere decir que son posibles los casos en los que uno o varios atributos estén presentes en algunos registros, pero estén ausentes de casi todos los demás, aún perteneciendo al mismo flujo de datos).
+\end{itemize}
+
+\subsubsection{Otras características importantes}
+
+A parte de las principales propiedades que se asignaron originalmente al \textit{Big Data}, con el tiempo fueron apareciendo más aspectos, hasta llegar a los 42 que existen en la actualidad~\cite{shaferData}. Sin embargo, a continuación se definen otras dos características que resultan de igual importancia que las descritas anteriormente:
+
+\begin{itemize}
+    \item \textbf{Valor.} Los datos en bruto no suelen presentar valor aparente por sí mismos. Generalmente, es necesario procesar estos datos y aplicar técnicas de análisis para poder obtener conocimiento útil. Algunas empresas o servicios de popular demanda se basan completamente en los datos de sus usuarios para poder ofrecer un valor añadido. Por ello, resulta necesario que los datos tengan el potencial de generar un valor suficiente. 
+    
+    \item \textbf{Veracidad.} Otro de los puntos de gran relevancia en el momento actual es trabajar con datos veraces. Resulta de vital importancia conocer qué tan fiables son los datos disponibles para poder asegurar la toma de decisiones futuras a partir de los mismos.
+\end{itemize}
+
+\subsection{Desafíos y oportunidades}
+
+Tras entender mejor el concepto \textit{Big Data}, se pueden plantear una serie de desafíos al trabajar con ello que no existían previamente con los datos tradicionales. Los principales retos a superar se pueden deducir a partir de <<Las 5 Vs del \textit{Big Data}>> detalladas anteriormente.
+
+Primero es necesario disponer de la capacidad de procesar grandes volúmenes de datos en tiempo real. Como se dijo previamente, los datos en bruto no suelen presentar valor por sí mismos. Por ello, normalmente se realizan operaciones de integración de datos, en los que se combina información originada de distintas fuentes de datos, tras lo cual se procesan en conjunto y se aplican agregaciones, reglas de negocio o asegurando la calidad de los mismos. Esto ha provocado la necesidad de desarrollar nuevas herramientas capaces de realizar esta labor de procesamiento en tiempo real sobre grandes cantidades de datos.
+
+También surge la necesidad de poder persistir toda la información obtenida de distintos orígenes, con sus muy seguras diferencias entre los tipos de datos con los que se trabaja en cada uno de ellos. De esta manera, el \textit{Big Data} ha promovido también el auge de bases de datos no relacionales que puedan ser capaces de soportar tanta variedad de datos.
+
+Resulta de igual relevancia comentar las técnicas con las que se trabajan los datos obtenidos. Distintos tipos de datos requieren de diferentes técnicas de análisis o transformaciones alternativas para poder explotarlos correctamente. La evolución de los métodos tradicionales y la creación de nuevas metodologías de procesamiento de datos resulta de gran ayuda en la obtención de nuevos \textit{insights}.
+
+Finalmente, es fundamental destacar la importancia de la seguridad en el ámbito de los datos, sobre todo al tratar con información de carácter personal. En la actualidad, los datos sobre uno mismo resultan ser lo más valioso que puede poseer una persona, puesto que pueden representar en gran parte la propia identidad. Es crucial el establecimiento de una <<gobernanza de datos>>, de manera que solamente las personas adecuadas puedan tener acceso a información privilegiada, y cada individuo al mínimo necesario para poder llevar a cabo su función.
+
+\section{Proceso ETL}
+
+\section{Arquitectura SoMABiT}
+
+\section{Procesamiento de lenguaje natural}
+
+\section{Análisis de sentimientos}
