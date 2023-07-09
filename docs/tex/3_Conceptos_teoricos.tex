@@ -84,7 +84,33 @@ Igualmente y de manera general, al ser cada proyecto distinto y presentar difere
 
 Resulta importante destacar de igual manera la posibilidad de cambios de contexto en los datos. Lo que puede provocar que durante cierta ventana temporal los datos extraídos puedan variar en gran medida respecto a lo establecido por defecto previamente. Esto podría no significar exclusivamente que los nuevos datos sean erróneos, sino que simplemente han modificado sus valores normales. Por ello, también será imprescindible ajustar las métricas de calidad de datos para asegurar que la información obtenida siga siendo fiable.
 
-\section{Arquitectura SoMABiT}
+\section{Big Data Knowledge Discovery}
+
+Un proyecto de esta magnitud,  que resulte modular y escalable a la vez, requiere de una serie de componentes correctamente integrados e interconectados capaces de soportar grandes volúmenes de datos. Por ello, cada fase del proceso ha de estar diseñada con estos objetivos en mente, permitiendo llevar a cabo de manera eficiente las tareas de \textit{knowledge discovery} o <<descubrimiento de conocimiento>> que puedan resultar necesarias para la obtención de valor.
+
+Un antecedente sobre cómo realizar este tipo de interconexión puede darse en la arquitectura \textit{SoMABiT}~\cite{bohlouli2020knowledge} (\textit{Social Media Analysis using Big Data Technology}). Se trata de un concepto de plataforma que permite la ejecución de tareas de integración y análisis de sentimientos. En los siguientes apartados se detalla en mejor medida el concepto y la arquitectura propuesta en dicho artículo.
+
+\subsection{Concepto SoMABiT}
+
+El artículo mencionado desarrolla el concepto \textit{SoMABiT} como una integración de distintas fuentes de datos sobre un sistema \textit{Hadoop HDFS} que sirva como \textit{knowledge base}, sobre el que posteriormente se posibilita la realización de consultas sobre los datos. De esta manera, se consigue crear una herramienta de ayuda a los usuarios para la toma de decisiones.
+
+Los datos extraídos de las fuentes de datos se almacenarían en bases de datos \textit{NoSQL} para su posterior procesamiento y enriquecimiento, persistiéndolos finalmente en la <<base de conocimiento>> \textit{Hadoop}. Finalmente, los usuarios podrían realizar consultas de manera directa sobre este conocimiento, filtrándose los registros que contengan las palabras clave seleccionadas y mostrándose los datos de manera visual en un \textit{dashboard}.
+
+\subsection{Arquitectura SoMABiT}
+
+La arquitectura básica consiste en tres componentes principales, teniendo cada uno una serie de responsabilidades y tareas concretas a llevar a cabo en el conjunto del sistema. En la \autoref{fig:somabit-architecture} se puede observar el diseño empleado por los autores.
+
+\imagenConFuente{somabit-architecture}{Arquitectura básica del sistema \textit{SoMABiT}}{\cite{bohlouli2020knowledge}}
+
+El sistema \textit{SoMABiT} está formado por los siguientes componentes:
+
+\begin{itemize}
+    \item \textbf{\textit{SoMABiT--Server}.} Se trata de un clúster de máquinas \textit{Cloudera} que actúan a modo de servidor para la plataforma. Este componente se encarga de recibir las configuraciones de las consultas realizadas por los usuarios y lanzar las peticiones de extracción a los distintos orígenes de datos, almacenando la información obtenida posteriormente en \textit{HBase} y creando las tablas necesarias para ello.
+
+    \item \textbf{\textit{SoMABiT--WebServlet}.} Este servicio se encarga del procesamiento analítico de los datos y de persistir las tareas lanzadas por los usuarios en una base de datos \textit{MySQL}, junto con información sobre la configuración de los trabajos \textit{MapReduce} a realizar y el momento de tiempo en el que ejecutar cada uno. Se comunica con el \textit{SoMABiT--Server} para realizar la extracción de los datos.
+
+    \item \textbf{\textit{Graphical User Interface} (\textit{GUI}).} Interfaz gráfica a la que pueden acceder los usuarios y administradores de la plataforma para interactuar con el servicio \textit{SoMABiT--WebServlet}. Cada tipo de usuario puede realizar distintas acciones según los permisos correspondientes. Por lo que los usuarios finales puede estar accediendo únicamente a los \textit{dashboards} de visualización de datos, mientras que usuarios más técnicos pueden estar encargándose de configurar y lanzar nuevos trabajos sobre los datos.
+\end{itemize}
 
 \section{Procesamiento de lenguaje natural}
 
