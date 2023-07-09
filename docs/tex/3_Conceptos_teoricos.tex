@@ -54,7 +54,7 @@ Finalmente, es fundamental destacar la importancia de la seguridad en el ámbito
 
 \section{Proceso ETL}
 
-En secciones anteriores se ha explicado cómo el \textit{Big Data} implica un aumento del volumen, velocidad y variedad de los datos, entre otras características. Ello supone también la utilización de distintas fuentes de datos, que suelen incrementar de igual manera con el tiempo.
+En secciones anteriores se ha explicado cómo el \textit{Big Data} implica un aumento del volumen, velocidad y variedad de los datos, entre otras características. Lo cual supone también la utilización de distintas fuentes de datos, que suelen incrementar de igual manera en el tiempo y a medida que surgen más requisitos o necesidades para los proyectos.
 
 Para llevar a cabo dicha gestión, se pone en funcionamiento un proceso \textit{ETL}, (\textit{Extract--Transform--Load}). Este proceso tendrá como objetivo dirigir los datos en bruto desde los orígenes de datos hasta los destinos de los mismos, transformándolos por el camino según corresponda para asegurar la obtención de información valiosa y fiable~\cite{databricksETL}.
 
@@ -114,4 +114,90 @@ El sistema \textit{SoMABiT} está formado por los siguientes componentes:
 
 \section{Procesamiento de lenguaje natural}
 
-\section{Análisis de sentimientos}
+Las técnicas \textit{NLP} (\textit{Natural Language Processing}) consisten en el estudio, análisis y procesamiento por máquinas del lenguaje natural. Estas tareas se llevan a cabo para que un sistema pueda comprender diversos aspectos sobre los datos y generar así un modelo de la interpretación del lenguaje con el que poder trabajar en mayor medida posteriormente.
+
+No obstante, conseguir tal objetivo no resulta en una tarea nada trivial. Uno de los mayores desafíos en este ámbito es que el modelo empleado consiga comprender la noción del significado de una palabra en combinación con el resto de un predicado.
+
+Por ejemplo, el siguiente enunciado se trata claramente de un sarcasmo, indicando que la persona no ha disfrutado de una obra: <<¡Qué buena comedia, un poco más y me hubiese reído!>>. Sin embargo, algunos modelos \textit{NLP} más simples podrían tratarlo como una buena experiencia por parte de la persona, puesto que incluye palabras como <<buena>>, <<más>> y <<reír>> que, por lo general, se podrían asignar con sentimientos positivos.
+
+En los siguientes apartados se indican las principales técnicas que constituyen el \textit{state-of-the-art} en cuanto a técnicas de procesamiento de lenguaje natural.
+
+\subsection{Principales técnicas del estado del arte}
+
+Las técnicas \textit{NLP} han ido evolucionando a lo largo del tiempo, desde tareas básicas utilizando bolsas de palabras hasta modelos más avanzados basados en \textit{Deep Learning}.
+
+En la \autoref{fig:nlp-timeline} se puede observar la evolución histórica de estas técnicas, culminando con la tendencia en la que se está enfocando actualmente, los llamados modelos preentrenados de lenguaje o \textit{LLM} (\textit{Large Language Models}).
+
+\imagenConFuente{nlp-timeline}{Evolución de las técnicas \textit{NLP}}{\cite{khurana2023natural}}
+
+A continuación, se describen algunas de las principales técnicas que han constituido el estado del arte~\cite{cromoNLP}:
+
+\begin{itemize}
+    \item \textbf{\textit{Recurrent Neural Networks}.}\\
+    Las redes neuronales recurrentes (\textit{RNN}) son un caso particular de las redes neuronales convencionales. En estos modelos, las capas intermedias completamente conectadas presentan un segundo \textit{output} a diferencia de las clásicas. 
+    
+    A parte de realizar la fase \textit{feedforward} en la que se propagan los valores y se realiza el ajuste de pesos por las capas del modelo, la salida de cada capa (tras pasar por las funciones de activación) vuelve a ser utilizada como entrada de la misma en la siguiente iteración. De esta manera, los resultados obtenidos de la aplicación de una \textit{RNN} no dependen solamente de los datos de entrada actuales, sino también de los anteriormente recibidos. 
+
+    \imagenConFuente{rnn-model}{Esquema básico de neuronas recurrentes}{\cite{cromoNLP}}
+
+    \item \textbf{\textit{Long Short-Term Memory Networks}.}\
+  
+    % \imagenConFuente{lstm-model}{Esquema básico de neuronas recurrentes con funciones de olvido incluidas}{\cite{cromoNLP}}
+
+    \imagenConFuenteConAnchura{0.8}{lstm-model}{Esquema básico de neuronas recurrentes con funciones de olvido incluidas}{\cite{cromoNLP}}
+
+    Estas redes neuronales son una evolución de las \textit{RNN}. A parte de presentar mejoras en el cálculo de los pesos, la novedad reside en un componente adicional que permite a la red <<olvidar>> algunos valores de lo entrenado previamente.
+    
+    De este modo se consigue que el modelo siga siendo capaz de aprender de manera continua y, al no <<olvidar>> todo sino solamente alguna parte de lo aprendido, se obtiene también cierta capacidad de memoria.
+
+    \item \textbf{Mecanismos de atención.}\\    
+    Este mecanismo forma parte del modelo \textit{Transformer}~\cite{vaswani2017attention}, que utiliza una estructura de \textit{encoder-decoder}. El \textit{encoder} es la parte de la red que se encarga de construir una representación continua a partir de datos de entrada en forma de símbolos para el \textit{decoder}, y este último tiene como objetivo generar una secuencia de símbolos como respuesta a partir de la representación continua creada por el \textit{encoder}.
+
+    \imagenConFuenteConAnchura{0.8}{transformer-model}{Arquitectura del modelo \textit{Transformer}}{\cite{vaswani2017attention}}
+    
+    Como se puede ver en la \autoref{fig:transformer-model}, el modelo no utiliza \textit{RNNs} ni {LSTMs}, pero presenta estos mecanismos de atención tanto en las capas del \textit{encoder} como del \textit{decoder}. El funcionamiento de estos mecanismos se basa en la idea de que, en lugar de procesar toda la secuencia de entrada de manera uniforme, se asignan pesos a diferentes partes de la secuencia.
+    
+    Esto permite al modelo poner la atención en las partes más relevantes y útiles para la tarea a realizar. La ausencia de \textit{RNNs} en el modelo también implica la eliminación de las limitaciones que estas suponían, por lo que el modelo \textit{Transformer} se vuelve capaz de mantener una memoria mucho mayor de lo aprendido. 
+    
+    En la \autoref{fig:attention-mechanism} se pueden observar las operaciones realizadas para para calcular los pesos de atención y combinar los datos de entrada (\textit{query}, \textit{key}, \textit{value}) de entrada de manera ponderada .
+
+    \imagenConFuenteConAnchura{0.9}{attention-mechanism}{Mecanismo de atención del modelo \textit{Transformer}}{\cite{vaswani2017attention}}
+
+    \item \textbf{\textit{BERT}.}\\
+    El modelo \textit{BERT} (\textit{Bidirectional Encoder Representations from Transformers}) se ha convertido en la referencia base del \textit{state-of-the-art} actual, a partir del cual se han ido desarrollando otros para tareas concretas.
+    
+    Se trata de una mejora del \textit{Transformer} en la que, en lugar de tener en cuenta solamente el contexto anterior a cada palabra, se consigue tener en cuenta el contexto posterior también, convirtiéndolo así en un modelo bidireccional.
+
+    No obstante, el mayor impacto que ha tenido \textit{BERT} es su método de entrenamiento. Este modelo se ha entrenado de manera no supervisada intentando predecir de manera correcta la siguiente palabra de una frase. 
+    
+    Esto se ha conseguido <<enmascarando>> una palabra de cada enunciado del conjunto de datos (por ejemplo, <<He entrado en la <<\textit{[MASK]}>> del banco.>>). Esto permite que el modelo aprenda tanto las representaciones de las palabras como las relaciones entre ellas y su significado el contexto de cada enunciado.
+
+    \imagenConFuente{bert-model}{Entrenamiento y \textit{fine-tuning} del modelo \textit{BERT}. El pre-entrenamiento del \textit{LLM} permite su posterior adaptación mediante transferencia de aprendizaje a nuevas tareas o conjuntos de datos}{\cite{devlin2019bert}}
+    
+    Por estas razones, se considera un \textit{LLM} (\textit{Large Language Model}) debido a su entrenamiento sobre grandes volúmenes de datos y a su arquitectura, puesto que el modelo \textit{BERT} base cuenta con 12 capas, y 12 mecanismos de atención y 110 millones de parámetros.
+    
+    Este entrenamiento previo intensivo es de gran ayuda al realizar \textit{transfer learning}, puesto que se puede adaptar a nuevas tareas simplemente añadiendo nuevas capas y realizando un entrenamiento posterior con datos etiquetados para dicha tarea.
+   
+\end{itemize}
+
+\subsection{Aplicaciones}
+
+Las técnicas de procesamiento de lenguaje natural tienen un amplio catálogo de aplicaciones en el que se pueden utilizar. Estos casos de uso han ido mejorando con el tiempo a medida que han evolucionado también las técnicas mencionadas anteriormente. No obstante, debido a las restricciones tecnológicas o computacionales de algunos proyectos, no siempre resulta posible utilizar los últimos avances en este campo.
+
+A continuación, se listan algunas de las aplicaciones de las técnicas \textit{NLP}:
+
+\begin{itemize}
+    \item \textbf{Clasificación de texto.} Consiste en categorizar el texto mediante etiquetas preestablecidas. Algunas de estas tareas pueden ser la clasificación de tópicos de un texto o el análisis de sentimientos, que se centra en determinar aspectos como el sentimiento (positivo, neutro o negativo), el sarcasmo o la actitud emocional (alegre, triste, enfadado) de la persona que ha proporcionado un enunciado~\cite{felbo2017using}~\cite{kim2014convolutional}.
+
+    \item \textbf{Traducción automática.} Trata la conversión de un texto en un idiota origen a un idioma destino~\cite{wu2016google}.
+
+    \item \textbf{Filtros de \textit{spam}.} Identificación de mensajes y correos electrónicos no deseados~\cite{sharmin2020convolutional}.
+
+    \item \textbf{Extracción de información.} Selección automática de información específica y extracción de fragmentos relevantes~\cite{lample2016neural}.
+
+    \item \textbf{Elaboración de resúmenes.} Generación de la síntesis de un texto de manera concisa y coherente~\cite{see2017get}.
+
+    \item \textbf{Sistemas de diálogo.} Como pueden ser los asistentes virtuales o los \textit{chatbots}, que utilizan el intercambio de lenguaje natural entre máquinas y humanos para realizar acciones específicas~\cite{chao2019bert}.
+
+    \item \textbf{Medicina.} Análisis de registros clínicos, información sanitaria y datos médicos~\cite{chen2019bert}.
+\end{itemize}

@@ -79,6 +79,15 @@
 	\FloatBarrier
 }
 
+\newcommand{\imagenConFuenteConAnchura}[4]{
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[width=#1\textwidth]{#2}
+		\caption[#3]{#3. Fuente:~#4}\label{fig:#2}
+	\end{figure}
+	\FloatBarrier
+}
+
 
 
 % El comando \figura nos permite insertar figuras comodamente, y utilizando
