@@ -2,44 +2,487 @@
 
 \section{Introducción}
 
+En las siguientes secciones se detalla el diseño de los datos, además de los diseños procedimentales de la plataforma y los esquemas arquitectónicos empleados.
+
 \section{Diseño de datos}
 
 En los siguientes apartados se detallará el diseño de los modelos de datos utilizados en cada parte del proyecto y el proceso seguido para elaborar los cuadros de mando en los que se visualiza la información obtenida finalmente.
 
 \subsection{Diseño de los modelos de datos}
 
-En esta sección se explicarán los modelos de datos empleados entre los distintos componentes del proyecto.
+En esta sección se explicarán los modelos de datos empleados entre los distintos componentes del proyecto. El esquema general utilizado para este proyecto ha sido un modelo de datos en estrella. Esta decisión de diseño se ha tomado por facilitar posteriormente en la herramienta de visualización el filtrado de datos, además de resultar en un modelo de datos que cumple las necesidades del proyecto sin necesidad de utilizar otro más complejo.
 
-\subsection{Diseño de los cuadros de mando}
+De esta manera, se toman las publicaciones como la tabla central de <<hechos>> y todas las demás tablas se han tomado como <<dimensiones>>. Las dimensiones de relacionan con las publicaciones mediante dos tipos de claves <<\textit{tweet\_id}>> o <<\textit{user\_id}>>.
 
-A continuación, se detalla la evolución seguida para el diseño de los cuadros de mando implementados en la herramienta \textit{Apache Superset}.
+\subsubsection{Modelo de datos en MongoDB}
 
-\subsubsection{Primera iteración}
+La base de datos no relacional MongoDB ha efectuado el rol de \textit{data lakehouse} en este proyecto. Al utilizar un modelo de datos basado en documentos \textit{BSON}, ha sido perfecta para persistir los datos en brutos que llegan mediante la fase de extracción del proceso \textit{ETL}. Esto se debe a que las \textit{APIs} investigadas devolvían las respuestas en formato \textit{JSON} con gran cantidad de campos anidados. Además, el conjunto de datos utilizado a modo de demostración también ha encajado a la perfección con la estructura orientada a documentos de MongoDB.
 
-Los siguientes bocetos capturan la primera iteración del diseño inicial del \textit{dashboard} junto a la interfaz implementada con la herramienta \textit{Apache Superset}.
+Sin embargo, esta base de datos no se ha utilizado para almacenar únicamente los datos en bruto, sino también los obtenidos tras la etapa de transformación del proceso \textit{ETL}. De esta manera, se persisten en una colección\footnote{Término que utiliza MongoDB para agrupar un conjunto de documentos, similar a las tablas en las bases de datos relacionales.} específica los datos ya procesados y limpios dentro de la misma base de datos.
+
+Los datos almacenados en MongoDB se han almacenado siguiendo los siguientes criterios:
+
+\begin{itemize}
+    \item \textbf{Cada fuente de datos cuenta con su propia base de datos.} Por lo que, al estar trabajando con dos orígenes de datos distintos, se han creado las bases de datos <<\textit{raw\_dataset}>> y <<\textit{raw\_twitter}>>. De esta manera, se añade el prefijo <<\textit{raw\_}>> al nombre de cada origen de datos, que en este caso son el \textit{dataset} de demostración utilizado y los datos provenientes de la \textit{API} de TWitter.
+
+    \item \textbf{Cada flujo de datos configurado en los conectores de Airbyte tiene como destino una colección.} Al configurar la conexión se elige el nombre que tendrá la tabla en el sistema destino (MongoDB en este caso). Para indicar que los datos se encuentran en un estado en bruto, se ha añadido en la configuración el prefijo <<\textit{airbyte\_raw\_}>>. De esta manera, los nombres de las colecciones han quedado <<\textit{airbyte\_raw\_movie}>>, <<\textit{airbyte\_raw\_season8}>>, etc.
+
+    \item \textbf{Los datos ya procesados se almacenan en la misma base de datos en la que se han originado.} La agregación de los mismos entre distintas fuentes de datos se realiza posteriormente en ClickHouse. Sin embargo, al tener varias colecciones en bruto a partir del mismo origen de datos (los distintos conjuntos de datos particionados), los datos procesados se persistirán de manera común en las colecciones de datos procesados. Para indicar el estado de estos datos ya procesados se ha utilizado el prefijo <<\textit{clean\_}>>. Por lo que las colecciones originadas tras la etapa de transformación se guarda en las colecciones <<\textit{clean\_tweets}>>, <<\textit{clean\_users}>>, etc.
+\end{itemize}
+
+En la \autoref{fig:mongodb-compass} se puede observar la estructura descrita con las relaciones entre las bases de datos y las colecciones, junto a la nomenclatura utilizada para designar cada uno de estos elementos.
+
+\imagen{mongodb-compass}{Estructura de datos en MongoDB y nomenclatura de las colecciones}
+
+A continuación, se muestran las estructuras de datos empleadas en las colecciones de cada base de datos junto a los tipos de datos utilizados para cada atributo.
+
+\vspace{2cm}
+
+\tablaSinColores{Esquema de datos para la base de datos <<\textit{dataset}>>, colecciones <<\textit{airbyte\_raw\_*}>>}{|l|c|c|}{3}{mongodbSchemaDatasetRaw}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo} & \multicolumn{1}{c}{Nullable}\\}{
+\_airbyte\_data & struct & true \\
+\quad |-- urls\_expanded\_url & string & true \\
+\quad |-- retweet\_count & integer & true \\
+\quad |-- retweet\_favorite\_count & void & true \\
+\quad |-- ext\_media\_expanded\_url & string & true \\
+\quad |-- country\_code & string & true \\
+\quad |-- user\_id & string & true \\
+\quad |-- bbox\_coords & string & true \\
+\quad |-- quoted\_favorite\_count & void & true \\
+\quad |-- media\_t.co & string & true \\
+\quad |-- quoted\_source & void & true \\
+\quad |-- retweet\_followers\_count & void & true \\
+\quad |-- reply\_to\_status\_id & string & true \\
+\quad |-- reply\_to\_user\_id & string & true \\
+\quad |-- place\_type & string & true \\
+\quad |-- retweet\_friends\_count & void & true \\
+\quad |-- coords\_coords & string & true \\
+\quad |-- hashtags & string & true \\
+\quad |-- source & string & true \\
+\quad |-- place\_full\_name & string & true \\
+\quad |-- retweet\_statuses\_count & void & true \\
+\quad |-- retweet\_created\_at & void & true \\
+\quad |-- statuses\_count & integer & true \\
+\quad |-- is\_quote & boolean & true \\
+\quad |-- quoted\_retweet\_count & void & true \\
+\quad |-- retweet\_name & void & true \\
+\quad |-- geo\_coords & string & true \\
+\quad |-- media\_expanded\_url & string & true \\
+\quad |-- friends\_count & integer & true \\
+\quad |-- text & string & true \\
+\quad |-- urls\_url & string & true \\
+\quad |-- retweet\_screen\_name & void & true \\
+\quad |-- location & string & true \\
+\quad |-- protected & boolean & true \\
+\quad |-- screen\_name & string & true \\
+\quad |-- profile\_background\_url & string & true \\
+\quad |-- quoted\_text & void & true \\
+\quad |-- profile\_expanded\_url & string & true \\
+\quad |-- quoted\_description & void & true \\
+\quad |-- retweet\_location & void & true \\
+\quad |-- retweet\_verified & void & true \\
+\quad |-- listed\_count & integer & true \\
+\quad |-- quoted\_name & void & true \\
+\quad |-- display\_text\_width & integer & true \\
+\quad |-- profile\_url & string & true \\
+\quad |-- ext\_media\_t.co & string & true \\
+\quad |-- urls\_t.co & string & true \\
+\quad |-- quoted\_screen\_name & void & true \\
+\quad |-- quoted\_status\_id & void & true \\
+\quad |-- ext\_media\_type & void & true \\
+\quad |-- profile\_banner\_url & string & true \\
+\quad |-- retweet\_user\_id & void & true \\
+\quad |-- quoted\_user\_id & void & true \\
+\quad |-- status\_id & string & true \\
+\quad |-- media\_url & string & true \\
+\quad |-- quoted\_friends\_count & void & true \\
+\quad |-- name & string & true \\
+\quad |-- profile\_image\_url & string & true \\
+\quad |-- retweet\_description & void & true \\
+\quad |-- retweet\_status\_id & void & true \\
+\quad |-- quoted\_created\_at & void & true \\
+\quad |-- status\_url & string & true \\
+\quad |-- quoted\_followers\_count & void & true \\
+\quad |-- account\_created\_at & string & true \\
+\quad |-- is\_retweet & boolean & true \\
+\quad |-- reply\_to\_screen\_name & string & true \\
+\quad |-- quoted\_statuses\_count & void & true \\
+\quad |-- verified & boolean & true \\
+\quad |-- url & string & true \\
+\quad |-- lang & string & true \\
+\quad |-- description & string & true \\
+\quad |-- created\_at & string & true \\
+\quad |-- retweet\_source & void & true \\
+\quad |-- account\_lang & string & true \\
+\quad |-- country & string & true \\
+\quad |-- mentions\_screen\_name & string & true \\
+\quad |-- retweet\_retweet\_count & void & true \\
+\quad |-- retweet\_text & void & true \\
+\quad |-- mentions\_user\_id & string & true \\
+\quad |-- quoted\_location & void & true \\
+\quad |-- favourites\_count & integer & true \\
+\quad |-- ext\_media\_url & string & true \\
+\quad |-- place\_name & string & true \\
+\quad |-- quoted\_verified & void & true \\
+\quad |-- media\_type & string & true \\
+\quad |-- place\_url & string & true \\
+\quad |-- favorite\_count & integer & true \\
+\quad |-- followers\_count & integer & true \\ 
+\_airbyte\_data\_hash & string & true \\ 
+\_airbyte\_emitted\_at & string & true \\ 
+\_id & struct & true \\
+\quad |-- oid & string & true \\
+}
+
+\hfill
+
+\tablaSinColores{Esquema de datos para la base de datos <<\textit{raw\_twitter}>>, colección <<\textit{airbyte\_raw\_movie}>>}{|l|c|c|}{3}{mongodbSchemaTwitterRaw}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo} & \multicolumn{1}{c}{Nullable}\\}{
+\_airbyte\_data & struct & true \\
+\quad |-- data & struct & true \\
+\quad | \quad |-- author\_id & string & true \\
+\quad | \quad |-- context\_annotations & array & true \\
+\quad | \quad | \quad |-- domain & struct & true \\
+\quad | \quad | \quad | \quad |-- description & string & true \\
+\quad | \quad | \quad | \quad |-- id & string & true \\
+\quad | \quad | \quad | \quad |-- name & string & true \\
+\quad | \quad | \quad |-- entity & struct & true \\
+\quad | \quad | \quad | \quad |-- description & string & true \\
+\quad | \quad | \quad | \quad |-- id & string & true \\
+\quad | \quad | \quad | \quad |-- name & string & true \\
+\quad |-- created\_at & string & true \\
+\quad |-- edit\_history\_tweet\_ids & array & true \\
+\quad |-- entities & struct & true \\
+\quad | \quad |-- annotations & array & true \\
+\quad | \quad | \quad |-- start & integer & true \\
+\quad | \quad | \quad |-- end & integer & true \\
+\quad | \quad | \quad |-- probability & double & true \\
+\quad | \quad | \quad |-- type & string & true \\
+\quad | \quad | \quad |-- normalized\_text & string & true \\
+\quad | \quad |-- cashtags & array & true \\
+\quad | \quad | \quad |-- start & integer & true \\
+\quad | \quad | \quad |-- end & integer & true \\
+\quad | \quad | \quad |-- tag & string & true \\
+\quad | \quad |-- hashtags & array & true \\
+\quad | \quad | \quad |-- start & integer & true \\
+\quad | \quad | \quad |-- end & integer & true \\
+\quad | \quad | \quad |-- tag & string & true \\
+\quad | \quad |-- mentions & array & true \\
+\quad | \quad | \quad |-- start & integer & true \\
+\quad | \quad | \quad |-- end & integer & true \\
+\quad | \quad | \quad |-- username & string & true \\
+\quad | \quad | \quad |-- id & string & true \\
+\quad | \quad |-- urls & array & true \\
+\quad | \quad | \quad |-- description & string & true \\
+\quad | \quad | \quad |-- display\_url & string & true \\
+\quad | \quad | \quad |-- end & integer & true \\
+\quad | \quad | \quad |-- expanded\_url & string & true \\
+\quad | \quad | \quad |-- images & array & true \\
+\quad | \quad | \quad | \quad |-- url & string & true \\
+\quad | \quad | \quad | \quad |-- width & integer & true \\
+\quad | \quad | \quad | \quad |-- height & integer & true \\
+\quad | \quad | \quad |-- media\_key & string & true \\
+\quad | \quad | \quad |-- start & integer & true \\
+\quad | \quad | \quad |-- status & integer & true \\
+\quad | \quad | \quad |-- title & string & true \\
+\quad | \quad | \quad |-- unwound\_url & string & true \\
+\quad | \quad | \quad |-- url & string & true \\
+\quad |-- geo & struct & true \\
+\quad | \quad |-- coordinates & struct & true \\
+\quad | \quad | \quad |-- type & string & true \\
+\quad | \quad | \quad |-- coordinates & array & true \\
+\quad |-- place\_id & string & true \\
+\quad |-- id & string & true \\
+\quad |-- lang & string & true \\
+\quad |-- public\_metrics & struct & true \\
+\quad | \quad |-- retweet\_count & integer & true \\
+\quad | \quad |-- reply\_count & integer & true \\
+\quad | \quad |-- like\_count & integer & true \\
+\quad | \quad |-- quote\_count & integer & true \\
+\quad | \quad |-- impression\_count & integer & true \\
+\quad |-- text & string & true \\
+\quad |-- withheld & struct & true \\
+\quad | \quad |-- copyright & boolean & true \\
+\quad | \quad |-- country\_codes & array & true \\
+includes & struct & true \\
+\quad |-- places & array & true \\
+\quad | \quad |-- country & string & true \\
+\quad | \quad |-- country\_code & string & true \\
+\quad | \quad |-- full\_name & string & true \\
+\quad | \quad |-- geo & struct & true \\
+\quad | \quad | \quad |-- type & string & true \\
+\quad | \quad | \quad |-- bbox & array & true \\
+\quad | \quad | \quad | \quad |-- coordinates & double & true \\
+\_airbyte\_data\_hash & string & true \\
+\_airbyte\_emitted\_at & string & true \\
+\_id & struct & true \\
+\quad |-- oid & string & true \\
+}
+
+
+Los siguientes esquemas de datos son comunes a ambos orígenes de datos, a excepción de las colecciones <<\textit{clean\_annotations}>> y \\<<\textit{clean\_context\_annotations}>>, que no se han podido construir a partir de la información del conjunto de datos de demostración. Los campos marcados con asterisco (*) tampoco se han podido obtener para el conjunto de datos, solamente con la información obtenida desde la \textit{API} de Twitter.
+
+\hfill
+
+\tablaSinColores{Esquema de datos para colección <<\textit{clean\_tweets}>>}{|l|c|c|}{3}{mongodbSchemaCleanTweets}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo} & \multicolumn{1}{c}{Nullable}\\}{
+tweet\_id & string & true \\
+source & string & false \\
+search\_query & string & false \\
+user\_id & string & true \\
+created\_at & string & true \\
+language & string & true \\
+text & string & true \\
+retweet\_count & integer & true \\
+reply\_count *  & integer & true \\
+like\_count & integer & true \\
+quote\_count * & integer & true \\
+}
+
+
+\tablaSinColores{Esquema de datos para colección <<\textit{clean\_users}>>}{|l|c|c|}{3}{mongodbSchemaCleanUsers}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo} & \multicolumn{1}{c}{Nullable}\\}{
+user\_id & string & true \\
+name & string & true \\
+username & string & true \\
+description & string & true \\
+location & string & true \\
+followers\_count & integer & true \\
+following\_count & integer & true \\
+tweet\_count & integer & true \\
+listed\_count & integer & true \\
+}
+
+
+\tablaSinColores{Esquema de datos para colección <<\textit{clean\_hashtags}>>}{|l|c|c|}{3}{mongodbSchemaCleanHashtags}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo} & \multicolumn{1}{c}{Nullable}\\}{
+tweet\_id & string & true \\
+tag & string & true \\
+}
+
+
+\tablaSinColores{Esquema de datos para colección <<\textit{clean\_mentions}>>}{|l|c|c|}{3}{mongodbSchemaCleanMentions}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo} & \multicolumn{1}{c}{Nullable}\\}{
+tweet\_id & string & true \\
+user\_id & string & true \\
+username & string & true \\
+}
+
+
+\tablaSinColores{Esquema de datos para colección <<\textit{clean\_urls}>>}{|l|c|c|}{3}{mongodbSchemaCleanUrls}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo} & \multicolumn{1}{c}{Nullable}\\}{
+tweet\_id & string & true \\
+display\_url & string & true \\
+}
+
+
+\tablaSinColores{Esquema de datos para colección <<\textit{clean\_annotations}>>}{|l|c|c|}{3}{mongodbSchemaCleanAnnotations}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo} & \multicolumn{1}{c}{Nullable}\\}{
+tweet\_id & string & true \\
+type & string & true \\
+annotation & string & true \\
+}
+
+
+\tablaSinColores{Esquema de datos para colección <<\textit{clean\_context\_annotations}>>}{|l|c|c|}{3}{mongodbSchemaCleanContextAnnotations}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo} & \multicolumn{1}{c}{Nullable}\\}{
+tweet\_id & string & true \\
+domain & string & true \\
+entity & string & true \\
+}
+
+
+
+\subsubsection{Modelo de datos en ClickHouse}
+
+La base de datos columnar ClickHouse ha efectuado el rol de \textit{data warehouse} en este proyecto. Al utilizar un modelo de datos basado en columnas, resulta perfecta para el caso de uso que presentan las fuentes de datos utilizadas. Algunos de los campos de los distintos esquemas de datos descritos en la sección anterior tienen poca densidad. Por lo que, si se utilizara una base de datos relacional tradicional, todos esos campos estarían completamente vacíos en la mayoría de los registros, lo que repercutiría en la latencia de las consultas realizadas.
+
+Sin embargo, al tratarse de un sistema \textit{OLAP} (\textit{On-Line Analytical Processing}), ClickHouse está expresamente diseñado para esta labor. El modelo de datos columnar que utiliza ayuda a reducir drásticamente el tiempo de ejecución de las consultas ya que emplea únicamente los campos necesarios para resolverlas, en lugar de iterar sobre cada uno como se haría en una base de datos relacional tradicional.
+
+Respecto a los esquemas de datos empleados, todos los datos procesados e inferidos mediante las técnicas de \textit{NLP} (\textit{Natural Language Processing}) se almacenan en una misma base de datos de nombre <<\textit{twitter}>>. Esta base de datos contiene toda la información relacionada con las fuentes de datos que tienen que ver con Twitter, que en el caso del proyecto son tanto los datos de la \textit{API} como el \textit{dataset} utilizado.
+
+De esta manera, los registros de la colección <<\textit{clean\_tweets}>> de la base de datos <<\textit{raw\_dataset}>> que existen en MongoDB y los registros de la colección <<\textit{clean\_tweets}>> de la base de datos <<\textit{raw\_twitter}>>, se vuelcan en la misma tabla <<\textit{tweets}>> existente en ClickHouse. Este proceso es similar para los demás esquemas de datos y permite tener integrada en la misma tabla la información de todos los conjuntos de datos relacionados entre sí (campo <<\textit{source}>>) junto a los términos de consulta (<<\textit{search\_query}>>) por los que se ha extraído dicha información.
+
+A continuación, se muestran los esquemas de datos utilizados para las tablas creadas en la base de datos ClickHouse.
+
+\tablaSinColores{Esquema de datos para tabla <<\textit{tweets}>>}{|l|c|}{2}{clickhouseSchemaTweets}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo de dato}\\}{
+tweet\_id & String \\
+source & String \\
+search\_query & String \\
+user\_id & String \\
+created\_at & DateTime \\
+language & FixedString(2) \\
+text & String \\
+retweet\_count & Int32 \\
+reply\_count & Int32 \\
+like\_count & Int32 \\
+quote\_count & Int32 \\
+sentiment & String \\
+emotion & String \\
+topic & String \\
+entity & String \\
+}
+
+\tablaSinColores{Esquema de datos para tabla <<\textit{users}>>}{|l|c|}{2}{clickhouseSchemaUsers}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo de dato}\\}{
+user\_id & String \\ 
+name & String \\ 
+username & String \\ 
+description & String \\ 
+followers\_count & Int32 \\ 
+following\_count & Int32 \\ 
+tweet\_count & Int32 \\ 
+listed\_count & Int32 \\ 
+}
+
+\tablaSinColores{Esquema de datos para tabla <<\textit{hashtags}>>}{|l|c|}{2}{clickhouseSchemaHashtags}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo de dato}\\}{
+tweet\_id & String \\ 
+tag & String \\ 
+}
+
+\tablaSinColores{Esquema de datos para tabla <<\textit{mentions}>>}{|l|c|}{2}{clickhouseSchemaMentions}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo de dato}\\}{
+tweet\_id & String \\ 
+user\_id & String \\ 
+username & String \\ 
+}
+
+\tablaSinColores{Esquema de datos para tabla <<\textit{urls}>>}{|l|c|}{2}{clickhouseSchemaUrls}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo de dato}\\}{
+tweet\_id & String \\ 
+display\_url & String \\ 
+}
+
+\tablaSinColores{Esquema de datos para tabla <<\textit{annotations}>>}{|l|c|}{2}{clickhouseSchemaAnnotations}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo de dato}\\}{
+tweet\_id & String \\ 
+type & String \\ 
+annotation & String \\ 
+}
+
+\tablaSinColores{Esquema de datos para tabla <<\textit{context\_annotations}>>}{|l|c|}{2}{clickhouseSchemaContextAnnotations}
+{\multicolumn{1}{c}{Nombre del campo} & \multicolumn{1}{c}{Tipo de dato}\\}{
+tweet\_id & String \\ 
+domain & String \\ 
+entity & String \\ 
+}
+
+
+\subsection{Diseños de los cuadros de mando}
+
+A continuación, se detalla la evolución seguida para el diseño de los cuadros de mando implementados en la herramienta \textit{Apache Superset}. Se han diseñado e implementado un total de 5 vistas para el \textit{dashboard} completo, las cuales muestran los datos procesados obtenidos a través del proceso \textit{ETL} en diversos niveles de detalle e información.
+
+\subsubsection{Raw Data}
+
+La primera vista del cuadro de mando planea dar una visión general de los datos disponibles. Muestra unos indicadores con el número total de registros disponibles, así como la fecha más reciente y antigua que presentan los datos. Se plantean también dos gráficos de línea que muestran el número de registros extraídos cada día y en cada hora.
+
+La idea inicial de esta primera pestaña del \textit{dashboard} se puede observar en el boceto de la \autoref{fig:dashboard-mockup-1}, mientras que la implementación correspondiente se puede ver en la \autoref{fig:dashboard-1-iter-1}.
 
 \imagen{dashboard-mockup-1}{Diseño inicial de la pestaña \textit{Raw data}}
 
 \imagen{dashboard-1-iter-1}{Primera iteración de la pestaña \textit{Raw data}}
 
+Posteriormente, se hizo una segunda iteración sobre el diseño. Se mejoró la usabilidad y accesibilidad de los gráficos de línea añadiendo la posibilidad de hacer \textit{zoom} en los datos. De esta manera, se puede observar en mayor detalle los registros en puntos específicos que puedan llamar la atención del usuario. Esta mejora se puede observar en la \autoref{fig:dashboard-1-iter-2}.
+
 \imagen{dashboard-1-iter-2}{Segunda iteración de la pestaña \textit{Raw data}}
+
+\subsubsection{Sentiment Overview}
+
+La segunda vista del cuadro de mando planea dar una visión general sobre los atributos inferidos a través de las técnicas de \textit{NLP}. Se ideó unos indicadores para la puntuación media del sentimiento, así como el número de registros con sentimientos positivos, neutros y negativos. Debajo de estos indicadores, se mostrarían unos gráficos de barras indicando el número de registros totales asociados a cada sentimiento, emoción, tópico y entidad.
+
+La idea inicial de esta segunda pestaña del \textit{dashboard} se puede observar en el boceto de la \autoref{fig:dashboard-mockup-2}, mientras que la implementación correspondiente se puede ver en la \autoref{fig:dashboard-2-iter-1}.
 
 \imagen{dashboard-mockup-2}{Diseño inicial de la pestaña \textit{Sentiment overview}}
 
 \imagen{dashboard-2-iter-1}{Primera iteración de la pestaña \textit{Sentiment overview}}
 
+\subsubsection{Sentiment Analysis}
+
+La tercera vista del cuadro de mando entra a mayor detalle en el nivel de registros respecto a los sentimientos inferidos con los algoritmos de \textit{NLP}. Se muestran unos gráficos lineales con el tipo de sentimiento (positivo, negativo o neutro) y emoción (optimismo, alegría, tristeza, enfado) asociada a nivel diario y en cuestión de la hora. 
+
+La idea inicial de esta tercera pestaña del \textit{dashboard} se puede observar en el boceto de la \autoref{fig:dashboard-mockup-3}, mientras que la implementación correspondiente se puede ver en la \autoref{fig:dashboard-3-iter-1}.
+
 \imagen{dashboard-mockup-3}{Diseño inicial de la pestaña \textit{Sentiment analysis}}
 
 \imagen{dashboard-3-iter-1}{Primera iteración de la pestaña \textit{Sentiment analysis}}
 
+Posteriormente, se hizo una segunda iteración sobre este diseño (véase la \autoref{fig:dashboard-3-iter-2}). Se mejoró la accesibilidad de las gráficas que se encuentran en el nivel de hora añadiendo un \textit{zoom} para poder observar en mayor detalle estos registros, además de eliminar las marcas de los puntos.
+
+También se ha convertido la línea de puntos rígida que existía anteriormente a una un área ligeramente curvada para representar mejor los sentimientos y las emociones, puesto que estos términos representan naturalmente un flujo de combinaciones de las mismas y no se trata de algo estricto y exclusivo. Además se han modificado los color asociados a cada categoría con los que suelen estar representadas, realizando la siguiente asignación:
+
+\begin{itemize}
+    \item Sentimiento
+    \begin{itemize}
+        \item Positivo: Un color \colorbox{positive}{verde claro} (\verb|#ACE1C4|).
+        \item Neutro: Un color \colorbox{neutral}{amarillo claro} (\verb|#FDE380|).
+        \item Negativo: Un color \colorbox{negative}{rojo claro} (\verb|#EFA1AA|).
+    \end{itemize}
+    
+    \item Emoción
+    \begin{itemize}
+        \item Optimismo: Un color \colorbox{optimism}{dorado} (\verb|#FFD700|).
+        \item Alegría: Un color \colorbox{joy}{verdoso} (\verb|#90EE90|).
+        \item Tristeza: Un color \colorbox{sadness}{morado} (\verb|#9370DB|).
+        \item Enfado: Un color \colorbox{anger}{rojo intenso} (\verb|#FF2400|).
+    \end{itemize}
+\end{itemize}
+
+
 \imagen{dashboard-3-iter-2}{Segunda iteración de la pestaña \textit{Sentiment analysis}}
+
+
+\subsubsection{User Analysis}
+
+La cuarta vista del cuadro de mando entra se centra en dar una visión a nivel de los usuarios que han realizado las publicaciones. En primer lugar, se muestran las estadísticas medias de cada usuario (número de seguidos, número de usuarios seguidos, total de publicaciones y número de listados) respecto al sentimiento con el que están mayormente asociado. De esta manera, se puede observar las diferencias entre los 3 tipos de usuarios y sus sentimientos notables respecto al tema de búsqueda.
+
+La segunda visualización muestra un grafo con las interacciones de usuarios que más han gustado. Cada nodo origen representa al usuario que ha realizado la publicación y los nodos destino al usuario que mencionan, mientras que el tamaño de los mismos es calculado en base al número de \textit{likes} que ha recibido la publicación. En la parte inferior del \textit{dashboard} se han agregado dos tablas que muestran, respectivamente, los usuarios más influyentes que han publicado sobre el tema en concreto y las publicaciones más influyentes que han sido realizadas sobre el tema en concreto. En las tablas se muestran también las estadísticas de los usuarios y las publicaciones, respectivamente.
 
 \imagen{dashboard-4-iter-1}{Primera iteración de la pestaña \textit{User analysis}}
 
+
+\subsubsection{Other}
+
+La quinta vista del cuadro de mando se centra en las demás dimensiones no utilizadas en las anteriores vistas, como las tablas <<\textit{hashtags}>>, <<\textit{urls}>>, <<\textit{annotations}>> y <<\textit{context\_annotations}>>. Esto se debe a la disponibilidad parcial que presentan las dos últimas tablas en solamente una de las fuentes de datos, además de representar información en un menor grado de relevancia que las otras vistas diseñadas hasta el momento.
+
+En primer lugar se muestran dos nubes de palabras, la primera con los \textit{hashtags} más utilizados y la segunda con los enlaces más publicados. El tamaño de cada palabra es directamente proporcional al número de registros que la contienen. En la parte inferior se han creado dos gráficos tipo \textit{sunburst} para las anotaciones y las anotaciones contextuales.
+
+En las anotaciones se muestra en el círculo interior las categorías de las categorías principales de información detectada automáticamente en el texto (organización, persona, lugar, etc.), mientras que en el círculo exterior se muestra el nombre específico detectado. Las anotaciones contextuales siguen el mismo formato, en la parte interior se muestra la categoría de la entidad detectada y en la exterior el nombre de la subcategoría específica.
+
 \imagen{dashboard-5-iter-1}{Primera iteración de la pestaña \textit{Other}}
+
+
+
 
 \section{Diseño procedimental}
 
+En este apartado se describen las interacciones entre los principales componentes del proyecto. Para ello, se mostrarán una serie de diagramas de secuencias que representan el proceso \textit{ETL}.
+
+En la \autoref{fig:interaction-extraction} se muestra la interacción entre los componentes de la etapa de extracción de datos del proceso \textit{ETL}. Esta interacción se realiza de manera automática si se programa la ejecución periódica de la \textit{data pipeline} o cuando se ejecute de manera manual.
+
+\imagen{interaction-extraction}{Diagrama de secuencia de la interacción entre los componentes que forman parte de la etapa de extracción de datos del proceso \textit{ETL}}
+
+En la \autoref{fig:interaction-processing} y en la \autoref{fig:interaction-inference} se muestra la interacción entre los componentes de la etapa de transformación del proceso \textit{ETL}. El primer diagrama muestra el flujo de acciones que se realiza en la fase de procesamiento de los datos, mientras que el segundo diagrama muestra las acciones que se realizan en la fase de la inferencia \textit{NLP}. Esta interacción se realiza de manera automática después de ejecutarse la etapa de extracción de datos (\autoref{fig:interaction-extraction}), si ha terminado satisfactoriamente.
+
+\imagen{interaction-processing}{Diagrama de secuencia de la interacción entre los componentes que forman parte de la fase de procesamiento de la etapa de transformación de datos del proceso \textit{ETL}}
+
+\imagen{interaction-inference}{Diagrama de secuencia de la interacción entre los componentes que forman parte de la fase de inferencia de la etapa de transformación de datos del proceso \textit{ETL}}
+
+En la \autoref{fig:interaction-gui} se muestra la interacción del usuario con el punto de acceso centralizado web creado para la plataforma. En este diagrama se indican las posibles acciones que se pueden tomar desde dicha interfaz web. Esta interacción se realiza en el momento que el usuario interactúa con la propia interfaz y es redirigido a las interfaces web de los demás componentes del proyecto.
+
+\imagen{interaction-gui}{Diagrama de secuencia de la interacción entre el usuario y los componentes a nivel general de la plataforma}
+
 \section{Diseño arquitectónico}
 
+La plataforma está compuesta por diversos componentes encapsulados en contenedores \textit{docker}, esto convierte la arquitectura de la plataforma en un diseño modular con la capacidad de intercambiar los diversos componentes sin afectar demasiado al resto.
 
+Al tratarse de un proyecto enfocado al \textit{Big Data}, las tecnologías utilizadas están diseñadas para ser escalables y distribuidas. No obstante, al haber realizado el desarrollo en una sola máquina, la interconexión de estos componentes entre ellos mismos se ha realizado a través de las redes \textit{docker} creadas.
+
+En la \autoref{fig:bisentys-architecture-network} se puede observar la vista general de la arquitectura de la plataforma junto a las redes a las que pertenece cada componente.
+
+\imagen{bisentys-architecture-network}{Vista general de la arquitectura de la plataforma junto a las redes \textit{docker} a las que pertenece cada componente}
+
+Las interacciones entre los componentes de la arquitectura y los flujos de datos y acciones se pueden observar en mayor detalle en la \autoref{fig:bisentys-architecture}. 
+
+\imagen{bisentys-architecture}{Diagrama de secuencia de la interacción entre el usuario y los componentes a nivel general de la plataforma}
