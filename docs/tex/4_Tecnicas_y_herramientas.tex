@@ -151,13 +151,22 @@ Para cumplir con estos requisitos, se ha investigado viabilidad de las siguiente
     \item \textbf{\textit{MongoDB}.} Base de datos \textit{NoSQL} orientada a documentos escalable y flexible que permite la ingestión y consulta eficientes de estructuras de datos complejas en formato \textit{JSON}. Presenta soporte limitado para modelado de datos relacional y para transacciones complejas~\cite{mongodbArchitecture}.
 \end{itemize}
 
+\vspace{2cm}
+
 \subsubsection{Herramienta elegida:}
 
 \begin{itemize}
     \item \textbf{\textit{MongoDB}}\footnote{\url{https://www.mongodb.com/}}
 \end{itemize}
 
-Se ha seleccionado esta herramienta por la sencilla integración y facilidad de uso que presenta para el caso de uso concreto de este proyecto. Los datos extraídos procedentes de las \textit{APIs} seleccionadas se presentan en su totalidad en formato \textit{JSON}, por lo que se pueden cargar directamente en esta base de datos sin realizar ninguna transformación intermedia. 
+Se ha seleccionado esta herramienta~\cite{mongodbCompass} por la sencilla integración y facilidad de uso que presenta para el caso de uso concreto de este proyecto. Los datos extraídos procedentes de las \textit{APIs} seleccionadas se presentan en su totalidad en formato \textit{JSON}, por lo que se pueden cargar directamente en esta base de datos sin realizar ninguna transformación intermedia. 
+
+\subsection{MongoDB Compass}
+
+Esta herramienta sirve de interfaz gráfica de usuario que permite explorar, analizar y manipular los datos almacenados en la base de datos no relacional y orientada a datos MongoDB. MongoDB Compass\footnote{\url{https://www.mongodb.com/products/compass}} Permite visualizar la estructura y el contenido de las colecciones, crear índices, realizar consultas, modificar documentos, entre otras tareas. Además, facilita el trabajo al evitar tener que utilizar la \textit{shell} propia de la herramienta.
+
+Ha resultado de gran utilidad para la exploración de los datos en bruto de este proyecto ya que los datos obtenidos mediante la herramienta de extracción están en formato \textit{JSON}, lo cual se asimila a la perfección con el formato \textit{BSON} empleado por MongoDB. Ofrece una interfaz intuitiva para la realización de consultas sobre los datos.
+
 
 \subsection{Apache Spark}
 
@@ -224,3 +233,4 @@ Debido a la compleja arquitectura que presenta este proyecto, es necesario un m�
 \end{itemize}
 
 La herramienta \textit{Apache Airflow} presenta una arquitectura modular y una cola de mensajes para la gestión de los nodos, lo que facilita su escalabilidad en situaciones necesarias. Además, permite la creación de \textit{data pipelines} de manera dinámica y programática, lo que mejora la definición de flujos de trabajo y su parametrización. La aplicación web que presenta es otro punto a favor, ya que permite monitorizar, programar y gestionar \textit{pipelines} de una manera sencilla.
+

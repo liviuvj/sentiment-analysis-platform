@@ -147,7 +147,7 @@ Al comienzo del proyecto se decidió utilizar inicialmente la \textit{API} de Tw
 
  Después de terminar las tareas de integración y mejora del conector de Airbyte para Twitter se dirigió el enfoque hacia las demás etapas del proyecto, dejando así por finalizada esta parte. Tras la inclusión, despliegue y configuración de la herramienta de orquestación de procesos Apache Airflow, se procedió a la realización de pruebas mediante la ejecución completa de la \textit{pipeline ETL} para comprobar el correcto funcionamiento del proyecto, surgiendo así problemas en la etapa de extracción de datos.
 
-Al comprobar el origen de los errores, se descubrieron los cambios críticos que había sufrido recientemente la \textit{API} de Twitter~\cite{karissa2023}~\cite{stokel2023}. El acceso básico sin coste que existía anteriormente permitía realizar hasta 500\,000 peticiones de manera mensual a una multitud de diversos \textit{endpoints}. Actualmente, el acceso de dicho plan (\textit{Free}) sin coste ha quedado altamente restringido, permitiendo tan solo realizar publicaciones en la propia cuenta del desarrollador. El siguiente plan (\textit{Basic}), que permite el acceso al \textit{endpoint} de búsqueda de \textit{tweets} presenta un coste de \$100 mensuales, limitando a 10\,000 el número de peticiones de lectura que se pueden realizar. El siguiente plan que se aproxima al número original de peticiones es el \textit{Pro}, con un coste de \$5\,000 mensuales y restringiendo el acceso a 300\,000 peticiones de búsqueda.
+Al comprobar el origen de los errores, se descubrieron los cambios críticos que había sufrido recientemente la \textit{API} de Twitter~\cite{karissa2023, stokel2023}. El acceso básico sin coste que existía anteriormente permitía realizar hasta 500\,000 peticiones de manera mensual a una multitud de diversos \textit{endpoints}. Actualmente, el acceso de dicho plan (\textit{Free}) sin coste ha quedado altamente restringido, permitiendo tan solo realizar publicaciones en la propia cuenta del desarrollador. El siguiente plan (\textit{Basic}), que permite el acceso al \textit{endpoint} de búsqueda de \textit{tweets} presenta un coste de \$100 mensuales, limitando a 10\,000 el número de peticiones de lectura que se pueden realizar. El siguiente plan que se aproxima al número original de peticiones es el \textit{Pro}, con un coste de \$5\,000 mensuales y restringiendo el acceso a 300\,000 peticiones de búsqueda.
 
 Al comprobar la siguiente opción investigada inicialmente a utilizar como segunda fuente de datos, se descubrió que la \textit{API} de Reddit también está sufriendo cambios muy restrictivos~\cite{watercutter2023}. Los usuarios y desarrolladores de la plataforma han organizado numerosas protestas~\cite{antonio2023} para intentar evitar estos hechos. El nuevo plan básico y sin coste ofrece entre 10 y 100 peticiones por minuto, dependiendo del tipo de cuenta y acceso concedido.
 
@@ -161,7 +161,7 @@ Teniendo esto en cuenta y el poco margen temporal restante para la finalización
 
 El conjunto de datos seleccionado finalmente ha sido \textit{Game of Thrones S8 (Twitter)}~\cite{got8}, de la plataforma de \textit{data science} Kaggle\footnote{\url{https://www.kaggle.com}}. Se trata de un \textit{dataset} sobre la serie de televisión del mismo nombre, que el autor recolectó mediante un \textit{script} en el lenguaje R de manera diaria a lo largo de un mes durante el estreno de su octava temporada.
 
-Este conjunto de datos en formato \textit{CSV} presenta más de 760\,000 registros y 88 atributos distintos, con información tanto sobre los usuarios como las publicaciones realizadas por los mismos. Lo que resulta de gran utilidad ya que se puede reconstruir una estructura de datos similar a la del primer \textit{data pipeline} realizado mediante la \textit{API} de Twitter.
+Este conjunto de datos en formato \textit{CSV} presenta más de 760\,000 registros y 88 atributos distintos, con información tanto sobre los usuarios, como las publicaciones realizadas por los mismos. Lo que resulta de gran utilidad ya que se puede reconstruir una estructura de datos similar a la del primer \textit{data pipeline} realizado mediante la \textit{API} de Twitter.
 
 Para comprobar de mejor manera los datos disponibles y la usabilidad de los mismos se ha realizado un análisis exploratorio, al que se puede acceder a través del \textit{Jupyter Notebook}\footnote{\url{https://colab.research.google.com/drive/1d_obU9idFqjsDi7ezeFs1CORxTUAgh7V\#offline=true&sandboxMode=true}} que se deja disponible.
 
@@ -170,11 +170,11 @@ La primera parte de dicho análisis consiste en comprobar la posibilidad de crea
 La segunda parte se centra en buscar palabras clave que puedan servir a modo de tópico o tema de interés sobre el que se pueda obtener más información mediante el análisis de sentimientos. Para ello, se comprueba el interés de los usuarios sobre diversos personajes y temas, de los que se han escogido los siguientes para formar particiones más pequeñas y manejables del conjuntos de datos total:
 
 \begin{itemize}
-    \item \textbf{\textit{dataset\_movie}.} Partición compuesta de 6\,996 registros que contienen la palabra clave <<\textit{movie}>> en la publicación.
-    \item \textbf{\textit{dataset\_got}.} Partición compuesta de 414\,955 registros que contienen la palabra clave <<\textit{Game of Thrones}>> en la publicación.
-    \item \textbf{\textit{dataset\_season8}.} Partición compuesta de 33\,663 registros que contienen la palabra clave <<\textit{season 8}>> en la publicación.
-    \item \textbf{\textit{dataset\_daenerys}.} Partición compuesta de 8\,830 registros que contienen la palabra clave <<\textit{Daenerys}>> en la publicación.
-    \item \textbf{\textit{dataset\_jon}.} Partición compuesta de 12\,222 registros que contienen la palabra clave <<\textit{Jon}>> en la publicación.
+    \item \textbf{\texttt{dataset\_movie}.} Partición compuesta de 6\,996 registros que contienen la palabra clave <<\textit{movie}>> en la publicación.
+    \item \textbf{\texttt{dataset\_got}.} Partición compuesta de 414\,955 registros que contienen la palabra clave <<\textit{Game of Thrones}>> en la publicación.
+    \item \textbf{\texttt{dataset\_season8}.} Partición compuesta de 33\,663 registros que contienen la palabra clave <<\textit{season 8}>> en la publicación.
+    \item \textbf{\texttt{dataset\_daenerys}.} Partición compuesta de 8\,830 registros que contienen la palabra clave <<\textit{Daenerys}>> en la publicación.
+    \item \textbf{\texttt{dataset\_jon}.} Partición compuesta de 12\,222 registros que contienen la palabra clave <<\textit{Jon}>> en la publicación.
 \end{itemize}
 
 \section{Carga de datos}
@@ -201,7 +201,7 @@ En esta sección se detallarán los aspectos relevantes de la herramienta selecc
 
 \section{Orquestación de los procesos}
 
-La arquitectura implementada en este proyecto resulta compleja no solamente a nivel de integración de las herramientas empleadas, sino también de la comunicación realizada entre ellas y los procesos que intervienen entre cada una.
+La arquitectura implementada en este proyecto resulta compleja, no solamente a nivel de integración de las herramientas empleadas, sino también de la comunicación realizada entre ellas y los procesos que intervienen entre cada una.
 
 Debido a estas razones, surge la necesidad de emplear una herramienta capaz de gestionar todo el flujo de acciones que se lleva a cabo entre los distintos componentes del proyecto. Para lograr este objetivo, se ha seleccionado \textit{Apache Airflow} como orquestador de procesos.
 

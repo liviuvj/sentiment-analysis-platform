@@ -1,6 +1,6 @@
 \capitulo{3}{Conceptos teóricos}
 
-En las siguientes secciones se detallarán los principales conceptos teóricos que se tratan en este proyecto. No obstante, debido a la naturaleza práctica de este trabajo, el enfoque central se desarrolla en mejor medida en la \autoref{section:relevant_aspects}. Por esta razón, los apartados a continuación expondrán temas relevantes a la construcción de la plataforma \textit{big data} para análisis de sentimientos desarrollada en este proyecto.
+En las siguientes secciones se detallarán los principales conceptos teóricos que se tratan en este proyecto. No obstante, debido a la naturaleza práctica de este trabajo, el enfoque central se desarrolla en mejor medida en el \autoref{section:relevant_aspects}. Por esta razón, los apartados a continuación expondrán temas relevantes a la construcción de la plataforma \textit{big data} para análisis de sentimientos desarrollada en este proyecto.
 
 \section{Big Data}
 
@@ -32,7 +32,7 @@ A continuación, se describen las principales características del \textit{Big D
 
 \subsubsection{Otras características importantes}
 
-A parte de las principales propiedades que se asignaron originalmente al \textit{Big Data}, con el tiempo fueron apareciendo más aspectos, hasta llegar a los 42 que existen en la actualidad~\cite{shaferData}. Sin embargo, a continuación se definen otras dos características que resultan de igual importancia que las descritas anteriormente:
+Aparte de las principales propiedades que se asignaron originalmente al \textit{Big Data}, con el tiempo fueron apareciendo más aspectos, hasta llegar a los 42 que existen en la actualidad~\cite{shaferData}. Sin embargo, a continuación se definen otras dos características que resultan de igual importancia que las descritas anteriormente:
 
 \begin{itemize}
     \item \textbf{Valor.} Los datos en bruto no suelen presentar valor aparente por sí mismos. Generalmente, es necesario procesar estos datos y aplicar técnicas de análisis para poder obtener conocimiento útil. Algunas empresas o servicios de popular demanda se basan completamente en los datos de sus usuarios para poder ofrecer un valor añadido. Por ello, resulta necesario que los datos tengan el potencial de generar un valor suficiente. 
@@ -44,9 +44,9 @@ A parte de las principales propiedades que se asignaron originalmente al \textit
 
 Tras entender mejor el concepto \textit{Big Data}, se pueden plantear una serie de desafíos al trabajar con ello que no existían previamente con los datos tradicionales. Los principales retos a superar se pueden deducir a partir de <<Las 5 Vs del \textit{Big Data}>> detalladas anteriormente.
 
-Primero es necesario disponer de la capacidad de procesar grandes volúmenes de datos en tiempo real. Como se dijo previamente, los datos en bruto no suelen presentar valor por sí mismos. Por ello, normalmente se realizan operaciones de integración de datos, en los que se combina información originada de distintas fuentes de datos, tras lo cual se procesan en conjunto y se aplican agregaciones, reglas de negocio o asegurando la calidad de los mismos. Esto ha provocado la necesidad de desarrollar nuevas herramientas capaces de realizar esta labor de procesamiento en tiempo real sobre grandes cantidades de datos.
+En primer lugar, es necesario disponer de la capacidad de procesar grandes volúmenes de datos en tiempo real. Como se ha indicado previamente, los datos en bruto no suelen presentar valor por sí mismos. Por ello, normalmente se realizan operaciones de integración de datos, en los que se combina información originada de distintas fuentes de datos, tras lo cual se procesan en conjunto y se aplican agregaciones, reglas de negocio o asegurando la calidad de los mismos. Esto ha provocado la necesidad de desarrollar nuevas herramientas capaces de realizar esta labor de procesamiento en tiempo real sobre grandes cantidades de datos.
 
-También surge la necesidad de poder persistir toda la información obtenida de distintos orígenes, con sus muy seguras diferencias entre los tipos de datos con los que se trabaja en cada uno de ellos. De esta manera, el \textit{Big Data} ha promovido también el auge de bases de datos no relacionales que puedan ser capaces de soportar tanta variedad de datos.
+También surge la necesidad de poder persistir toda la información obtenida de distintos orígenes, teniendo en cuenta las posibles diferencias entre los tipos de datos con los que se trabaja en cada uno de ellos. De esta manera, el \textit{Big Data} ha promovido también el auge de bases de datos no relacionales que puedan ser capaces de soportar tanta variedad de datos.
 
 Resulta de igual relevancia comentar las técnicas con las que se trabajan los datos obtenidos. Distintos tipos de datos requieren de diferentes técnicas de análisis o transformaciones alternativas para poder explotarlos correctamente. La evolución de los métodos tradicionales y la creación de nuevas metodologías de procesamiento de datos resulta de gran ayuda en la obtención de nuevos \textit{insights}.
 
@@ -80,9 +80,9 @@ La aplicación de un proceso \textit{ETL} o \textit{ELT} se formaliza con la cre
 
 Comenzando por la infraestructura necesaria para ejecutar dichos procesos, los sistemas sobre los que se desarrollan estos flujos de datos han de cumplir con las necesidades específicas de cada proyecto. Distintas tareas pueden necesitar de una serie de recursos distintos, de menor a mayor capacidad computacional o espacio de almacenamiento. Estos sistemas necesitan ser escalables para permitir la flexibilidad de mantener las \textit{data pipelines} disponibles y en correcto estado ante cambios imprevistos en los datos o en los requisitos.
 
-Igualmente y de manera general, al ser cada proyecto distinto y presentar diferentes requerimientos, los desarrollos realizados para un flujo de datos no tienen por qué ser traspasables a otro proyecto. De esta manera, las aplicaciones que actúan como origen o destino de datos, y las propias herramientas que se encargan del procesamiento de los mismos, pueden estar en continuo desarrollo y evolución. Por consiguiente, surge también la necesidad de un mantenimiento continuo sobre las \textit{data pipelines} creadas para sustentar la correcta fiabilidad de las mismas.
+Igualmente y de manera general, al ser cada proyecto distinto y presentar diferentes requerimientos, los desarrollos realizados para un flujo de datos no tienen por qué ser extrapolables a otro proyecto. De esta manera, las aplicaciones que actúan como origen o destino de datos, y las propias herramientas que se encargan del procesamiento de los mismos, pueden estar en continuo desarrollo y evolución. Por consiguiente, surge también la necesidad de un mantenimiento continuo sobre las \textit{data pipelines} creadas para sustentar la correcta fiabilidad de las mismas.
 
-Resulta importante destacar de igual manera la posibilidad de cambios de contexto en los datos. Lo que puede provocar que durante cierta ventana temporal los datos extraídos puedan variar en gran medida respecto a lo establecido por defecto previamente. Esto podría no significar exclusivamente que los nuevos datos sean erróneos, sino que simplemente han modificado sus valores normales. Por ello, también será imprescindible ajustar las métricas de calidad de datos para asegurar que la información obtenida siga siendo fiable.
+De igual manera, resulta importante destacar la posibilidad de cambios de contexto en los datos. Lo que puede provocar que durante cierta ventana temporal los datos extraídos puedan variar en gran medida respecto a lo establecido por defecto previamente. Esto podría no significar exclusivamente que los nuevos datos sean erróneos, sino que simplemente han modificado sus valores normales. Por ello, también será imprescindible ajustar las métricas de calidad de datos para asegurar que la información obtenida siga siendo fiable.
 
 \section{Big Data Knowledge Discovery}
 
@@ -136,7 +136,7 @@ A continuación, se describen algunas de las principales técnicas que han const
     \item \textbf{\textit{Recurrent Neural Networks}.}\\
     Las redes neuronales recurrentes (\textit{RNN}) son un caso particular de las redes neuronales convencionales. En estos modelos, las capas intermedias completamente conectadas presentan un segundo \textit{output} a diferencia de las clásicas. 
     
-    A parte de realizar la fase \textit{feedforward} en la que se propagan los valores y se realiza el ajuste de pesos por las capas del modelo, la salida de cada capa (tras pasar por las funciones de activación) vuelve a ser utilizada como entrada de la misma en la siguiente iteración. De esta manera, los resultados obtenidos de la aplicación de una \textit{RNN} no dependen solamente de los datos de entrada actuales, sino también de los anteriormente recibidos. 
+    Aparte de realizar la fase \textit{feedforward} en la que se propagan los valores y se realiza el ajuste de pesos por las capas del modelo, la salida de cada capa (tras pasar por las funciones de activación) vuelve a ser utilizada como entrada de la misma en la siguiente iteración. De esta manera, los resultados obtenidos de la aplicación de una \textit{RNN} no dependen solamente de los datos de entrada actuales, sino también de los anteriormente recibidos. 
 
     \imagenConFuente{rnn-model}{Esquema básico de neuronas recurrentes}{\cite{cromoNLP}}
 
@@ -146,7 +146,7 @@ A continuación, se describen algunas de las principales técnicas que han const
 
     \imagenConFuenteConAnchura{0.8}{lstm-model}{Esquema básico de neuronas recurrentes con funciones de olvido incluidas}{\cite{cromoNLP}}
 
-    Estas redes neuronales son una evolución de las \textit{RNN}. A parte de presentar mejoras en el cálculo de los pesos, la novedad reside en un componente adicional que permite a la red <<olvidar>> algunos valores de lo entrenado previamente.
+    Estas redes neuronales son una evolución de las \textit{RNN}. Aparte de presentar mejoras en el cálculo de los pesos, la novedad reside en un componente adicional que permite a la red <<olvidar>> algunos valores de lo entrenado previamente.
     
     De este modo se consigue que el modelo siga siendo capaz de aprender de manera continua y, al no <<olvidar>> todo sino solamente alguna parte de lo aprendido, se obtiene también cierta capacidad de memoria.
 
@@ -159,7 +159,7 @@ A continuación, se describen algunas de las principales técnicas que han const
     
     Esto permite al modelo poner la atención en las partes más relevantes y útiles para la tarea a realizar. La ausencia de \textit{RNNs} en el modelo también implica la eliminación de las limitaciones que estas suponían, por lo que el modelo \textit{Transformer} se vuelve capaz de mantener una memoria mucho mayor de lo aprendido. 
     
-    En la \autoref{fig:attention-mechanism} se pueden observar las operaciones realizadas para para calcular los pesos de atención y combinar los datos de entrada (\textit{query}, \textit{key}, \textit{value}) de entrada de manera ponderada .
+    En la \autoref{fig:attention-mechanism} se pueden observar las operaciones realizadas para para calcular los pesos de atención y combinar los datos de entrada (\textit{query}, \textit{key}, \textit{value}) de entrada de manera ponderada.
 
     \imagenConFuenteConAnchura{0.9}{attention-mechanism}{Mecanismo de atención del modelo \textit{Transformer}}{\cite{vaswani2017attention}}
 
@@ -187,7 +187,7 @@ Las técnicas de procesamiento de lenguaje natural tienen un amplio catálogo de
 A continuación, se listan algunas de las aplicaciones de las técnicas \textit{NLP}:
 
 \begin{itemize}
-    \item \textbf{Clasificación de texto.} Consiste en categorizar el texto mediante etiquetas preestablecidas. Algunas de estas tareas pueden ser la clasificación de tópicos de un texto o el análisis de sentimientos, que se centra en determinar aspectos como el sentimiento (positivo, neutro o negativo), el sarcasmo o la actitud emocional (alegre, triste, enfadado) de la persona que ha proporcionado un enunciado~\cite{felbo2017using}~\cite{kim2014convolutional}.
+    \item \textbf{Clasificación de texto.} Consiste en categorizar el texto mediante etiquetas preestablecidas. Algunas de estas tareas pueden ser la clasificación de tópicos de un texto o el análisis de sentimientos, que se centra en determinar aspectos como el sentimiento (positivo, neutro o negativo), el sarcasmo o la actitud emocional (alegre, triste, enfadado) de la persona que ha proporcionado un enunciado~\cite{felbo2017using, kim2014convolutional}.
 
     \item \textbf{Traducción automática.} Trata la conversión de un texto en un idiota origen a un idioma destino~\cite{wu2016google}.
 

@@ -1,4 +1,51 @@
 \capitulo{7}{Conclusiones y Líneas de trabajo futuras}
 
-Todo proyecto debe incluir las conclusiones que se derivan de su desarrollo. Éstas pueden ser de diferente índole, dependiendo de la tipología del proyecto, pero normalmente van a estar presentes un conjunto de conclusiones relacionadas con los resultados del proyecto y un conjunto de conclusiones técnicas. 
-Además, resulta muy útil realizar un informe crítico indicando cómo se puede mejorar el proyecto, o cómo se puede continuar trabajando en la línea del proyecto realizado. 
+En esta sección final se desarrollarán las conclusiones derivadas del desarrollo de este proyecto, así como los resultados obtenidos en comparación con los objetivos planteados inicialmente. También se incluye un listado de posibles mejoras a implementar de cara a líneas de trabajo futuras.
+
+\section{Conclusiones}
+
+Este proyecto ha sido el resultado de los conocimientos aprendidos hasta el momento y de los obtenidos a medida que se estaba desarrollando esta <<Plataforma \textit{Big Data} para \textit{Sentiment Analysis}>>.
+
+A continuación, se destacan las conclusiones obtenidas tras la realización del proyecto:
+
+\begin{itemize}
+    \item En general, se han podido cumplir la gran mayoría de los objetivos propuestos inicialmente para el proyecto. Se ha desarrollado e integrado una plataforma modular, escalable y capaz de trabajar con \textit{Big Data} utilizando únicamente tecnologías de código abierto.
+
+    \item Se han diseñado e implementado diversas \textit{data pipelines} mediante el proceso \textit{ETL} (\textit{Extract, Transform, Load}) que han necesitado de la correcta cooperación entre diversas tecnologías. Para ello, ha hecho falta la correcta integración y configuración de los diversos componentes que han intervenido en estos flujos de datos.
+
+    \item Respecto a la herramienta de extracción de datos Airbyte, se ha conseguido mejorar y extender las funcionalidades que presentaba el conector base de Twitter. El desarrollo de la mejora de este conector se ha hecho público para la comunidad en el repositorio oficial de la herramienta.
+
+    \item Para la utilización de las técnicas de procesamiento de lenguaje natural (\textit{NLP}) se han empleado modelos que forman parte del \textit{state-of-the-art} en este campo, más concretamente, las distintas variantes del modelo \textit{BERT}. La investigación realizada sobre dichos modelos ha ayudado a comprender mejor el funcionamiento de los modelos \textit{Transformer} y de las tendencias actuales del \textit{Deep Learning} en general.
+
+    \item Se ha conseguido el despliegue de la plataforma completa mediante contenedores \textit{docker}. Esto la convierte en una solución integral para el análisis de sentimientos en \textit{Big Data}, además de una solución modular. Por consiguiente, se posibilita la agregación de nuevos componentes para extender las funcionalidades de la misma y el intercambio de unos componentes por otros, en caso de necesitar emplear tecnologías diferentes o adaptarse a distintos casos de uso.
+
+    \item Se ha llevado a cabo el diseño e implementación de un \textit{dashboard} que comprende 5 vistas distintas en las que se muestra la información procesada a través de la \textit{pipeline ETL} a diferente nivel de detalle. El cuadro de mando creado permite la obtención de nuevos \textit{insights} mediante varias visualizaciones, que muestran los sentimientos de los usuarios respecto al tema inquirido.
+
+    \item El desarrollo de esta plataforma empleando las tecnologías seleccionadas ha supuesto un grado de aprendizaje nada trivial. Cada herramienta presentaba numerosos conceptos necesarios para utilizarlas correctamente, además de la complejidad inherente que podía darse en cada una de ellas. No obstante, se ha obtenido una gran satisfacción por todos los conocimientos aprendidos, ya que resultarán útiles para futuros proyectos.
+
+    \item Este proyecto ha resultado de gran complejidad por la cantidad de tecnologías empleadas en su desarrollo, ya que el número de componentes utilizados se podría haber reducido. Esta decisión se ha tomado con el objetivo de afianzar los conocimientos obtenidos hasta el momento sobre las distintas áreas que ha cubierto el Máster y, al mismo tiempo, aprender nuevas tecnologías modernas capaces de cubrir todo el proceso \textit{ETL}. Con los resultados finales obtenidos, este proceso de aprendizaje ha resultado satisfactorio.
+
+    \item Finalmente, cabe destacar que la realización de este Trabajo Final de Máster se ha realizado compaginando tanto la jornada laboral de trabajo como el estudio de las asignaturas del propio Máster. Esto ha supuesto una gran carga de trabajo y limitaciones de tiempo, lo que ha necesitado de una capacidad de organización para la priorización de ciertas tareas y partes del proyecto con el objetivo de finalizar este trabajo final de manera satisfactoria.
+
+\end{itemize}
+
+\section{Líneas de trabajo futuras}
+
+A continuación, se listan una serie de posibles líneas de mejora o aspectos con los que se podría continuar el desarrollo de este proyecto:
+
+\begin{itemize}
+    \item Actualmente, la plataforma desarrollada se ha enfocado en trabajar con datos en \textit{batch}. Por ello, la ejecución del proceso \textit{ETL}, en especial la etapa de Extracción y la fase de inferencia mediante \textit{NLP} de la etapa de Transformación, conllevan cierta cantidad de tiempo para su finalización.
+    
+    Una de las posibles mejoras futuras para esta plataforma sería implementar la posibilidad de trabajar también con datos en \textit{streaming}, para los casos de uso en los que se quiera obtener la información de inmediato en lugar de esperar a la ejecución periódica de los \textit{data pipelines}.
+
+    \item El funcionamiento desarrollado para la fase de inferencia mediante técnicas \textit{NLP} se realiza en las \textit{data pipelines} de manera consecutiva, ejecutando todas las tareas de procesamiento de lenguaje natural una a una sobre los datos. La herramienta Apache Airflow permite ejecución de tareas en paralelo mediante su programación en \textit{DAGs} (\textit{Directed Acyclic Graph}). El código desarrollado para las \textit{data pipelines} se ha diseñado de tal manera que permita la inclusión de estos cambios para su generación de manera dinámica.
+    
+    Por lo que otra posible línea de mejora consistiría en realizar la ejecución cada tarea \textit{NLP} en paralelo, necesitando posteriormente la agregación de los datos inferidos de cada tarea con sus respectivos registros de datos. Esto conllevaría un aumento notable en la velocidad de ejecución de las \textit{data pipelines}, debido a que esta fase es la que supone una mayor carga de trabajo en la plataforma.
+
+    \item Como se ha mencionado en la anterior sección, la arquitectura de la plataforma está compuesta por numerosas tecnologías. Este diseño se podría reducir y emplear una menor cantidad de componentes en caso de que se quiera aligerar la carga de trabajo en el servidor de despliegue, por ejemplo, eliminando el uso de algunos componentes y unificando su funcionalidad en una sola tecnología o herramienta.
+
+    \item En contraste con el punto anterior, se podría también sugerir añadir un componente más. Al trabajar con \textit{Big Data}, y más concretamente con opiniones de personas, resulta necesario mantener la seguridad de los datos. Para ello, se podría sugerir la implementación de una herramienta para llevar a cabo la <<gobernanza>> de los datos y asignar los permisos necesarios a cada usuario según el uso que se necesite dar a los datos.
+
+    \item Finalmente, otro posible punto de mejora en el ámbito de la seguridad. La mayoría de las herramientas empleadas se han protegido con acceso restringido mediante credenciales básicos de autenticación. Sin embargo, y ya que las herramientas utilizadas lo permiten, se podría ir un paso más en esta línea y realizar la integración de estas tecnologías con un sistema \textit{LDAP} (Lightweight Directory Access Protocol), mejorando así la seguridad de autenticación en la plataforma.
+
+\end{itemize}
