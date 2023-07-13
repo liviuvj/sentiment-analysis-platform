@@ -2,10 +2,121 @@
 
 \section{Introducción}
 
+En las secciones siguientes se incluye la documentación necesaria dar a los usuarios del proyecto las nociones necesarias y la manera de instalar, configurar, ejecutar y utilizar la plataforma desarrollada.
+
+La definición de usuario final para esta plataforma cubre dos roles principales. El primero, un usuario sin conocimientos técnicos que solamente va a visualizar los datos finales a través del \textit{dashboard} diseñado. Y el segundo, un analista de datos que se va a encargar también de la exploración de los datos y de gestionar e implementar los cuadros de mando para la plataforma.
+
 \section{Requisitos de usuarios}
+
+Esta <<Plataforma \textit{Big data} para \textit{Sentiment Analysis}>> se ha desarrollado en un entorno local y empleando una sola máquina. No obstante, al ser una plataforma modular, escalable y distribuida, en un entorno de producción real se debería realizar el despliegue de cada componente en una máquina o clúster dedicado.
+
+Para los usuarios finales, estos tendrían que acceder simplemente a través de las interfaces web correspondientes a los componentes necesarios. Por lo que los requisitos para estos usuarios serían los siguientes:
+
+\vspace{2cm}
+
+\begin{itemize}
+    \item Disponer de una conexión con acceso a la red en la que se haya realizado el despliegue de esta <<Plataforma \textit{Big data} para \textit{Sentiment Analysis}>>.
+    \item Tener asignados los roles o disponer de los permisos y credenciales necesarios para acceder a las interfaces web de las herramientas correspondientes (en este caso, Apache Superset).
+    \item Disponer de los conocimientos necesarios para interpretar los datos visualizados. En caso de ser un analista de datos, necesita también conocer las técnicas de análisis de datos respectivas para llevar a cabo el diseño e implementación de \textit{dashboards}.
+\end{itemize}
+
 
 \section{Instalación}
 
+Como se ha mencionado anteriormente, al tratarse de una plataforma \textit{Big Data}, esta herramienta idealmente se estaría ejecutando sobre un clúster dedicado para ello y no sobre la máquina del usuario final.
+
+No obstante, gracias al \textit{script bash} que se ha creado para el despliegue y configuración de la plataforma, el usuario final puede instalarse el entorno en la máquina local para realizar las pruebas necesarias en caso de dispone de los requisitos técnicos necesarios. 
+
+Para la instalación del proyecto tan solo es necesario clonar localmente el código del repositorio \textit{GitHub}: \url{https://github.com/liviuvj/sentiment-analysis-platform}
+
+Posteriormente, es necesario instalar las dependencias que se encuentran en el archivo de requisitos. Para ello, es buena práctica crear primero un entorno virtual para evitar problemas de versiones posteriormente y realizar la instalación del fichero de requisitos.
+
+\begin{verbatim}
+    python3 -m venv venv
+    source ./venv/bin/activate
+    pip install -r requirements.txt
+\end{verbatim}
+
+Para la ejecución del proyecto se ha creado un \textit{script bash} que se encarga de realizar la descarga de ficheros adicionales, clonación de repositorios, despliegue de contenedores \textit{Docker} y configuración de los componentes que forman parte del proyecto.
+
+\vspace{2cm}
+
+Por lo que tan solo será necesario ejecutar dicho \textit{script bash}:
+
+\begin{verbatim}
+    ./quickstart.sh
+\end{verbatim}
+
+No obstante, cada directorio principal correspondiente a las herramientas empleadas para la realización de este proyecto contiene un fichero \texttt{.env}. Dicho archivo contiene los parámetros de configuración por defecto, así como usuarios y contraseñas, de los distintos componentes de la plataforma. Por lo que sería recomendable modificar dichos valores en un entorno de producción.
+
+
+
 \section{Manual del usuario}
 
+Las siguientes secciones que desarrollan los usos que pueden dar los usuarios finales a la plataforma se han distribuido según el propio tipo de usuario que la va a utilizar. 
 
+\subsection{Usuario final básico}
+
+El usuario final básico debería tener el acceso mínimo y necesario para su caso de uso. De esta manera, se tendría acceso a los siguientes componentes (cuyas \textit{URLs} muestran los puertos asignados por defecto con la configuración realizada):
+
+\begin{itemize}
+    \item \textbf{Punto web de acceso centralizado.} Página web ligera que permite el acceso directo a todas las demás interfaces web que presentan los componentes de la plataforma. Accesible en \url{http://localhost:5000}
+
+    \item \textbf{Apache Superset.} Aplicación en la que se pueden diseñar, implementar, visualizar y compartir cuadros de mando interactivos. Accesible en \url{http://localhost:8088}
+
+\end{itemize}
+
+\subsubsection{Visualización de cuadros de mando}
+
+Por las razones mencionadas anteriormente, este usuario podría únicamente visualizar los \textit{dashboards} implementados en la plataforma.
+
+Para ello, es necesario acceder a la interfaz web de la herramienta Apache Superset y acceder a alguno de los cuadros de mando disponibles según los permisos asignados.
+
+Posteriormente podrá navegar por las distintas vistas del \textit{dashboard} visualizando los gráficos y obtener los \textit{insights} que crea oportunos, además de realizar acciones como el filtrado de los datos con las opciones que disponga para ello en el menú lateral.
+
+
+\subsection{Analista de datos}
+
+El analista de datos debería tener los conocimientos y capacidades necesarias para realizar más que solamente visualizar los \textit{dashboards} ya implementados. Por ello, este usuario se entiende que tiene acceso a los siguients componentes (cuyas \textit{URLs} muestran los puertos asignados por defecto con la configuración realizada):
+
+\begin{itemize}
+    \item \textbf{Punto web de acceso centralizado.} Página web ligera que permite el acceso directo a todas las demás interfaces web que presentan los componentes de la plataforma. Accesible en \url{http://localhost:5000}
+
+    \item \textbf{ClickHouse.} Sencilla interfaz web que permite la ejecución de consultas directas sobre la base de datos en lenguaje \textit{SQL}. Accesible en \url{http://localhost:8123/play}
+
+    \item \textbf{Apache Superset.} Aplicación en la que se pueden diseñar, implementar, visualizar y compartir cuadros de mando interactivos. Accesible en \url{http://localhost:8088}
+\end{itemize}
+
+\subsubsection{Exploración de datos}
+
+Este usuario debería tener acceso suficiente para realizar consultas en la base de datos utilizada para almacenar la información a visualizar, el sistema \textit{OLAP} ClickHouse.
+
+Para ello, se facilita su acceso directamente desde la herramienta Apache Superset, en la pestaña dedicada para ello \textit{SQL Lab}. En esta vista se podrán seleccionar uno o varios conjuntos de datos sobre los que realizar consultas en lenguaje \textit{SQL} nativo.
+
+Las consultas realizadas se guardan en un histórico para poder volver a ejecutarlas posteriormente en caso necesario. Además, los resultados de estas consultas se pueden exportar como nuevos \textit{datasets} virtuales que pueden utilizados posteriormente como base de nuevas consultas o gráficos.
+
+\imagen{superset-lab}{Vista del \textit{SQL Lab} para la exploración de datos de Apache Superset}
+
+\subsubsection{Creación o modificación de visualizaciones}
+
+Para la creación o modificación de nuevas visualizaciones es necesario acceder a la pestaña \textit{Charts} de la herramienta Apache Superset. En esta vista se puede seleccionar alguno de los \textit{datasets} disponibles y un tipo de visualización de los más de 40 tipos distintos que tiene la herramienta.
+
+A continuación, se accede a la vista de edición de la visualización. En esta pantalla se pueden seleccionar los campos deseados que se pueden añadir a la visualización, simplemente haciendo \textit{click} y arrastrándolos al elemento correspondiente.
+
+\imagen{superset-chart-edit}{Vista de edición de visualizaciones de Apache Superset}
+
+También se presentan en la misma vista opciones para cambiar el tipo de gráfico y personalizar los elementos visuales del mismo (paleta de colores, leyendas, títulos, etc.). Además, presenta también las opciones de configuración de analíticas avanzadas, como la previsión de valores.
+
+\subsubsection{Integración de nuevos cuadros de mando}
+
+Para la creación de nuevos cuadros de mando se ha de acceder a la pestaña \textit{Dashboards} de la herramienta Apache Superset. En esta vista se pueden modificar los \textit{dashboards} ya existentes o añadir nuevos.
+
+Esta pantalla de edición cuenta con las siguientes partes principales:
+
+\begin{itemize}
+    \item El menú lateral izquierdo permite la definición y configuración de filtros para el cuadro de mando. Se permite la selección de atributos presentes entre los distintos \textit{datasets} que pueden estar formando el \textit{dashboard} y la elección de a qué gráficos afectan estos filtros.
+
+    \item La vista central es la plantilla donde se van a colocar y organizar las distintas visualizaciones creadas anteriormente. Se puede ajustar tanto el tamaño como la posición que ocupan en la pantalla.
+
+    \item El menú lateral derecho contiene las visualizaciones creadas hasta el momento y acceso directo a la creación de nuevas, estas se pueden colocar en la vista central simplemente arrastrándolas. También cuenta con unos elementos gráficos para la estructuración del \textit{dashboard} como separadores, pestañas, organizadores, etc.
+\end{itemize}

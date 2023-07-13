@@ -7,6 +7,70 @@ En esta sección se incluye la documentación técnica necesaria para entender l
 
 \section{Estructura de directorios}
 
+La estructura del proyecto se ha organizado en la siguiente forma:
+
+\begin{itemize}
+    \item \textbf{\texttt{./}} Carpeta raíz del proyecto, contiene el directorio de prototipos, las carpetas relevantes para desplegar cada componente del proyecto, la documentación del proyecto, el fichero de requisitos y los de información (\textit{README}, licencia...).
+
+    \item \textbf{\texttt{./docs}} Directorio principal de la documentación del proyecto, donde se encuentra la memoria y los anexos en formato \LaTeX{}.
+
+    \begin{itemize}
+        \item \textbf{\texttt{./docs/img}} Carpeta que contiene las imágenes utilizadas en la documentación.
+        \item \textbf{\texttt{./docs/tex}} Carpeta que contiene los ficheros \textit{TEX} que conforman la documentación.
+    \end{itemize}
+
+    \item \textbf{\texttt{./prototypes}} Directorio que contiene los desarrollos realizados a lo largo del prototipado del proyecto. La estructura de carpetas es la misma que la expuesta en los puntos siguientes.
+
+    \item \textbf{\texttt{./airflow}} Directorio que contiene los ficheros de despliegue y configuración de Apache Airbyte, así como los archivos \textit{dockerfile} y \textit{docker-compose} para crear los contenedores del proyecto y levantar el \textit{proxy} para securizar el \textit{Docker socket}.
+
+    \begin{itemize}
+        \item \textbf{\texttt{./airflow/config}} Carpeta que aparecerá una vez desplegado Apache Airflow en la que se pueden añadir configuraciones adicionales.
+
+        \item \textbf{\texttt{./airflow/dags}} Carpeta que contiene los archivos con las definiciones de los \textit{DAGs} (\textit{Directed Acyclic Graphs}) que crean las \textit{data pipelines} implementadas y el orden de ejecución de las mismas.
+
+        \item \textbf{\texttt{./airflow/logs}} Carpeta que aparecerá una vez desplegado Apache Airflow en la que se guardan los registros de todas las ejecuciones de las \textit{data pipelines} creadas.
+
+        \item \textbf{\texttt{./airflow/plugins}} Carpeta que aparecerá una vez desplegado Apache Airflow en la que se pueden añadir \textit{plugins} adicionales.
+    \end{itemize}
+
+    \item \textbf{\texttt{./clickhouse}} Directorio que contiene los ficheros de despliegue y configuración de ClickHouse.
+
+    \item \textbf{\texttt{./extraction}} Directorio que contiene el fichero de descarga y configuración de la herramienta de extracción Airbyte.
+
+    \item \textbf{\texttt{./mongodb}} Directorio que contiene los ficheros de despliegue y configuración de MongoDB.
+
+    \item \textbf{\texttt{./nlp}} Directorio que contiene los ficheros de despliegue y configuración de \textit{HuggingFace Transformers}.
+
+    \begin{itemize}
+        \item \textbf{\texttt{./nlp/nlp-tasks}} Carpeta que contiene los ficheros Python que se encargan de la configuración y ejecución de las tareas de procesamiento de lenguaje natural (\textit{NLP}).
+    \end{itemize}
+
+    \item \textbf{\texttt{./spark}} Directorio que contiene los ficheros de despliegue y configuración de Apache Spark.
+
+    \begin{itemize}
+        \item \textbf{\texttt{./spark/spark-tasks}} Carpeta que contiene los ficheros Scala que se encargan de la configuración y ejecución de las tareas de procesamiento y limpieza de datos.
+    \end{itemize}
+
+    \item \textbf{\texttt{./visualization}} Directorio que contiene los ficheros de despliegue y configuración de Apache Superset.
+
+    \item \textbf{\texttt{./web}} Directorio principal de la aplicación web \textit{Flask} que se utiliza a modo de punto de acceso centralizado a las interfaces web de los componentes del proyecto..
+    \begin{itemize}
+        \item \textbf{./app} 
+        \begin{itemize}
+            \item \textbf{./app/static} Contiene los ficheros estáticos utilizados para la aplicación web.
+                \begin{itemize}
+                    \item \textbf{./app/static/css} Carpeta con los archivos de estilos \textit{CSS}.
+                    \item \textbf{./app/static/js} Carpeta con los archivos de funciones \textit{JavaScript}.
+                    \item \textbf{./app/static/media} Carpeta con las imágenes utilizadas en aplicación web.
+                \end{itemize}
+            \item \textbf{./app/templates} Contiene las plantillas \textit{HTML} de la aplicación web.
+        \end{itemize}
+
+    \end{itemize}
+
+\end{itemize}
+
+
 \section{Manual del programador}
 
 En esta sección se describirán todos los elementos necesarios y la metodología a seguir para realizar futuros desarrollos.
@@ -159,6 +223,152 @@ A continuación, se va a crear un ejemplo de fichero de configuración para una 
     
 \end{itemize}
 
+\subsubsection{Creación de nuevos conectores}
+
+La herramienta de extracción Airbyte permite la creación de nuevos conectores que utilicen \textit{APIs REST} de forma rápida y sencilla directamente desde la interfaz gráfica. Para ello, es necesario acceder a la siguiente sección de la herramienta: \url{http://<AIRBYTE-EXAMPLE.COM>/workspaces/<WORKSPACE_ID>/connector-builder/}.
+
+En esta vista se pueden crear y configurar nuevos conectores para \textit{APIs} bien de manera visual (\autoref{fig:airbyte-connection-builder}) o mediante un esquema en formato \textit{YAML} (\autoref{fig:airbyte-connection-builder-yaml}).
+
+\imagen{airbyte-connection-builder}{Interfaz gráfica de la vista para creación y configuración de nuevos conectores para Airbyte}
+
+\imagen{airbyte-connection-builder-yaml}{Esquema \textit{YAML} de la vista para creación y configuración de nuevos conectores para Airbyte}
+
+\subsection{Procesamiento de los datos}
+
+El procesamiento de los datos se ha realizado mediante \textit{scripts} en lenguaje Scala para el sistema Apache Spark, por lo que será necesario tener conocmientos de estas dos herramientas para poder llevar a cabo mayores desarrollos en esta parte.
+
+Se ha de configurar un único archivo de procesamiento a ejecutar por cada origen de datos creado, aunque se pueden incluir dependencias como funciones comunes a varios archivos. Los \textit{scripts} pueden seguir la estructura de ejemplo en los ficheros \texttt{transform\_twitter.scala} y \texttt{transform\_dataset.scala}.
+
+La ejecución de ambos archivos deberá poder realizarse mediante la \texttt{spark-shell}, a la que se le han de pasar los parámetros los parámetros de conexión para las bases de datos de origen y destino de los datos. Además, de los parámetros necesarios para identificar y filtrar los datos concretos a extraer y procesar.
+
+\subsection{Inferencia \textit{NLP}}
+
+La inferencia mediante técnicas de procesamiento de lenguaje natural (\textit{NLP}) se ha realizado mediante la librería \textit{HuggingFace Transformers}. Esta librería permite la utilización de \textit{LLMs} (\textit{Large Language Models}) ya preentrenados para estas tareas \textit{NLP}.
+
+Para añadir más tareas a la \textit{pipeline} de inferencia de datos, se han de modificar los siguientes archivos:
+
+\begin{itemize}
+    \item El archivo \texttt{connectors.py} si se van a añadir nuevos conectores para distintos orígenes o destinos de datos.
+    \item El archivo \texttt{tasks.py} para añadir las clases correspondientes con todos los parámetros necesarios para configurar las conexiones de entrada, salida, nombre de las tablas de los datos, etc. En el mismo archivo se añadirán nuevos métodos \textit{task\_*}, uno por cada tarea o modelo \textit{NLP} a emplear.
+    \item El archivo \texttt{pipeline.py} para añadir las nuevas opciones de ejecución para los nuevos orígenes o destinos de datos.
+\end{itemize}
+
+\subsection{Visualización de los datos}
+
+La herramienta de visualización Apache Superset presenta una interfaz intuitiva y sencilla de utilizar para la agregación de nuevas fuentes de datos y la creación de gráficos interactivos.
+
+En la pestaña \textit{Datasets} se pueden configurar conexiones a nuevos orígenes de datos. Posteriormente, desde la pestaña \textit{SQL Lab} se pueden realizar consultas en \textit{SQL} nativo sobre los \textit{datasets} importados.
+
+A parte de los datos importados, los resultados de las consultas realizadas en \textit{SQL Lab} se pueden guardar en \textit{datasets} virtuales para poder utilizarlos posteriormente también como base para la creación de nuevos gráficos.
+
+En la pestaña \textit{Charts} se pueden diseñar e implementar nuevas visualizaciones que añadir posteriormente a los \textit{dashboards} creados. El proceso presenta la selección de un conjunto de datos a utilizar para cada gráfico creado y un tipo de visualización que se puede configurar y personalizar posteriormente.
+
+\subsection{Orquestación de los datos}
+
+La orquestación de los datos se ha realizado mediante la herramienta Apache Airflow. Esta herramienta permite definir grafos acíclicos dirigidos (\textit{DAGs}) para diseñar los flujos de trabajo a ejecutar.
+
+En la carpeta \texttt{dags} existente dentro del directorio respectivo de la herramienta se encuentran los \textit{DAGs} diseñados para la plataforma. Cada fuente de datos deberá tener su \textit{DAG} propio.
+
+Estos grafos acíclicos dirigidos se pueden crear de manera estática (véase el archivo \texttt{twitter\_pipeline\_dag.py}) o de manera dinámica (véase el archivo \texttt{dataset\_pipeline\_dag.py}). De esta manera, al necesitar crear cierto número de flujos de datos que utilicen la misma configuración base pero cambiando solamente los parámetros de entrada, se puede realizar la configuración de manera dinámica para añadir más claridad al código y facilitar la comprensión del mismo.
+
+Los \textit{DAGs} están formados por <<actuadores>>, que realizan las acciones, y por <<sensores>>, que esperan una confirmación para continuar con el flujo de trabajo. las \textit{data pipelines} diseñadas tienen la siguente estructura:
+
+\begin{itemize}
+    \item Actuador Airbyte: Ejecutar sincronización de los datos.
+    \item Sensor Airbyte: Esperar la confirmación con el estado de la sincronización de los datos.
+    \item Actuador \textit{Docker} (\textit{Spark}): Desplegar contenedor, ejecutar procesamiento de los datos y eliminar contenedor.
+    \item Actuador \textit{Docker} (\textit{NLP}): Desplegar contenedor, ejecutar inferencia \textit{NLP} y eliminar el contenedor.
+\end{itemize}
+
+Cada tipo de tarea tiene su propia actuador o sensor. Airflow presenta actuadores listo para utilizar para algunas de las acciones más comunes como ejecutar comandos \textit{bash}, enviar correos electrónicos, realizar peticiones \textit{HTTP}, ejecutar código Python, etc.
+
+
+
 \section{Compilación, instalación y ejecución del proyecto}
 
+En los siguientes apartados se desarrollan los requisitos necesarios para la instalación y despliegue del proyecto.
+
+\subsection{Especificaciones técnicas recomendadas}
+
+Esta <<Plataforma \textit{Big data} para \textit{Sentiment Analysis}>> se ha desarrollado en un entorno local y empleando una sola máquina. No obstante, al ser una plataforma modular, escalable y distribuida, en un entorno de producción real se debería realizar el despliegue de cada componente en una máquina o clúster dedicado. De esta manera, se evitaría la sobrecarga del sistema, se aumentaría la seguridad de la plataforma y se eliminarían las limitaciones en el uso de recursos por cada componente.
+
+En caso de realizar el despliegue en una sola máquina, y teniendo en cuenta las consideraciones anteriores, se recomiendan las siguientes especificaciones técnicas para la misma:
+
+\begin{itemize}
+    \item \textbf{Sistema operativo:} Windows 11 (22H2) / Ubuntu 22.04.2 LTS
+    \item \textbf{CPU:} Intel(R) Core(TM) i5-13600K 3.50 GHz
+    \item \textbf{Memoria RAM:} 32GB DDR4 3.2GHz
+    \item \textbf{GPU:} NVIDIA GeForce RTX 3060 12GB
+\end{itemize}
+
+El punto más notable de esta plataforma sería los requisitos de memoria \textit{RAM} que presenta. La gran cantidad de componentes que se despliegan en contenedores \textit{Docker} establece el consumo en reposo de la plataforma en unos 13 GB (véase \autoref{fig:ram-usage}). Este consumo aumenta hasta los 18GB al momento de ejecutar la etapa de transformación del proceso \textit{ETL} (\textit{Extract, Transform, Load}), por lo que sería recomendable cumplir esta recomendación para evitar caídas del sistema ante altos niveles de carga.
+
+\imagen{ram-usage}{Consumo de memoria RAM con la plataforma <<en reposo>>}
+
+Respecto a la GPU, realmente no se necesita para la ejecución normal de la inferencia \textit{NLP} ya que actualmente dichos modelos se ejecutan en la CPU. No obstante, realizar estas tareas en una GPU de alta gama permitiría reducir notablemente los tiempos de ejecución de esta fase del proceso \textit{ETL}. También sería útil en gran medida en el caso de querer realizar el entrenamiento de modelos propios sobre cada flujo de datos.
+
+\subsection{Dependencias \textit{software}}
+
+A continuación, se describen las versiones de los componentes \textit{software} empleados para la realización del proyecto:
+
+\begin{itemize}
+    \item Airbyte 0.43.1
+    \item Apache Airflow 2.6.2
+    \item Apache Spark 3.2.3
+    \item MongoDB 6.0
+    \item ClickHouse 22.1.3.7
+    \item Apache Superset 2.1.0
+    \item HuggingFace Transformers 4.30.1
+    \item Python 3.10.6
+    \item Flask 2.3.2
+\end{itemize}
+
+\subsection{Instalación}
+
+Para la instalación del proyecto tan solo es necesario clonar localmente el código del repositorio \textit{GitHub}: \url{https://github.com/liviuvj/sentiment-analysis-platform}
+
+Posteriormente, es necesario instalar las dependencias que se encuentran en el archivo de requisitos. Para ello, es buena práctica crear primero un entorno virtual para evitar problemas de versiones posteriormente y realizar la instalación del fichero de requisitos.
+
+\begin{verbatim}
+    python3 -m venv venv
+    source ./venv/bin/activate
+    pip install -r requirements.txt
+\end{verbatim}
+
+\subsection{Compilación}
+
+Este proyecto está compuesto en su mayor parte por contenedores \textit{docker} y código en \textit{scripts} de Python y Scala, por lo que no es necesaria la compilación del mismo. Al ser lenguajes de \textit{scripting} y ficheros de configuración, no resulta necesaria su compilación.
+
+\subsection{Ejecución}
+
+Para la ejecución del proyecto se ha creado un \textit{script bash} que se encarga de realizar la descarga de ficheros adicionales, clonación de repositorios, despliegue de contenedores \textit{Docker} y configuración de los componentes que forman parte del proyecto.
+
+Por lo que tan solo será necesario ejecutar dicho \textit{script bash}:
+
+\begin{verbatim}
+    ./quickstart.sh
+\end{verbatim}
+
+No obstante, cada directorio principal correspondiente a las herramientas empleadas para la realización de este proyecto contiene un fichero \texttt{.env}. Dicho archivo contiene los parámetros de configuración por defecto, así como usuarios y contraseñas, de los distintos componentes de la plataforma. Por lo que sería recomendable modificar dichos valores en un entorno de producción.
+
+Una vez levantados y configurados todos los componentes del proyecto, se puede acceder las distintas interfaces web disponibles para gestionar o monitorizar las herramientas. Las \textit{URLs} especificadas muestran los puertos asignados por defecto con la configuración realizada.
+
+\begin{itemize}
+    \item \textbf{Punto web de acceso centralizado.} Página web ligera que permite el acceso directo a todas las demás interfaces web que presentan los componentes de la plataforma. Accesible en \url{http://localhost:5000}
+
+    \item \textbf{Apache Airbyte.} Plataforma desde la que se pueden crear, gestionar y monitorizar las conexiones de sincronización de datos entre origen y destino. Accesible en \url{http://localhost:8000}
+
+    \item \textbf{Apache Spark.} Monitorización de los recursos utilizados por Spark. Accesible en \url{http://localhost:4040}
+
+    \item \textbf{ClickHouse.} Sencilla interfaz web que permite la ejecución de consultas directas sobre la base de datos en lenguaje \textit{SQL}. Accesible en \url{http://localhost:8123/play}
+
+    \item \textbf{Apache Superset.} Aplicación en la que se pueden diseñar, implementar, visualizar y compartir cuadros de mando interactivos. Accesible en \url{http://localhost:8088}
+
+    \item \textbf{Apache Airflow.} Accesible en \url{http://localhost:8080}
+\end{itemize}
+
 \section{Pruebas del sistema}
+
+A lo largo de este proyecto se han realizado diversas tareas de integración entre los distintos componentes que conforman la plataforma desarrollada. No obstante, no se han implementado unas pruebas unitarias o de integración de manera formal.
+
+Esto se debe a que la mayoría de los componentes utilizados ya presentan sus propias pruebas específicas para la validación, integración y funcionamiento utilizados. Por ello, se ha decidido por la creación de un \textit{script bash} para realizar el despliegue y configuración automáticos de la plataforma. En caso de encontrarse algún fallo en alguna de las tecnologías empleadas, la propia herramienta será capaz de identificar la configuración errónea y notificar al usuario del fallo detectado.
