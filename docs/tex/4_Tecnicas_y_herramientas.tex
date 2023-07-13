@@ -159,20 +159,27 @@ Para cumplir con estos requisitos, se ha investigado viabilidad de las siguiente
     \item \textbf{\textit{MongoDB}}\footnote{\url{https://www.mongodb.com/}}
 \end{itemize}
 
-Se ha seleccionado esta herramienta~\cite{mongodbCompass} por la sencilla integración y facilidad de uso que presenta para el caso de uso concreto de este proyecto. Los datos extraídos procedentes de las \textit{APIs} seleccionadas se presentan en su totalidad en formato \textit{JSON}, por lo que se pueden cargar directamente en esta base de datos sin realizar ninguna transformación intermedia. 
+Se ha seleccionado esta herramienta por la sencilla integración y facilidad de uso que presenta para el caso de uso concreto de este proyecto. Los datos extraídos procedentes de las \textit{APIs} seleccionadas se presentan en su totalidad en formato \textit{JSON}, por lo que se pueden cargar directamente en esta base de datos sin realizar ninguna transformación intermedia. 
 
 \subsection{MongoDB Compass}
 
-Esta herramienta sirve de interfaz gráfica de usuario que permite explorar, analizar y manipular los datos almacenados en la base de datos no relacional y orientada a datos MongoDB. MongoDB Compass\footnote{\url{https://www.mongodb.com/products/compass}} Permite visualizar la estructura y el contenido de las colecciones, crear índices, realizar consultas, modificar documentos, entre otras tareas. Además, facilita el trabajo al evitar tener que utilizar la \textit{shell} propia de la herramienta.
+Esta herramienta~\cite{mongodbCompass} sirve de interfaz gráfica de usuario que permite explorar, analizar y manipular los datos almacenados en la base de datos no relacional y orientada a datos MongoDB. MongoDB Compass\footnote{\url{https://www.mongodb.com/products/compass}} Permite visualizar la estructura y el contenido de las colecciones, crear índices, realizar consultas, modificar documentos, entre otras tareas. Además, facilita el trabajo al evitar tener que utilizar la \textit{shell} propia de la herramienta.
 
 Ha resultado de gran utilidad para la exploración de los datos en bruto de este proyecto ya que los datos obtenidos mediante la herramienta de extracción están en formato \textit{JSON}, lo cual se asimila a la perfección con el formato \textit{BSON} empleado por MongoDB. Ofrece una interfaz intuitiva para la realización de consultas sobre los datos.
 
 
 \subsection{Apache Spark}
 
-Apache Spark\footnote{\url{https://spark.apache.org/}} es un sistema de procesamiento de datos distribuido y de código abierto. Spark es capaz de procesar grandes volúmenes de datos de manera rápida, eficiente y escalable.
+Apache Spark\footnote{\url{https://spark.apache.org/}} es un sistema de procesamiento de datos distribuido y de código abierto~\cite{apacheSpark}. Spark es capaz de procesar grandes volúmenes de datos de manera rápida, eficiente y escalable.
 
 Permite procesar datos en memoria, lo que lo hace más rápido que otros sistemas de procesamiento de datos como Hadoop MapReduce, que requieren que los datos se escriban en disco entre las operaciones. Sus principales características se centran en el rendimiento, escalabilidad, facilidad de uso y flexibilidad.
+
+\subsection{HuggingFace Transformers}
+
+\textit{HuggingFace Transformers}\footnote{\url{https://huggingface.co/docs/transformers/}} es una librería del lenguaje de programación \textit{Python}. Esta facilita el uso y entrenamiento de modelos pre-entrenados pertenecientes al \textit{state-of-the-art} de las técnicas \textit{NLP} (\textit{Natural Language Processing})~\cite{huggingfaceTransformers}.
+
+Este paquete proporciona una interfaz unificada y sencilla para cargar, entrenar, evaluar y desplegar estos \textit{LLM} (\textit{Large Language Models}). El uso que se le dará a esta herramienta consistirá  en la carga e inferencia de diversos modelos \textit{NLP} pre-entrenados para tareas de análisis de sentimiento y de emoción, clasificación de tópicos y entidades.
+
 
 \subsection{Base de datos para procesamiento analítico de datos en línea}
 
@@ -181,9 +188,9 @@ Los datos extraídos y los inferidos a través de los modelos de procesamiento d
 \subsubsection{Herramientas consideradas:}
 
 \begin{itemize}
-    \item \textbf{\textit{ClickHouse}.} Sistema gestor de base de datos \textit{OLAP}\footnote{\url{https://clickhouse.com/}} basado en arquitectura \textit{share-nothing}, compresión de datos y posibilidad de consultas en lenguaje SQL nativo. Utiliza un concepto de vistas materializadas que se gestionan automáticamente para asegurar un rendimiento óptimo de las consultas en cualquier momento.
+    \item \textbf{\textit{ClickHouse}.} Sistema gestor de base de datos \textit{OLAP}\footnote{\url{https://clickhouse.com/}} basado en arquitectura \textit{share-nothing}, compresión de datos y posibilidad de consultas en lenguaje SQL nativo~\cite{clickhouseFeatures}. Utiliza un concepto de vistas materializadas que se gestionan automáticamente para asegurar un rendimiento óptimo de las consultas en cualquier momento.
     
-    \item \textbf{\textit{Apache Druid}.} Base de datos \textit{OLAP}\footnote{\url{https://druid.apache.org/}} distribuida, escalable y autobalanceada. Al contrario que ClickHouse, presenta una arquitectura modular en la que las consultas, datos y nodos de almacenamiento se encuentran separados unos de otros. A pesar de esto, realiza una gestión óptima de datos en \textit{streaming} y permite priorizar consultas.
+    \item \textbf{\textit{Apache Druid}.} Base de datos \textit{OLAP}\footnote{\url{https://druid.apache.org/}} distribuida, escalable y autobalanceada~\cite{apacheDruid}. Al contrario que ClickHouse, presenta una arquitectura modular en la que las consultas, datos y nodos de almacenamiento se encuentran separados unos de otros. A pesar de esto, realiza una gestión óptima de datos en \textit{streaming} y permite priorizar consultas.
 \end{itemize}
 
 \subsubsection{Herramienta elegida:}
@@ -206,13 +213,15 @@ Una vez que se tiene todos los datos extraídos, procesados, transformados e inf
     \item \textbf{\textit{Apache Superset}.} Plataforma de visualización y exploración de datos moderna\footnote{\url{https://superset.apache.org/}} e intuitiva que permite la gestión de \textit{dashboards}, roles y consultas asíncronas. Ofrece gran cantidad de recursos tanto para visualización de datos como conectores a bases de datos.
 \end{itemize}
 
+\vspace{2cm}
+
 \subsubsection{Herramienta elegida:}
 
 \begin{itemize}
     \item \textbf{\textit{Apache Superset}}
 \end{itemize}
 
-La herramienta \textit{Apache Superset} presenta todas las características necesarias para una correcta gestión y visualización de los datos. Permite la asignación de roles y permisos de usuario, gestión de \textit{dashboards} y gráficos individuales, construcción de consultas tanto en lenguaje \textit{SQL} nativo como de manera interactiva y visual, más de 40 tipos de visualizaciones distintas y más de 30 conectores para distintas bases de datos.
+La herramienta \textit{Apache Superset}~\cite{apacheSuperset} presenta todas las características necesarias para una correcta gestión y visualización de los datos. Permite la asignación de roles y permisos de usuario, gestión de \textit{dashboards} y gráficos individuales, construcción de consultas tanto en lenguaje \textit{SQL} nativo como de manera interactiva y visual, más de 40 tipos de visualizaciones distintas y más de 30 conectores para distintas bases de datos.
 
 \subsection{Herramienta de orquestación de procesos}
 
@@ -226,11 +235,13 @@ Debido a la compleja arquitectura que presenta este proyecto, es necesario un m�
     \item \textbf{\textit{Luigi}.} Paquete de Python\footnote{\url{https://github.com/spotify/luigi}} capaz de construir flujos de trabajo complejos con datos en \textit{batch}. Gestiona la resolución de dependencias, \textit{workflows}, visualización y fallos. Tiene soporte para el ecosistema \textit{Hadoop} y funcionalidades para integrar diversas tareas en un solo \textit{pipeline}.
 \end{itemize}
 
+\vspace{2cm}
+
 \subsubsection{Herramienta elegida:}
 
 \begin{itemize}
     \item \textbf{\textit{Apache Airflow}}
 \end{itemize}
 
-La herramienta \textit{Apache Airflow} presenta una arquitectura modular y una cola de mensajes para la gestión de los nodos, lo que facilita su escalabilidad en situaciones necesarias. Además, permite la creación de \textit{data pipelines} de manera dinámica y programática, lo que mejora la definición de flujos de trabajo y su parametrización. La aplicación web que presenta es otro punto a favor, ya que permite monitorizar, programar y gestionar \textit{pipelines} de una manera sencilla.
+La herramienta \textit{Apache Airflow}~\cite{apacheAirflow} presenta una arquitectura modular y una cola de mensajes para la gestión de los nodos, lo que facilita su escalabilidad en situaciones necesarias. Además, permite la creación de \textit{data pipelines} de manera dinámica y programática, lo que mejora la definición de flujos de trabajo y su parametrización. La aplicación web que presenta es otro punto a favor, ya que permite monitorizar, programar y gestionar \textit{pipelines} de una manera sencilla.
 

@@ -1,4 +1,5 @@
 # Python Virtual Environment
+.vscode
 .venv
 .credentials.yml
 prototypes/extraction/__*

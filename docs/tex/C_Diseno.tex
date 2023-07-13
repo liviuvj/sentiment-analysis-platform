@@ -14,7 +14,7 @@ En esta sección se explicarán los modelos de datos empleados entre los distint
 
 De esta manera, se toman las publicaciones como la tabla central de <<hechos>> y todas las demás tablas se han tomado como <<dimensiones>>. Las dimensiones de relacionan con las publicaciones mediante dos tipos de claves <<\textit{tweet\_id}>> o <<\textit{user\_id}>>.
 
-\subsubsection{Modelo de datos en MongoDB}
+\subsubsection{Modelo de datos en MongoDB} \label{section:mongodb_schema}
 
 La base de datos no relacional MongoDB ha efectuado el rol de \textit{data lakehouse} en este proyecto. Al utilizar un modelo de datos basado en documentos \textit{BSON}, ha sido perfecta para persistir los datos en brutos que llegan mediante la fase de extracción del proceso \textit{ETL}. Esto se debe a que las \textit{APIs} investigadas devolvían las respuestas en formato \textit{JSON} con gran cantidad de campos anidados. Además, el conjunto de datos utilizado a modo de demostración también ha encajado a la perfección con la estructura orientada a documentos de MongoDB.
 
@@ -293,7 +293,7 @@ entity & string & true \\
 
 
 
-\subsubsection{Modelo de datos en ClickHouse}
+\subsubsection{Modelo de datos en ClickHouse} \label{section:clickhouse_schema}
 
 La base de datos columnar ClickHouse ha efectuado el rol de \textit{data warehouse} en este proyecto. Al utilizar un modelo de datos basado en columnas, resulta perfecta para el caso de uso que presentan las fuentes de datos utilizadas. Algunos de los campos de los distintos esquemas de datos descritos en la sección anterior tienen poca densidad. Por lo que, si se utilizara una base de datos relacional tradicional, todos esos campos estarían completamente vacíos en la mayoría de los registros, lo que repercutiría en la latencia de las consultas realizadas.
 
@@ -370,7 +370,7 @@ entity & String \\
 }
 
 
-\subsection{Diseños de los cuadros de mando}
+\subsection{Diseños de los cuadros de mando} \label{section:dashboard-design}
 
 A continuación, se detalla la evolución seguida para el diseño de los cuadros de mando implementados en la herramienta \textit{Apache Superset}. Se han diseñado e implementado un total de 5 vistas para el \textit{dashboard} completo, las cuales muestran los datos procesados obtenidos a través del proceso \textit{ETL} en diversos niveles de detalle e información.
 

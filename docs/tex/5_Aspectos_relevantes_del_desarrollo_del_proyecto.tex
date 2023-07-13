@@ -5,11 +5,11 @@ realización del mismo con las diversas tecnologías empleadas.
 
 \section{Extracción de datos} \label{section:data_extraction}
 
-Comenzando con la primera etapa del proceso ETL, el objetivo de la extracción de datos consiste en investigar y explotar los posibles recursos disponibles para recoger toda la información necesaria para el proyecto. Consecuentemente, los requisitos fundamentales de esta etapa consistirán en localizar las fuentes de datos a utilizar y emplear las herramientas necesarias para extraer dichos datos.
+Comenzando con la primera etapa del proceso \textit{ETL}, el objetivo de la extracción de datos consiste en investigar y explotar los posibles recursos disponibles para recoger toda la información necesaria para el proyecto. Consecuentemente, los requisitos fundamentales de esta etapa consistirán en localizar las fuentes de datos a utilizar y emplear las herramientas necesarias para extraer dichos datos.
 
 \subsection{Fuentes de datos}
 
-La información necesaria para conseguir el objetivo de este proyecto está formada por opiniones públicas de personas sobre algún tema o temas en concreto. La manera más sencilla de obtener estos datos es empleando recursos web como foros, blogs y redes sociales. Más concretamente, se ha optado por investigar la disponibilidad de \textit{APIs} públicas de los principales sitios web donde las personas publican sus opiniones.
+La información necesaria para conseguir el objetivo de este proyecto está formada por opiniones públicas de personas sobre algún tema o temas en concreto. La manera más sencilla de obtener estos datos es empleando recursos web como foros, \textit{blogs} y redes sociales. Más concretamente, se ha optado por investigar la disponibilidad de \textit{APIs} públicas de los principales sitios web donde las personas publican sus opiniones.
 
 A continuación, se realiza un pequeño resumen de la información de la que se dispone actualmente sobre las \textit{APIs} de cada plataforma.
 
@@ -163,6 +163,10 @@ El conjunto de datos seleccionado finalmente ha sido \textit{Game of Thrones S8 
 
 Este conjunto de datos en formato \textit{CSV} presenta más de 760\,000 registros y 88 atributos distintos, con información tanto sobre los usuarios, como las publicaciones realizadas por los mismos. Lo que resulta de gran utilidad ya que se puede reconstruir una estructura de datos similar a la del primer \textit{data pipeline} realizado mediante la \textit{API} de Twitter.
 
+No obstante, dichos datos son del año 2019 mientras que los obtenidos mediante la \textit{API} de Twitter datan de este año 2023. Al momento de visualizar los datos habrá grandes discrepancias en las gráficas que incluyan un eje temporal (véase la \autoref{fig:date-data-diff}), por lo que estos datos extraídos de la \textit{API} de Twitter no van a dejarse disponibles para su uso, empleando solamente este conjunto de datos investigado a modo de demostración.
+
+\imagen{date-data-diff}{Discrepancia en el eje temporal al utilizar los datos recientes de la \textit{API} de TWitter y los del conjunto de datos de demostración}
+
 Para comprobar de mejor manera los datos disponibles y la usabilidad de los mismos se ha realizado un análisis exploratorio, al que se puede acceder a través del \textit{Jupyter Notebook}\footnote{\url{https://colab.research.google.com/drive/1d_obU9idFqjsDi7ezeFs1CORxTUAgh7V\#offline=true&sandboxMode=true}} que se deja disponible.
 
 La primera parte de dicho análisis consiste en comprobar la posibilidad de crear una estructura de datos parecida a la diseñada originalmente para el flujo de datos de la \textit{API} de Twitter, consiguiendo completar dicho esquema de datos en una gran medida.
@@ -179,6 +183,10 @@ La segunda parte se centra en buscar palabras clave que puedan servir a modo de 
 
 \section{Carga de datos}
 
+La carga de los datos se ha realizado en dos bases de datos distintas para diferentes propósitos. La primera se ha utilizado a modo de \textit{Data Lake} del proyecto para guardar los datos en bruto extraídos, mientras que la segunda se ha empleado como un \textit{Data Warehouse} para realizar la agregación de datos de distintos orígenes.
+
+\subsection{MongoDB}
+
 Una vez completada la extracción de los datos, resulta necesario persistirlos para su posterior uso. La herramienta seleccionada para realizar esta tarea es \textit{MongoDB}~\cite{mongodbArchitecture}.
 
 Esta base de datos no relacional basada en documentos almacena los datos en un \textit{JSON} optimizado llamado \textit{BSON}. Teniendo en cuenta que los datos extraídos mediante las \textit{APIs} que se han detallado en el apartado anterior se encuentran en su totalidad en formato \textit{JSON}, su carga en esta base de datos resulta íntegra y directa, eliminando cualquier necesidad de transformación intermedia para ser ajustados a un esquema concreto.
@@ -187,23 +195,92 @@ Esta base de datos no relacional basada en documentos almacena los datos en un \
 
 Presenta también capacidades de alta disponibilidad y escalabilidad gracias a la replicación y particionamiento de los datos (\textit{sharding}), cumpliendo con las partes \textit{C} (Consistencia) y \textit{P} (Tolerante a particiones) del \textit{Teorema CAP}.
 
+Para más información sobre los esquemas de datos utilizados, consultar el apartado correspondiente de la \autoref{section:mongodb_schema}.
+
+\subsection{ClickHouse}
+
+Tras la ejecución de los modelos de \textit{NLP} sobre los datos procesados, estos resultados son almacenados y agregados en el sistema \textit{OLAP} (\textit{On-Line Analytical Processing}) ClickHouse~\cite{clickhouseFeatures}. Este sistema gestor de bases de datos (SGBD) analítico y columnar permite realizar consultas rápidas sobre grandes volúmenes de datos.
+
+Los datos con los que se trabaja en el proyecto son peticiones \textit{API} cuya respuesta contiene una serie de campos que vienen o no completos según la disponibilidad de los datos. En la mayoría de los casos, algunos de los campos presentan poca densidad de información, por lo que en gran parte de registros estos campos estarán vacíos. El modelo de datos columnar que emplea ClickHouse es perfecto para este tipo de casos en los que algunos campos puedan presentar poca densidad.
+
+Al realizar las consultas a la base de datos, se filtran únicamente los campos o columnas necesarias para resolver la petición en lugar de iterar sobre todos los campos de cada fila como en una base de datos tradicional. Por consiguiente, ClickHouse ofrece un alto rendimiento para este tipo de casos ya que se consigue aumentar notablemente la velocidad de las consultas ejecutadas al seleccionar únicamente los campos que intervienen en ellas.
+
+ClickHouse también presenta escalabilidad horizontal, permitiendo así adaptarse ante cargas de trabajo con \textit{Big Data}. Además cuenta con una alta flexibilidad, admitiendo datos en diversos formatos y empleando motores de almacenamiento con funciones específicas por cada tabla, según resulte necesario.
+
+Otro punto ventajoso a la hora de trabajar con este SGBD es la capacidad de integración que presenta. Ofrece interfaz directa con la herramienta de visualización empleada Apache Superset y presenta una sintaxis \textit{SQL} nativa, por lo que resulta de gran facilidad a la hora de lanzar consultas contra los datos.
+
+Para más información sobre los esquemas de datos utilizados, consultar el apartado correspondiente de la \autoref{section:clickhouse_schema}.
+
+
 \section{Transformación de los datos}
 
-Una vez finalizada la carga inicial de los datos en \textit{MongoDB}, se procede con su procesamiento. Para ello, se ha utilizado \textit{Spark} con el lenguaje \textit{Scala}, ya que presenta una gran velocidad de cómputo ideal al trabajar con grandes cantidades de datos.
+Una vez finalizada la carga inicial de los datos en \textit{MongoDB}, se procede con su procesamiento. Para esta labor, se han empleado dos herramientas descritas en los siguientes apartados.
 
-Esta tarea contempla la lectura de los datos realizando una limpieza inicial de los mismos, de manera que se recogen únicamente los datos necesarios y se elimina la compleja estructura de datos de la que se han extraído. Posteriormente se seleccionan los campos que serán exportados nuevamente a una colección de \textit{MongoDB} de datos limpios.
+\subsection{Apache Spark}
 
-Estos datos estarán ya listos para servir de entrada a los algoritmos de \textit{sentiment analysis} que serán ejecutados a continuación.
+Para la primera fase de la etapa de transformación de datos se ha utilizado \textit{Apache Spark}~\cite{apacheSpark} con el lenguaje de programación \textit{Scala}, ya que permite una gran velocidad de cómputo ideal al trabajar con grandes cantidades de datos. Además presenta las características perfectas para \textit{Big Data}, su arquitectura es escalable y el procesamiento se puede realizar de manera distribuida.
+
+Las tareas de procesamiento contemplan la lectura de los datos en bruto y una posterior limpieza inicial de los mismos. De esta manera, se recogen únicamente los datos necesarios y se elimina la compleja estructura de datos de la que se han extraído. A continuación, se seleccionan los campos que serán exportados nuevamente a una colección de \textit{MongoDB} de datos limpios. Los esquemas de datos antes y después de este procesamiento se pueden comprobar en la \autoref{section:mongodb_schema}.
+
+Estos datos procesados estarán ya listos para servir de entrada a los algoritmos de \textit{sentiment analysis} que serán ejecutados a continuación.
+
+\subsection{HuggingFace Transformers}
+
+Para la segunda fase de la etapa de transformación de datos se ha utilizado la librería \textit{HuggingFace Transformers}~\cite{huggingfaceTransformers} del lenguaje de programación \textit{Python}. Esta librería ha facilitado la ejecución de las técnicas de procesamiento de lenguaje natural gracias a su interfaz unificada para la carga y ejecución de \textit{LLM} (\textit{Large Language Models}) pre-entrenados.
+
+Más concretamente, se han enriquecido los datos procesados gracias a la inferencia de varias tareas mediante variaciones del modelo \textit{BERT} ya explicado en la \autoref{section:theory_nlp}. A continuación, se describen las distintas tareas \textit{NLP} empleadas y sus respectivos modelos empleados:
+
+\begin{itemize}
+    \item \textbf{\textit{Sentiment Analysis}.} Consiste en identificar y extraer la opinión o actitud de una persona o entidad hacia un tema. Las posibles categorías de sentimiento son: positivo, neutro o negativo. El modelo empleado: \texttt{Twitter-roBERTa-base for Sentiment Analysis}~\cite{cardiffnlpSentiment,  camacho2022tweetnlp, loureiro2022timelms}.
+
+    \item \textbf{\textit{Emotion Analysis}.} Consiste en reconocer y clasificar las emociones expresadas por una persona en un texto. Las posibles categorías de emoción son: optimismo, alegría, tristeza, enfado. El modelo empleado: \texttt{Twitter-roBERTa-base for Emotion Recognition}~\cite{cardiffnlpEmotion, camacho2022tweetnlp, loureiro2022timelms}
+
+    \item \textbf{\textit{Topic Classification}.} Consiste en clasificar en una o más categorías a un enunciado según su contenido y contexto. El modelo empleado: \texttt{tweet-topic-21-multi}~\cite{cardiffnlpTopic, antypas2022twitter}. Las posibles categorías son las mostradas a continuación:
+    \begin{verbatim}
+    0: arts_&_culture           1: business_&_entrepreneurs
+    2: celebrity_&_pop_culture  3: diaries_&_daily_life
+    4: family                   5: fashion_&_style
+    6: film_tv_&_video          7: fitness_&_health
+    8: food_&_dining            9: gaming
+    10: learning_&_educational  11: music
+    12: news_&_social_concern   13: other_hobbies
+    14: relationships           15: science_&_technology
+    16: sports                  17: travel_&_adventure
+    18: youth_&_student_life		
+    \end{verbatim}
+
+    \item \textbf{\textit{Named Entity Recognition}.} Consiste en localizar y etiquetar las entidades nombradas que aparecen en un texto, como personas, lugares, organizaciones, etc. El modelo empleado:\\\texttt{tner/twitter-roberta-base-dec2021-tweetner7-all}~\cite{tnerNER, ushio2022t, ushio2022named}. Las posibles categorías de entidad son las mostradas a continuación:
+    \begin{verbatim}
+    0: corporation      1: creative_work    2: event
+    3: group            4: location         5: person
+    6: product
+    \end{verbatim}
+    
+\end{itemize}
+
 
 \section{Visualización de los datos}
 
-En esta sección se detallarán los aspectos relevantes de la herramienta seleccionada para la visualización de los datos.
+En esta sección se detallarán los aspectos relevantes de la herramienta seleccionada para la visualización de los datos. Apache Superset~\cite{apacheSuperset} permite a la exploración y visualización de datos, además de compartir información de forma interactiva y colaborativa.
+
+Presenta capacidades de creación de usuarios y permisos, por lo que es posible designar roles específicos para cada usuario según las necesidades del mismo. De esta manera, se consigue implementar cierta seguridad en los datos, de modo que ciertos usuarios podrían interactuar solamente con ciertos \textit{dashboards} según el nivel de acceso que tengan, en caso de trabajar con datos sensibles.
+
+Además, cuenta con una sección llamada <<\textit{SQL Lab}>> en la que es posible realizar consultas en formato \textit{SQL} nativo sobre los distintos conjuntos de datos cargados. Una vez ejecutadas las consultas, estas se pueden exportar a un \textit{dataset} virtual que se puede tomar como base para la creación de nuevas visualizaciones.
+
+En este proyecto se ha desarrollado un cuadro de mando integral que comprende 5 vistas a distinto nivel de detalle sobre los datos recogidos. Para ello, se han empleado las visualizaciones pertinentes junto a una paleta de colores elegida intencionalmente para representar el análisis de sentimientos.
+
+Las vistas del \textit{dashboard} permiten la obtención de \textit{insights} no solo en el ámbito general mediante métricas sobre los datos extraídos, sino también sobre las estadísticas representadas de las publicaciones realizadas y los usuarios de las mismas, junto a la información enriquecida añadida mediante las técnicas \textit{NLP}. 
+
+Para utilizar los datos almacenados en el sistema \textit{OLAP} ClickHouse ha hecho falta la instalación de un conector adicional. Esta configuración, así como el cuadro de mando desarrollado y la importación de los \textit{datasets} desde ClickHouse, se realiza mediante un \textit{script} automático para facilitar el despliegue para el usuario. 
+
+El diseño e implementación de las vistas para el \textit{dashboard} se pueden comprobar en mayor detalle en la \autoref{section:dashboard-design}.
+
 
 \section{Orquestación de los procesos}
 
 La arquitectura implementada en este proyecto resulta compleja, no solamente a nivel de integración de las herramientas empleadas, sino también de la comunicación realizada entre ellas y los procesos que intervienen entre cada una.
 
-Debido a estas razones, surge la necesidad de emplear una herramienta capaz de gestionar todo el flujo de acciones que se lleva a cabo entre los distintos componentes del proyecto. Para lograr este objetivo, se ha seleccionado \textit{Apache Airflow} como orquestador de procesos.
+Debido a estas razones, surge la necesidad de emplear una herramienta capaz de gestionar todo el flujo de acciones que se lleva a cabo entre los distintos componentes del proyecto. Para lograr este objetivo, se ha seleccionado \textit{Apache Airflow}~\cite{apacheAirflow} como orquestador de procesos.
 
 En las siguientes secciones se desarrollan los aspectos que mayor influencia han tenido para la integración de esta etapa.
 
@@ -211,19 +288,34 @@ En las siguientes secciones se desarrollan los aspectos que mayor influencia han
 
 La documentación de \textit{Apache Airflow} indica de la disponibilidad de un <<entorno \textit{dockerizado} listo para producción>>, aunque dicha afirmación no resulta del todo cierta. Para la correcta configuración y despliegue de esta herramienta ha resultado necesaria la creación de un \textit{script} que automatice de la manera más abstracta posible para el usuario la parametrización y despliegue iniciales de la plataforma.
 
+Este \textit{script} se encarga de la declaración de las variables y conexiones a las demás herramientas necesarias para la ejecución de las \textit{data pipelines} creadas. También crea y configura la clave de encriptación \textit{Fernet}~\cite{fernetKey} y realiza la instalación de los \textit{plugins} empleados (\texttt{apache-airflow-providers-docker}~\cite{airflowDocker} y \texttt{apache-airflow-providers-airbyte}~\cite{airflowAirbyte}), que se han utilizado para, respectivamente, realizar la integración con el servicio \textit{Docker} y ejecutar la sincronización de datos en Airbyte.
+
 \subsection{Acceso seguro al \textit{Docker socket}}
 
 Teniendo en cuenta los objetivos del proyecto sobre la creación de una plataforma segura y autocontenida, se ha realizado el despliegue completo de la plataforma en contenedores \textit{Docker}.
 
 Debido a esto, las etapas de procesamiento e inferencia de los datos se realizan en contenedores <<desechables>>, en el sentido de que solamente resulta necesario que estén activos durante el tiempo necesario para realizar sus operaciones. De esta manera, esta parte del flujo de datos se vuelve más dinámica y eficiente, utilizando únicamente los recursos necesarios durante el tiempo requerido y liberándolos nuevamente tras finalizar dichas tareas.
 
-Para realizar dicho despliegue y borrado dinámico de contenedores, \textit{Apache Airflow} necesita acceso al \textit{docker socket}.
+Para realizar dicho despliegue y borrado dinámico de contenedores, \textit{Apache Airflow} necesita acceso al \textit{Docker socket}. No obstante, conceder acceso a este \textit{socker} significa otorgar permisos de administrador local sobre la propia máquina en la que se despliega. Para solventar este problema y securizar el \textit{socket}, se ha desplegado un \textit{proxy}~\cite{dockerProxy} también \textit{dockerizado} y configurable que permite el paso de peticiones benignas y bloquea las malignas.
 
 \subsection{Integración y flujos de datos}
 
 La orquestación de los procesos y comunicación entre los numerosos componentes del proyecto ha requerido la creación de distintos flujos de datos utilizando diversas tareas y configuraciones.
 
-Teniendo en cuenta la cantidad de fuentes de datos seleccionadas finalmente para el proyecto, se han diseñado dos \textit{data pipelines}. Un flujo de datos con un \textit{DAG} normal para los datos provenientes de la \textit{API} de Twitter y otro flujo de datos que genera de manera dinámica los \textit{DAGs} necesarios para todos los subconjuntos de datos del \textit{dataset} explicado en anteriores apartados.  
+Teniendo en cuenta la cantidad de fuentes de datos seleccionadas finalmente para el proyecto, se han diseñado dos \textit{data pipelines}. Un flujo de datos con un \textit{DAG} (\textit{Directed Acyclic Graph}) normal para los datos provenientes de la \textit{API} de Twitter y otro flujo de datos que genera de manera dinámica los \textit{DAGs} necesarios para todos los subconjuntos de datos del \textit{dataset} explicado en anteriores apartados. No obstante, en ambos flujos de datos han intervenido las mismas tareas y en el mismo orden de ejecución, como se puede observar en la \autoref{fig:airflow-data-pipeline}.
+
+\imagen{airflow-data-pipeline}{Tareas de la \textit{data pipeline} sobre el \textit{dataset} de demostración}
+
+\begin{itemize}
+    \item La primera tarea (\texttt{sync\_data}) es un actuador que se encarga de ejecutar la sincronización de los datos en Airbyte. Para ello, es necesario establecer previamente la conexión con la herramienta de extracción de datos desde la configuración de Airflow y especificar el identificador de la conexión a ejecutar.
+
+    \item La segunda tarea (\texttt{sensor\_sync\_data}) es un sensor que se encarga de recibir la señal con el estado de la sincronización cuando Airbyte finaliza la extracción de datos. Según el estado de la señal, finalización satisfactoria o no, termina la \textit{pipeline} o continúa con la siguiente tarea.
+
+    \item La tercera tarea (\texttt{process\_data}) es un actuador que se encarga de realizar el procesamiento de los datos mediante Apache Spark. Los parámetros de configuración necesitan los datos de conexión a la base de datos MongoDB, junto al término de búsqueda empleado para las consultas de extracción y en qué colección se están almacenando estos datos en bruto. Esta tarea levanta un contenedor \textit{Docker} con Apache Spark para realizar sus operaciones, que posteriormente es eliminado para liberar los recursos ocupados. Durante la ejecución de esta fase se puede acceder a la interfaz web de monitorización que provee Spark.
+
+    \item La cuarta tarea (\texttt{nlp\_inference}) es otro actuador que se encarga de realizar la inferencia de los modelos \textit{NLP} (\textit{Natural Language Processing}). Los parámetros de configuración necesitan los datos de conexión a las bases de datos MongoDB y ClickHouse, junto al término de búsqueda empleado para las consultas de extracción. Esta tarea levanta un contenedor \textit{Docker} con la librería \textit{HuggingFace Transformers} y emplea los modelos descritos en la sección anterior para realizar la inferencia de los datos. Tras su finalización, los datos son agregados en ClickHouse y el contenedor eliminado para liberar los recursos utilizados.
+\end{itemize}
+
 
 \section{Interfaz web de acceso centralizado}
 
@@ -233,6 +325,6 @@ La modularidad que ofrece esta arquitectura invita a posibles extensiones de fun
 
 Por estas razones, se ha decidido crear un punto único de acceso centralizado a todas las interfaces de gestión y monitorización en forma de página web. De esta manera, se agiliza el acceso al resto de interfaces que ofrece la plataforma actualmente en caso de que se necesite trabajar de manera paralela en varios puntos de la misma.
 
-El desarrollo de la página web se ha realizado mediante el \textit{framework Flask} con el objetivo de que esta interfaz sea una aplicación web ligera con las funcionalidades básicas y necesarias. El diseño se ha realizado a medida, \textit{responsive} (adaptable a cualquier dispositivo) y teniendo en cuenta un estilo minimalista acorde a las necesidades de un punto web de acceso centralizado.
+El desarrollo de la página web (véase la \autoref{fig:web-app}) se ha realizado mediante el \textit{framework Flask} con el objetivo de que esta interfaz sea una aplicación web ligera con las funcionalidades básicas y necesarias. El diseño se ha realizado a medida, \textit{responsive} (adaptable a cualquier dispositivo) y teniendo en cuenta un estilo minimalista acorde a las necesidades de un punto web de acceso centralizado.
 
 \imagen{web-app}{Aplicación web desarrollada como punto de acceso centralizado}
