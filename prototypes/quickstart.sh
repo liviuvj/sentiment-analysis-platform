@@ -14,6 +14,8 @@ cd extraction
 git clone --depth 1 https://github.com/airbytehq/airbyte.git
 cd airbyte
 ./run-ab-platform.sh -b
+echo ">> Airbyte up and running!"
+
 
 # Create external networks
 docker network create etl_network
@@ -22,23 +24,27 @@ docker network create etl_bridge
 # Run MongoDB instance
 cd ../../mongodb
 docker compose up -d
+echo ">> Airbyte up and running!"
 
 # Configure data extraction and data loading pipeline
 cd ../extraction
 sleep 30
 python config.py
+echo ">> Airbyte configured and ready!"
 
 # Build custom spark image
 cd ../spark
 echo "SPARK_TASKS_PATH=$PWD/spark-tasks" >> .env
 source .env
 docker build -t $SPARK_IMAGE_NAME .
+echo ">> Airbyte up and ready!"
 
 # Build NLP image
 cd ../nlp
 echo "NLP_TASKS_PATH=$PWD/nlp-tasks" >> .env
 source .env
 docker build -t $NLP_IMAGE_NAME .
+echo ">> Airbyte up and ready!"
 
 # Run ClickHouse instance and connect to bridge network
 cd ../clickhouse
@@ -47,6 +53,7 @@ until [ "$( docker container inspect -f '{{.State.Status}}' clickhouse )" = "run
     sleep 0.1;
 done;
 docker network connect etl_bridge clickhouse
+echo ">> ClickHouse up and running!"
 
 # Clone repository and add connector requirement
 cd ../visualization
@@ -62,6 +69,7 @@ cd ../..
 # Run script to import dashboard and datasets
 source ./clickhouse/.env
 source ./superset/.env
+curl -L "https://drive.google.com/uc?export=download&id=15e7Uu5cEPASdB73Ug1qHUBUMj9hQSo7_" --output dashboard_export.zip
 python -u import_dashboard.py $SUPERSET_ADMIN_PASSWORD $CLICKHOUSE_PASSWORD
 
 # Wait until container is ready and add it to the bridge network
@@ -69,6 +77,7 @@ until [ "$( docker container inspect -f '{{.State.Status}}' superset_app )" = "r
     sleep 0.1;
 done;
 docker network connect etl_bridge superset_app
+echo ">> Apache Superset up and running!"
 
 # Fetch Airflow
 cd airflow
@@ -84,7 +93,9 @@ docker compose up airflow-init
 docker compose up -d
 docker compose -f docker-compose.proxy.yaml up -d
 cd ..
+echo ">> Apache Airflow up and running!"
 
 # Run centralized web access point
 cd web
 docker compose up -d
+echo ">> Web app up and running!"
