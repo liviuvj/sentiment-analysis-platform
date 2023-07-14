@@ -1,21 +1,4 @@
 from transformers import pipeline
-
-# from pymongo import MongoClient
-# from connectors import ClickHouseConnector
-
-# Connecto to MongoDB
-# mongo_client = MongoClient("mongodb://mongoroot:mongopassword@mongo-db:27017/raw_tweets?authSource=admin")
-
-# Select database and collections
-# db = mongo_client["raw_twitter"]
-# collection_tweets = db["clean_tweets"].find()
-# collection_users = db["clean_users"].find()
-# collection_mentions = db["clean_mentions"].find()
-# collection_annotations = db["clean_annotations"].find()
-# collection_context_annotations = db["clean_context_annotations"].find()
-# collection_urls = db["clean_urls"].find()
-# collection_hashtags = db["clean_hashtags"].find()
-
 from utils import get_logger
 
 log = get_logger("tasks")
@@ -29,6 +12,20 @@ class TaskPipeline:
         topic_model: str = "cardiffnlp/tweet-topic-21-multi",
         ner_model: str = "tner/twitter-roberta-base-dec2021-tweetner7-all",
     ) -> None:
+        """
+        Main class to run the Natural Language Processing tasks.
+
+        Args:
+            sentiment_model (str, optional): Sentiment analysis model.
+                Defaults to "cardiffnlp/twitter-roberta-base-sentiment-latest".
+            emotion_model (str, optional): Emotion classification model.
+                Defaults to "cardiffnlp/twitter-roberta-base-emotion".
+            topic_model (str, optional): Topic classification model.
+                Defaults to "cardiffnlp/tweet-topic-21-multi".
+            ner_model (str, optional): Named Entity Recognition model.
+                Defaults to "tner/twitter-roberta-base-dec2021-tweetner7-all".
+        """
+
         self.sentiment_classifier = pipeline(
             "sentiment-analysis", model=sentiment_model
         )
@@ -36,8 +33,8 @@ class TaskPipeline:
         self.topic_classifier = pipeline("sentiment-analysis", model=topic_model)
         self.ner_classifier = pipeline("sentiment-analysis", model=ner_model)
 
-    # Create iterator for the data
     def data_iterator(self, data, log_iterations=1000):
+        # Create iterator for the data
         for i, d in enumerate(data, start=1):
             if not i % log_iterations:
                 log.info(f"\t> Iterated over {i} instances")
@@ -103,10 +100,6 @@ class TaskTwitterInput:
         self.database_password = db_password
         self.database_host = db_host
         self.database_port = db_port
-        # self.database_host = "mongo-db"
-        # self.database_port = 27017
-        # self.database_username = "mongoroot"
-        # self.database_password = "mongopassword"
 
         # Database and collection names
         self.database_name = "raw_twitter"
@@ -138,10 +131,6 @@ class TaskTwitterOutput:
         self.database_password = db_password
         self.database_host = db_host
         self.database_port = db_port
-        # self.database_host = "clickhouse"
-        # self.database_port = 9000
-        # self.database_username = "ck_user"
-        # self.database_password = "ck_password"
 
         # Database name
         self.database_name = "twitter"
@@ -232,10 +221,6 @@ class TaskDatasetInput:
         self.database_password = db_password
         self.database_host = db_host
         self.database_port = db_port
-        # self.database_host = "mongo-db"
-        # self.database_port = 27017
-        # self.database_username = "mongoroot"
-        # self.database_password = "mongopassword"
 
         # Database and collection names
         self.database_name = "raw_dataset"
@@ -265,10 +250,6 @@ class TaskDatasetOutput:
         self.database_password = db_password
         self.database_host = db_host
         self.database_port = db_port
-        # self.database_host = "clickhouse"
-        # self.database_port = 9000
-        # self.database_username = "ck_user"
-        # self.database_password = "ck_password"
 
         # Database name
         self.database_name = "twitter"

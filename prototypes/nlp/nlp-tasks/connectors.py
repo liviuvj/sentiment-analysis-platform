@@ -168,7 +168,7 @@ class ClickHouseConnector:
             )
 
             self.client.execute(query.format(**params))
-            log.info("Created table '%s'", table_name)
+            log.info("Created table '%s' if not existed", table_name)
 
         except Exception as e:
             log.error("Error creating table:", e)

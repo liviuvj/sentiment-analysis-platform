@@ -51,13 +51,17 @@ SLEEP_TIME = "30"
 # Dynamic configuration for multiple similar DAGs
 dynamic_config = {
     "movie": {"connection_id": AIRBYTE_MOVIE_CONNECTION_ID,
-              "search_query": "movie",},
+              "search_query": "movie",
+              "collection_name": "airbyte_raw_movie"},
     "season8": {"connection_id": AIRBYTE_SEASON8_CONNECTION_ID,
-                "search_query": "season 8"},
+                "search_query": "season 8",
+                "collection_name": "airbyte_raw_season8"},
     "jon": {"connection_id": AIRBYTE_JON_CONNECTION_ID,
-            "search_query": "Jon"},
+            "search_query": "Jon",
+            "collection_name": "airbyte_raw_jon"},
     "daenerys": {"connection_id": AIRBYTE_DAENERYS_CONNECTION_ID,
-                 "search_query": "Daenerys"},
+                 "search_query": "Daenerys",
+                 "collection_name": "airbyte_raw_daenerys"},
 }
 
 
@@ -123,7 +127,7 @@ for config_name, config in dynamic_config.items():
             params={
                 "DATA_SOURCE": DATA_SOURCE,
                 "SEARCH_QUERY": config["search_query"],
-                "COLLECTION": config_name,
+                "COLLECTION": config["collection_name"],
                 "TARGET_SPARK_TASKS_PATH": TARGET_PATH_SPARK_TASKS,
                 "SLEEP_TIME": SLEEP_TIME,
                 "MONGO_USER": MONGO_USER,
@@ -189,7 +193,9 @@ for config_name, config in dynamic_config.items():
             dag=dag,
             do_xcom_push=True,
             params={
+                "TASK_NAME": DATA_SOURCE,
                 "DATA_SOURCE": DATA_SOURCE,
+                "SEARCH_QUERY": config["search_query"],
                 "TARGET_NLP_TASKS_PATH": TARGET_PATH_NLP_TASKS,
                 "MONGO_USER": MONGO_USER,
                 "MONGO_PASSWORD": MONGO_PASSWORD,
@@ -215,7 +221,7 @@ for config_name, config in dynamic_config.items():
                 "python",
                 "-u",
                 "{{ params.TARGET_NLP_TASKS_PATH }}/pipeline.py",
-                "{{ params.DATA_SOURCE }}",
+                "{{ params.TASK_NAME }}",
                 "{{ params.MONGO_USER }}",
                 "{{ params.MONGO_PASSWORD }}",
                 "{{ params.MONGO_HOST }}",
@@ -224,6 +230,8 @@ for config_name, config in dynamic_config.items():
                 "{{ params.CLICKHOUSE_PASSWORD }}",
                 "{{ params.CLICKHOUSE_HOST }}",
                 "{{ params.CLICKHOUSE_PORT }}",
+                "{{ params.DATA_SOURCE }}",
+                "{{ params.SEARCH_QUERY }}",
             ],
         )
 

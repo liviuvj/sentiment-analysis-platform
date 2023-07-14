@@ -11,114 +11,22 @@ log = get_logger("main")
 
 
 def run_pipeline_twitter(
-    task_input, task_output, input_client, output_client, nlp_pipeline
+    input_task, output_task, input_client, output_client, nlp_pipeline
 ):
+    """
+    Twitter NLP pipeline.
+
+    Args:
+        input_task (class): The task with the input database connection parameters.
+        output_task (class): The task with the output database connection parameters.
+        input_client (class): The input database client.
+        output_client (class): The output database client.
+        nlp_pipeline (class): The NLP pipeline task to execute on the data.
+    """
+
     log.info("Starting Twitter Pipeline...")
 
     # Fetch Twitter database
-    input_db = input_client[task_input.database_name]
-
-    # MongoDB query to remove the unusable _ID field
-    query_filter = {"_id": 0}
-
-    # Fetch input collections
-    collection_tweets = input_db[task_input.tweets].find({}, query_filter)
-    collection_users = input_db[task_input.users].find({}, query_filter)
-    collection_mentions = input_db[task_input.mentions].find({}, query_filter)
-    collection_annotations = input_db[task_input.annotations].find({}, query_filter)
-    collection_context_annotations = input_db[task_input.context_annotations].find(
-        {}, query_filter
-    )
-    collection_urls = input_db[task_input.urls].find({}, query_filter)
-    collection_hashtags = input_db[task_input.hashtags].find({}, query_filter)
-
-    # Get tweet texts
-    tweets_english = [doc for doc in collection_tweets if doc["language"] == "en"]
-
-    # Execute all NLP tasks on the data
-    nlp_pipeline.run_all_tasks(tweets_english)
-
-    # Create output database
-    output_client.create_database(task_output.database_name)
-    output_client.use_database(task_output.database_name)
-
-    # Create tables
-    log.info("Creating output tables...")
-    output_client.create_table(
-        task_output.tweets["name"], task_output.tweets["columns"]
-    )
-    output_client.create_table(task_output.users["name"], task_output.users["columns"])
-    output_client.create_table(
-        task_output.mentions["name"], task_output.mentions["columns"]
-    )
-    output_client.create_table(
-        task_output.annotations["name"], task_output.annotations["columns"]
-    )
-    output_client.create_table(
-        task_output.context_annotations["name"],
-        task_output.context_annotations["columns"],
-    )
-    output_client.create_table(task_output.urls["name"], task_output.urls["columns"])
-    output_client.create_table(
-        task_output.hashtags["name"], task_output.hashtags["columns"]
-    )
-
-    # Insert data into tables
-    output_client.insert_into_table(
-        task_output.tweets["name"],
-        list(task_output.tweets["columns"].keys()),
-        convert_date(tweets_english, "created_at"),
-    )
-
-    users = [user for user in collection_users]
-    output_client.insert_into_table(
-        task_output.users["name"],
-        list(task_output.users["columns"].keys()),
-        users,
-    )
-
-    mentions = [mention for mention in collection_mentions]
-    output_client.insert_into_table(
-        task_output.mentions["name"],
-        list(task_output.mentions["columns"].keys()),
-        mentions,
-    )
-
-    annotations = [annotation for annotation in collection_annotations]
-    output_client.insert_into_table(
-        task_output.annotations["name"],
-        list(task_output.annotations["columns"].keys()),
-        annotations,
-    )
-
-    context_annotations = [context for context in collection_context_annotations]
-    output_client.insert_into_table(
-        task_output.context_annotations["name"],
-        list(task_output.context_annotations["columns"].keys()),
-        context_annotations,
-    )
-
-    urls = [url for url in collection_urls]
-    output_client.insert_into_table(
-        task_output.urls["name"],
-        list(task_output.urls["columns"].keys()),
-        urls,
-    )
-
-    hashtags = [hashtag for hashtag in collection_hashtags]
-    output_client.insert_into_table(
-        task_output.hashtags["name"],
-        list(task_output.hashtags["columns"].keys()),
-        hashtags,
-    )
-
-
-def run_pipeline_dataset(
-    input_task, output_task, input_client, output_client, nlp_pipeline
-):
-    log.info("Starting Dataset Pipeline...")
-
-    # Fetch Dataset database
     input_db = input_client[input_task.database_name]
 
     # MongoDB query to remove the unusable _ID field
@@ -128,11 +36,144 @@ def run_pipeline_dataset(
     collection_tweets = input_db[input_task.tweets].find({}, query_filter)
     collection_users = input_db[input_task.users].find({}, query_filter)
     collection_mentions = input_db[input_task.mentions].find({}, query_filter)
+    collection_annotations = input_db[input_task.annotations].find({}, query_filter)
+    collection_context_annotations = input_db[input_task.context_annotations].find(
+        {}, query_filter
+    )
     collection_urls = input_db[input_task.urls].find({}, query_filter)
     collection_hashtags = input_db[input_task.hashtags].find({}, query_filter)
 
     # Get tweet texts
-    tweets = [doc for doc in collection_tweets]
+    tweets_english = [doc for doc in collection_tweets if doc["language"] == "en"]
+
+    # Execute all NLP tasks on the data
+    nlp_pipeline.run_all_tasks(tweets_english)
+
+    # Create output database
+    output_client.create_database(output_task.database_name)
+    output_client.use_database(output_task.database_name)
+
+    # Create tables
+    log.info("Creating output tables...")
+    output_client.create_table(
+        output_task.tweets["name"], output_task.tweets["columns"]
+    )
+    output_client.create_table(output_task.users["name"], output_task.users["columns"])
+    output_client.create_table(
+        output_task.mentions["name"], output_task.mentions["columns"]
+    )
+    output_client.create_table(
+        output_task.annotations["name"], output_task.annotations["columns"]
+    )
+    output_client.create_table(
+        output_task.context_annotations["name"],
+        output_task.context_annotations["columns"],
+    )
+    output_client.create_table(output_task.urls["name"], output_task.urls["columns"])
+    output_client.create_table(
+        output_task.hashtags["name"], output_task.hashtags["columns"]
+    )
+
+    # Insert data into tables
+    output_client.insert_into_table(
+        output_task.tweets["name"],
+        list(output_task.tweets["columns"].keys()),
+        convert_date(tweets_english, "created_at"),
+    )
+
+    users = [user for user in collection_users]
+    output_client.insert_into_table(
+        output_task.users["name"],
+        list(output_task.users["columns"].keys()),
+        users,
+    )
+
+    mentions = [mention for mention in collection_mentions]
+    output_client.insert_into_table(
+        output_task.mentions["name"],
+        list(output_task.mentions["columns"].keys()),
+        mentions,
+    )
+
+    annotations = [annotation for annotation in collection_annotations]
+    output_client.insert_into_table(
+        output_task.annotations["name"],
+        list(output_task.annotations["columns"].keys()),
+        annotations,
+    )
+
+    context_annotations = [context for context in collection_context_annotations]
+    output_client.insert_into_table(
+        output_task.context_annotations["name"],
+        list(output_task.context_annotations["columns"].keys()),
+        context_annotations,
+    )
+
+    urls = [url for url in collection_urls]
+    output_client.insert_into_table(
+        output_task.urls["name"],
+        list(output_task.urls["columns"].keys()),
+        urls,
+    )
+
+    hashtags = [hashtag for hashtag in collection_hashtags]
+    output_client.insert_into_table(
+        output_task.hashtags["name"],
+        list(output_task.hashtags["columns"].keys()),
+        hashtags,
+    )
+
+
+def run_pipeline_dataset(
+    input_task, output_task, input_client, output_client, nlp_pipeline, data_source, search_query
+):
+    """_summary_
+
+    Args:
+        input_task (class): The task with the input database connection parameters.
+        output_task (class): The task with the output database connection parameters.
+        input_client (class): The input database client.
+        output_client (class): The output database client.
+        nlp_pipeline (class): The NLP pipeline task to execute on the data.
+        data_source (str): The name of the data source.
+        search_query (str): The name of the search query.
+    """
+
+    log.info("Starting Dataset Pipeline...")
+
+    # Fetch Dataset database
+    input_db = input_client[input_task.database_name]
+
+    # MongoDB filter to remove the unusable _ID field
+    query_filter = {"_id": 0}
+
+    # Fetch filtered tweet collection
+    collection_tweets = input_db[input_task.tweets].find(
+        {"source": data_source, "search_query": search_query},
+        query_filter)
+
+    # Get tweets and filters for tweet_ids and user_ids
+    tweets = [tweet for tweet in collection_tweets]
+    tweet_ids = [tweet["tweet_id"] for tweet in tweets]
+    tweet_filter = {"tweet_id": {"$in": tweet_ids}}
+    user_ids = [tweet["user_id"] for tweet in tweets]
+    user_filter = {"user_id": {"$in": user_ids}}
+
+    # Fetch filtered users collection
+    collection_users = input_db[input_task.users].find(user_filter, query_filter)
+    users = list({user["user_id"]:user for user in collection_users}.values())
+
+    # Fetch filtered mentions collection
+    collection_mentions = input_db[input_task.mentions].find(tweet_filter, query_filter)
+    mentions = list({mention["tweet_id"]:mention for mention in collection_mentions}.values())
+
+    # Fetch filtered urls collection
+    collection_urls = input_db[input_task.urls].find(tweet_filter, query_filter)
+    urls = list({url["tweet_id"]:url for url in collection_urls}.values())
+
+    # Fetch filtered hashtags collection
+    collection_hashtags = input_db[input_task.hashtags].find(tweet_filter, query_filter)
+    hashtags = list({tag["tweet_id"]:tag for tag in collection_hashtags}.values())
 
     # Execute all NLP tasks on the data
     nlp_pipeline.run_all_tasks(tweets)
@@ -162,28 +203,24 @@ def run_pipeline_dataset(
         convert_date(tweets, "created_at"),
     )
 
-    users = [user for user in collection_users]
     output_client.insert_into_table(
         output_task.users["name"],
         list(output_task.users["columns"].keys()),
         users,
     )
 
-    mentions = [mention for mention in collection_mentions]
     output_client.insert_into_table(
         output_task.mentions["name"],
         list(output_task.mentions["columns"].keys()),
         mentions,
     )
 
-    urls = [url for url in collection_urls]
     output_client.insert_into_table(
         output_task.urls["name"],
         list(output_task.urls["columns"].keys()),
         urls,
     )
 
-    hashtags = [hashtag for hashtag in collection_hashtags]
     output_client.insert_into_table(
         output_task.hashtags["name"],
         list(output_task.hashtags["columns"].keys()),
@@ -202,6 +239,10 @@ def main():
     out_db_password = sys.argv[7]
     out_db_host = sys.argv[8]
     out_db_port = sys.argv[9]
+    if len(sys.argv) > 10:
+        data_source = sys.argv[10]
+    if len(sys.argv) > 11:
+        search_query = sys.argv[11]
 
     # Create input and output tasks
     input_task, output_task = None, None
@@ -234,9 +275,13 @@ def main():
 
     # Run pipeline
     if task_name == "twitter":
-        run_pipeline_twitter(input_task, output_task, input_client, output_client, nlp_pipeline)
+        run_pipeline_twitter(input_task, output_task,
+                             input_client,output_client,
+                             nlp_pipeline)
     elif task_name == "dataset":
-        run_pipeline_dataset(input_task, output_task, input_client, output_client, nlp_pipeline)
+        run_pipeline_dataset(input_task, output_task,
+                             input_client, output_client,
+                             nlp_pipeline, data_source, search_query)
 
 if __name__ == "__main__":
     main()

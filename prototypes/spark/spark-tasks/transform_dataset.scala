@@ -79,6 +79,13 @@ val cleanUsersDF = usersDF.
         "tweet_count", "listed_count").
     na.fill("", Array("description"))
 
+// Log output data
+println(">> Total tweets processed: " + cleanTweetsDF.count)
+println(">> Total users processed: " + cleanUsersDF.count)
+println(">> Total mentions processed: " + cleanMentionsDF.count)
+println(">> Total urls processed: " + cleanUrlsDF.count)
+println(">> Total hashtags processed: " + cleanHashtagsDF.count)
+
 // Save clean data back to MongoDB
 cleanTweetsDF.write.format("mongo").mode("append").option("collection", "clean_tweets").save()
 cleanUsersDF.write.format("mongo").mode("append").option("collection", "clean_users").save()

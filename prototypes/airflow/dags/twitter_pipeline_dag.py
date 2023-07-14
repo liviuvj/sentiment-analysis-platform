@@ -146,6 +146,7 @@ with DAG(
         do_xcom_push=True,
         params={
             "TARGET_NLP_TASKS_PATH": TARGET_PATH_NLP_TASKS,
+            "TASK_NAME": "twitter",
             "MONGO_USER": MONGO_USER,
             "MONGO_PASSWORD": MONGO_PASSWORD,
             "MONGO_HOST": MONGO_HOST,
@@ -170,7 +171,7 @@ with DAG(
             "python",
             "-u",
             "{{ params.TARGET_NLP_TASKS_PATH }}/pipeline.py",
-            "twitter",
+            "{{ params.TASK_NAME }}",
             "{{ params.MONGO_USER }}",
             "{{ params.MONGO_PASSWORD }}",
             "{{ params.MONGO_HOST }}",
