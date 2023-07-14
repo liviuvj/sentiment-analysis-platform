@@ -19,3 +19,27 @@ This project focuses on building a Big Data Platform for Sentiment Analysis comp
 <div align="center">
     <img src="./docs/img/platform-architecture-basic.png" alt="BISENTYS Logo" width="550"/>
 </div>
+
+
+# How to install
+
+1. Create Python virtual environment and activate it.
+
+    ```sh
+    python3 -v venv .venv
+    source .venv/bin/activate
+    ```
+
+2. Install [requirements.txt](./requirements.txt).
+
+    ```sh
+    pip install -r requirements.txt
+    ```
+
+2. Run [quickstart.sh](quickstart.sh).
+
+    ```sh
+    ./quickstart.sh
+    ```
+
+This script will deploy and configure all the components in the platform with a demo dataset. For more information, please check the documentation.

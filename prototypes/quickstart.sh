@@ -28,7 +28,9 @@ echo ">> Airbyte up and running!"
 
 # Configure data extraction and data loading pipeline
 cd ../extraction
-sleep 30
+until [ "$( docker container inspect -f '{{.State.Status}}' airbyte-server )" = "running" ]; do
+    sleep 0.1;
+done;
 python config.py
 echo ">> Airbyte configured and ready!"
 
@@ -64,19 +66,21 @@ git clone https://github.com/apache/superset.git
 cd superset
 docker-compose -f docker-compose-non-dev.yml pull
 docker-compose -f docker-compose-non-dev.yml up -d
-cd ../..
-
-# Run script to import dashboard and datasets
-source ./clickhouse/.env
-source ./superset/.env
-curl -L "https://drive.google.com/uc?export=download&id=15e7Uu5cEPASdB73Ug1qHUBUMj9hQSo7_" --output dashboard_export.zip
-python -u import_dashboard.py $SUPERSET_ADMIN_PASSWORD $CLICKHOUSE_PASSWORD
+cd ../
 
 # Wait until container is ready and add it to the bridge network
 until [ "$( docker container inspect -f '{{.State.Status}}' superset_app )" = "running" ]; do
     sleep 0.1;
 done;
 docker network connect etl_bridge superset_app
+
+# Run script to import dashboard and datasets
+source ./clickhouse/.env
+source ./superset/.env
+curl -L "https://drive.google.com/uc?export=download&id=15e7Uu5cEPASdB73Ug1qHUBUMj9hQSo7_" --output dashboard_export.zip
+python -u import_dashboard.py $SUPERSET_ADMIN_PASSWORD $CLICKHOUSE_PASSWORD
+cd ..
+
 echo ">> Apache Superset up and running!"
 
 # Fetch Airflow
