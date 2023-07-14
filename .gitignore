@@ -1,7 +1,6 @@
 # Python Virtual Environment
 .vscode
 .venv
-.credentials.yml
 prototypes/extraction/__*
 prototypes/extraction/airbyte
 prototypes/mongodb/data/*

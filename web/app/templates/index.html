@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<main class="page-content">
+   <div class="top-grid">
+  <div class="card first-card" id="orchestration" onclick="platformRedirect(this.id)">
+    <div class="content first-content">
+      <h2 class="title">DATA ORCHESTRATION</h2>
+      <p class="copy">Manage and monitorize the created data pipelines, launch workflows and check platform logs.</p>
+    </div>
+  </div>
+ </div>
+  <div class="card" id="ingestion" onclick="platformRedirect(this.id)">
+    <div class="content">
+      <h2 class="title">DATA INGESTION</h2>
+      <p class="copy">Create and configure sources for data extraction and destinations for the data ingestion.</p>
+    </div>
+  </div>
+  <div class="card" id="processing" onclick="platformRedirect(this.id)">
+    <div class="content">
+      <h2 class="title">DATA PROCESSING</h2>
+      <p class="copy">Monitorize Apache Spark jobs, logs and resource consumption.</p>
+    </div>
+  </div>
+  <div class="card" id="storage" onclick="platformRedirect(this.id)">
+    <div class="content">
+      <h2 class="title">DATA STORAGE</h2>
+      <p class="copy">Interact with the ClickHouse database and execute queries.</p>
+    </div>
+  </div>
+  <div class="card" id="visualization" onclick="platformRedirect(this.id)">
+    <div class="content">
+      <h2 class="title">DATA VISUALIZATION</h2>
+      <p class="copy">Create and visualize the data in interactive dashboards.</p>
+    </div>
+  </div>
+</main>
+
+{% endblock %}

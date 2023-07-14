@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/main.css')}}">
+  <link rel="shortcut icon" href="{{url_for('static',filename='media/favicon.ico')}}" />
+  <script type="text/javascript" src="{{url_for('static',filename='js/functions.js')}}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <title>Big Data Platform for Sentiment Analysis</title>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-md-12 hero">
+          <img src="{{url_for('static', filename='media/bisentys-logo.png')}}" class="image image-center image-header"
+            alt="Big Data Platform for Sentiment Analysis">
+        </div>
+      </div>
+    </div>
+  </header>
+
+ <!-- Navigation Bar -->
+  <div class="container navigation-menu" id="top-nav">
+    <div class="row">
+      <div class="col-xs-12">
+        <a href="javascript:void(0);" class="icon col-xs-12" onclick="toggleNavbar()">Menu<i class="fas fa-bars fa-lg"></i></a>
+        <a href="{{url_for('home')}}"><i class="fa fa-home fa-lg"></i>Home</a>
+        <a href="{{url_for('github')}}" target="_blank"><i class="fa-brands fa-github fa-lg"></i>GitHub</a>
+        <a href="{{url_for('colab')}}" target="_blank"><i class="fa fa-infinity fa-lg"></i>Google Colab</a>
+        <a href="{{url_for('dockerhub')}}" target="_blank"><i class="fa-brands fa-docker fa-lg"></i>Airbyte Docker Connector</a>
+        <a href="{{url_for('about')}}"><i class="far fa-question-circle fa-lg"></i>About</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Separator -->
+  <div class="row separator">
+    &nbsp;
+  </div>
+
+  {% block content %}{% endblock %}
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="row row-footer">
+      <div class="col-xs-12 col-md-4">
+        <a href="https://www.uva.es/">
+          <img src="{{url_for('static', filename='media/logo-uva.jpg')}}"
+          class="image image-center" alt="UVU" width="200px">
+        </a>
+      </div>
+      <div class="col-xs-12 col-md-4">
+        <a href="https://www.ubu.es/">
+          <img src="{{url_for('static', filename='media/logo-ubu.png')}}"
+          class="image image-center" alt="UBU" width="200px">
+        </a>
+      </div>
+      <div class="col-xs-12 col-md-4">
+        <a href="https://www.unileon.es/">
+          <img src="{{url_for('static', filename='media/logo-ule.jpg')}}"
+          class="image image-center" alt="ULE" width="200px">
+        </a>
+      </div>
+    </div>
+
+    <div class="row footer-license">
+      <div class="col-xs-12 col-md-12">
+        2023 | <a href="https://www.linkedin.com/in/liviu-viorel-jula-8a8233161/" class="no-decoration">Liviu Viorel Jula</a>
+      </div>
+    </div>
+
+  </footer>
+
+</body>
+
+</html>

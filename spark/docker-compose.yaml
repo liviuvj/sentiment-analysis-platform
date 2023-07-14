@@ -1,0 +1,28 @@
+version: '3'
+
+x-logging: &default-logging
+  options:
+    max-size: "100m"
+    max-file: "5"
+  driver: json-file
+
+services:
+
+  spark:
+    entrypoint:
+    - sleep
+    - infinity
+    build:
+      context: .
+      dockerfile: Dockerfile
+    logging: *default-logging
+    init: true
+    ports:
+      - $SPARK_PORT:4040
+    volumes:
+    - ./spark-tasks:/opt/spark-tasks
+
+networks:
+  default:
+    external:
+      name: etl_network

@@ -1,0 +1,25 @@
+version: '3'
+x-logging: &default-logging
+  options:
+    max-size: "100m"
+    max-file: "5"
+  driver: json-file
+services:
+  transformers:
+    logging: *default-logging
+    build:
+      context: .
+      dockerfile: Dockerfile
+    init: true
+    volumes:
+    - ./nlp-tasks:/opt/nlp-tasks
+    environment:
+      - PYTHONUNBUFFERED=1
+    entrypoint:
+      - sleep
+      - infinity
+
+networks:
+  default:
+    external:
+      name: etl_network

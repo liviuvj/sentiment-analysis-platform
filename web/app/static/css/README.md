@@ -1,0 +1,1 @@
+This folder is designated for the CSS files of the Flask web application.
