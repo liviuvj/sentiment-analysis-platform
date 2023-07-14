@@ -14,14 +14,16 @@
 
 # Introduction
 
-This project focuses on building a Big Data Platform for Sentiment Analysis completely dockerized and modular. The following diagram describes the technologies used in the architecture of the platform:
+This project focuses on building a Big Data Platform for Sentiment Analysis completely scalable, dockerized and modular. The following diagram describes the technologies used in the architecture of the platform:
 
 <div align="center">
     <img src="./docs/img/platform-architecture-basic.png" alt="BISENTYS Logo" width="550"/>
 </div>
 
 
-# How to install
+# Installation guide
+
+This process will take some time since all the services need to be deployed and configured first.
 
 1. Create Python virtual environment and activate it.
 
@@ -43,3 +45,5 @@ This project focuses on building a Big Data Platform for Sentiment Analysis comp
     ```
 
 This script will deploy and configure all the components in the platform with a demo dataset. For more information, please check the documentation.
+
+A graceful minute will be given to Airbyte after it's up and running to let it boot up properly before configuring it further.
