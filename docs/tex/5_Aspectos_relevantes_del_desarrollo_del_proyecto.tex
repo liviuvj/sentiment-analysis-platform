@@ -155,7 +155,7 @@ Estos cambios críticos en las \textit{APIs} fueron detectados \textbf{a lo larg
 
 \subsection{Conjunto de datos de demostración}
 
-Por las razones explicadas en la sección anterior, las mejoras implementadas en el conector de Airbyte para Twitter se han vuelto poco usables. También se ha descartado el desarrollo de un nuevo conector para Reddit que dependa de la baja cadencia de peticiones posibles a realizar.
+Por las razones explicadas en la sección anterior, las mejoras implementadas en el conector de Airbyte para Twitter se han vuelto poco usables en el TFM. También se ha descartado el desarrollo de un nuevo conector para Reddit que dependa de la baja cadencia de peticiones posibles a realizar.
 
 Teniendo esto en cuenta y el poco margen temporal restante para la finalización del proyecto, se ha decidido investigar el uso de un posible conjunto de datos a modo de demostración de uso del proyecto, ya que resulta poco viable utilizar las \textit{APIs} investigadas.
 
@@ -163,11 +163,11 @@ El conjunto de datos seleccionado finalmente ha sido \textit{Game of Thrones S8 
 
 Este conjunto de datos en formato \textit{CSV} presenta más de 760\,000 registros y 88 atributos distintos, con información tanto sobre los usuarios, como las publicaciones realizadas por los mismos. Lo que resulta de gran utilidad ya que se puede reconstruir una estructura de datos similar a la del primer \textit{data pipeline} realizado mediante la \textit{API} de Twitter.
 
-No obstante, dichos datos son del año 2019 mientras que los obtenidos mediante la \textit{API} de Twitter datan de este año 2023. Al momento de visualizar los datos habrá grandes discrepancias en las gráficas que incluyan un eje temporal (véase la \autoref{fig:date-data-diff}), por lo que estos datos extraídos de la \textit{API} de Twitter no van a dejarse disponibles para su uso, empleando solamente este conjunto de datos investigado a modo de demostración.
+No obstante, dichos datos son del año 2019 mientras que los obtenidos mediante la \textit{API} de Twitter datan de este año 2023. Al momento de visualizar los datos habrá grandes discrepancias en las gráficas que incluyan un eje temporal (véase la \autoref{fig:date-data-diff}), por lo que estos datos extraídos de la \textit{API} de Twitter no van a dejarse disponibles para su visualización, empleando solamente este conjunto de datos investigado a modo de demostración.
 
 \imagen{date-data-diff}{Discrepancia en el eje temporal al utilizar los datos recientes de la \textit{API} de TWitter y los del conjunto de datos de demostración}
 
-Para comprobar de mejor manera los datos disponibles y la usabilidad de los mismos se ha realizado un análisis exploratorio, al que se puede acceder a través del \textit{Jupyter Notebook}\footnote{\url{https://colab.research.google.com/drive/1d_obU9idFqjsDi7ezeFs1CORxTUAgh7V\#offline=true&sandboxMode=true}} que se deja disponible.
+Para comprobar de mejor manera los datos disponibles y la usabilidad de los mismos se ha realizado un análisis exploratorio, accesible a través del \textit{Jupyter Notebook}\footnote{\url{https://colab.research.google.com/drive/1d_obU9idFqjsDi7ezeFs1CORxTUAgh7V\#offline=true&sandboxMode=true}} que se deja disponible.
 
 La primera parte de dicho análisis consiste en comprobar la posibilidad de crear una estructura de datos parecida a la diseñada originalmente para el flujo de datos de la \textit{API} de Twitter, consiguiendo completar dicho esquema de datos en una gran medida.
 
@@ -271,7 +271,7 @@ En este proyecto se ha desarrollado un cuadro de mando integral que comprende 5 
 
 Las vistas del \textit{dashboard} permiten la obtención de \textit{insights} no solo en el ámbito general mediante métricas sobre los datos extraídos, sino también sobre las estadísticas representadas de las publicaciones realizadas y los usuarios de las mismas, junto a la información enriquecida añadida mediante las técnicas \textit{NLP}. 
 
-Para utilizar los datos almacenados en el sistema \textit{OLAP} ClickHouse ha hecho falta la instalación de un conector adicional. Esta configuración, así como el cuadro de mando desarrollado y la importación de los \textit{datasets} desde ClickHouse, se realiza mediante un \textit{script} automático para facilitar el despliegue para el usuario. 
+Para utilizar los datos almacenados en el sistema \textit{OLAP} ClickHouse ha sido necesaria la instalación de un conector adicional. Esta configuración, así como el cuadro de mando desarrollado y la importación de los \textit{datasets} desde ClickHouse, se realiza mediante un \textit{script} automático para facilitar el despliegue para el usuario. 
 
 El diseño e implementación de las vistas para el \textit{dashboard} se pueden comprobar en mayor detalle en la \autoref{section:dashboard-design}.
 

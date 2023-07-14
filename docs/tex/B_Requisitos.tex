@@ -2,10 +2,146 @@
 
 \section{Introducción}
 
+En las secciones siguientes se detallan lo objetivos propuestos para la realización de este proyecto, su descomposición y sus respectivos requisitos específicos.
+
 \section{Objetivos generales}
+
+\begin{itemize}
+    \item Realizar extracciones de datos de dominio público.
+
+    \item Llevar a cabo tareas de procesamiento, limpieza y asegurar la calidad de los datos.
+
+    \item Utilizar técnicas de procesamiento de lenguaje natural para enriquecer los datos.
+
+    \item Diseñar e implementar cuadros de mando interactivos sobre la información obtenida.
+
+    \item Aplicar procesos de Extracción, Transformación y Carga (\textit{ETL}).
+
+    \item Diseñar y desarrollar una plataforma \textit{open-source} para análisis de sentimiento sobre \textit{Big Data}.
+\end{itemize}
 
 \section{Catalogo de requisitos}
 
+A continuación, se detallan los requisitos funcionales y no funcionales.
+
+\subsection{Requisitos funcionales}
+
+\begin{itemize}
+
+    \item \textbf{RF-1 Realizar la extracción de datos.} Para la obtención de los datos será necesario:
+    \begin{itemize}
+        \item \textbf{RF-1.1} Configurar una fuente de datos.
+        \item \textbf{RF-1.2} Configurar un destino de datos.
+        \item \textbf{RF-1.3} Configurar una conexión de sincronización entre el origen y destino de los datos.
+    \end{itemize}
+
+    \item \textbf{RF-2 Realizar el procesamiento de los datos.} Para ello se utilizará la herramienta Apache Spark, que deberá permitir:
+    \begin{itemize}
+        \item \textbf{RF-2.1} Cargar los datos en bruto.
+        \item \textbf{RF-2.2} Realizar las operaciones de procesamiento, limpieza y asegurar la calidad de los datos.
+        \item \textbf{RF-2.3} Guardar los datos limpios.
+    \end{itemize}
+
+    \item \textbf{RF-3 Ejecutar tareas de procesamiento de lenguaje natural.} Para ello se utilizarán modelos \textit{NLP} (\textit{Natural Language Processing}) pre-entrenados que deberán ser capaces de:
+    \begin{itemize}
+        \item \textbf{RF-3.1} Cargar los datos limpios.
+        \item \textbf{RF-3.2} Ejecutar las tareas \textit{NLP} y enriquecer los datos con análisis de sentimientos.
+        \item \textbf{RF-3.3} Guardar los datos enriquecidos.
+    \end{itemize}
+
+    \item \textbf{RF-4 Diseñar e implementar \textit{dashboards} interactivos}. Para ello, la herramienta de visualización de datos deberá hacer posible lo siguiente:
+    \begin{itemize}
+        \item \textbf{RF-4.1} Cargar los datos enriquecidos.
+        \item \textbf{RF-4.2} Crear visualizaciones a partir de la información obtenida.
+        \item \textbf{RF-4.3} Componer cuadros de mando mediante los gráficos creados.
+    \end{itemize}
+
+\end{itemize}
+
+\subsection{Requisitos no funcionales}
+
+\begin{itemize}
+    \item \textbf{RNF-1 Usabilidad.} Los componentes empleados en el proyecto deberán resultar sencillos de utilizar por el usuario final según su \textit{background} y rol. 
+
+    \item \textbf{RNF-2 Escalabilidad.} La plataforma desarrollada deberá ser escalable para soportar grandes volúmenes de datos.
+    
+    \item \textbf{RNF-3 Modularidad.} Los componentes de la plataforma deberán poder intercambiarse con otros de funciones similares, según los casos de uso establecidos.
+    
+    \item \textbf{RNF-4 Configurabilidad} La configuración de las tecnologías utilizadas deberá resultar sencilla de modificar.
+\end{itemize}
+
+
 \section{Especificación de requisitos}
 
+En esta sección se detalla el diagrama de casos de uso, las descripciones de los mismos y los requisitos funcionales que forman parte de cada caso de uso en concreto.
+
+\imagen{use-cases}{Diagrama de casos de uso}
+
+
+\vspace{2cm}
+
+\subsection{Casos de uso}
+
+
+\casoDeUso{CU-01}{Configurar una conexión de sincronización de datos}{RF-1, RF-1.3}
+{La herramienta de extracción de datos debe permitir la configuración de conexiones entre origen y destino para ejecutar la sincronización de los datos y realizar su ingestión en la base de datos.}
+{Se han creado y configurado la fuente de datos y el destino de datos de la conexión.}
+{
+\item El usuario abre la interfaz web de Airbyte.
+\item El usuario especifica los parámetros de configuración de la conexión entre origen y destino de datos.
+\item El usuario ejecuta la sincronización de los datos.
+}
+{Los datos extraídos se encuentran correctamente almacenados en el destino de datos.}
+{
+\item La configuración del origen de datos presenta fallos.
+\item La configuración del destino de datos presenta fallos.
+}
+{Alta}
+
+
+\casoDeUso{CU-02}{Realizar procesamiento de los datos}{RF-2, RF-2.2}
+{La herramienta de procesamiento de datos debe permitir la ejecución de tareas de limpieza de los datos y asegurar la calidad de los mismos.}
+{Los datos en bruto se encuentran cargados en la base de datos.}
+{
+\item El usuario programa las tareas de procesamiento de datos.
+\item El usuario ejecuta las tareas de procesamiento.
+\item El usuario recibe el \textit{feedback} con los registros procesados.
+}
+{Los datos en bruto se han procesado correctamente y almacenado nuevamente.}
+{
+\item La herramienta de procesamiento no puede establecer conexión con la base de datos.
+\item Las tareas de procesamiento presentan algún fallo y la validación del esquema de datos falla.
+}
+{Alta}
+
+
+\casoDeUso{CU-03}{Ejecutar tareas de procesamiento de lenguaje natural}{RF-3, RF-3.2}
+{Durante la etapa de transformación del proceso \textit{ETL} se debe poder realizar la inferencia de modelos \textit{NLP} (\textit{Natural Language Processing}) sobre los datos procesados para enriquecerlos mediante análisis de sentimientos.}
+{Los datos procesados se encuentran cargados en la base de datos.}
+{
+\item El usuario programa las tareas de procesamiento de lenguaje natural.
+\item El usuario ejecuta las tareas de inferencia.
+\item El usuario recibe el \textit{feedback} con los registros inferidos.
+}
+{Los datos procesados se han enriquecido con el análisis de sentimientos y se han almacenado nuevamente en la base de datos \textit{OLAP} (\textit{On-Line Analytical Processing}).}
+{
+\item La herramienta no puede establecer conexión con la base de datos.
+\item Algún registro no se ha procesado correctamente y supera el límite de caracteres de entrada a los modelos \textit{NLP}.
+}
+{Alta}
+
+\casoDeUso{CU-04}{Diseñar e implementar \textit{dashboards} interactivos}{RF-4, RF-4.3}
+{Durante la etapa de transformación del proceso \textit{ETL} se debe poder realizar la inferencia de modelos \textit{NLP} (\textit{Natural Language Processing}) sobre los datos procesados para enriquecerlos mediante análisis de sentimientos.}
+{Los datos procesados se encuentran cargados en la base de datos.}
+{
+\item El usuario programa las tareas de procesamiento de lenguaje natural.
+\item El usuario ejecuta las tareas de inferencia.
+\item El usuario recibe el \textit{feedback} con los registros inferidos.
+}
+{Los datos procesados se han enriquecido con el análisis de sentimientos y se han almacenado nuevamente en la base de datos \textit{OLAP} (\textit{On-Line Analytical Processing}).}
+{
+\item La herramienta no puede establecer conexión con la base de datos.
+\item Algún registro no se ha procesado correctamente y supera el límite de caracteres de entrada a los modelos \textit{NLP}.
+}
+{Alta}
 

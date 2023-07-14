@@ -410,7 +410,7 @@ La idea inicial de esta tercera pestaña del \textit{dashboard} se puede observa
 
 Posteriormente, se hizo una segunda iteración sobre este diseño (véase la \autoref{fig:dashboard-3-iter-2}). Se mejoró la accesibilidad de las gráficas que se encuentran en el nivel de hora añadiendo un \textit{zoom} para poder observar en mayor detalle estos registros, además de eliminar las marcas de los puntos.
 
-También se ha convertido la línea de puntos rígida que existía anteriormente a una un área ligeramente curvada para representar mejor los sentimientos y las emociones, puesto que estos términos representan naturalmente un flujo de combinaciones de las mismas y no se trata de algo estricto y exclusivo. Además se han modificado los color asociados a cada categoría con los que suelen estar representadas, realizando la siguiente asignación:
+También se ha convertido la línea de puntos rígida que existía anteriormente a una un área ligeramente curvada, para representar mejor los sentimientos y las emociones, puesto que estos términos representan naturalmente un flujo de combinaciones de las mismas y no se trata de algo estricto y exclusivo. Además se han modificado los color asociados a cada categoría con los que suelen estar representadas, realizando la siguiente asignación:
 
 \begin{itemize}
     \item Sentimiento
@@ -435,7 +435,7 @@ También se ha convertido la línea de puntos rígida que existía anteriormente
 
 \subsubsection{User Analysis}
 
-La cuarta vista del cuadro de mando entra se centra en dar una visión a nivel de los usuarios que han realizado las publicaciones. En primer lugar, se muestran las estadísticas medias de cada usuario (número de seguidos, número de usuarios seguidos, total de publicaciones y número de listados) respecto al sentimiento con el que están mayormente asociado. De esta manera, se puede observar las diferencias entre los 3 tipos de usuarios y sus sentimientos notables respecto al tema de búsqueda.
+La cuarta vista del cuadro de mando se centra en dar una visión a nivel de los usuarios que han realizado las publicaciones. En primer lugar, se muestran las estadísticas medias de cada usuario (número de seguidos, número de usuarios seguidos, total de publicaciones y número de listados) respecto al sentimiento con el que están mayormente asociado. De esta manera, se puede observar las diferencias entre los 3 tipos de usuarios y sus sentimientos notables respecto al tema de búsqueda.
 
 La segunda visualización muestra un grafo con las interacciones de usuarios que más han gustado. Cada nodo origen representa al usuario que ha realizado la publicación y los nodos destino al usuario que mencionan, mientras que el tamaño de los mismos es calculado en base al número de \textit{likes} que ha recibido la publicación. En la parte inferior del \textit{dashboard} se han agregado dos tablas que muestran, respectivamente, los usuarios más influyentes que han publicado sobre el tema en concreto y las publicaciones más influyentes que han sido realizadas sobre el tema en concreto. En las tablas se muestran también las estadísticas de los usuarios y las publicaciones, respectivamente.
 
@@ -461,7 +461,7 @@ En este apartado se describen las interacciones entre los principales componente
 
 En la \autoref{fig:interaction-extraction} se muestra la interacción entre los componentes de la etapa de extracción de datos del proceso \textit{ETL}. Esta interacción se realiza de manera automática si se programa la ejecución periódica de la \textit{data pipeline} o cuando se ejecute de manera manual.
 
-\imagen{interaction-extraction}{Diagrama de secuencia de la interacción entre los componentes que forman parte de la etapa de extracción de datos del proceso \textit{ETL}}
+\imagen{interaction-extraction}{Diagrama con la secuencia de la interacción entre los componentes que forman parte de la etapa de extracción de datos del proceso \textit{ETL}}
 
 En la \autoref{fig:interaction-processing} y en la \autoref{fig:interaction-inference} se muestra la interacción entre los componentes de la etapa de transformación del proceso \textit{ETL}. El primer diagrama muestra el flujo de acciones que se realiza en la fase de procesamiento de los datos, mientras que el segundo diagrama muestra las acciones que se realizan en la fase de la inferencia \textit{NLP}. Esta interacción se realiza de manera automática después de ejecutarse la etapa de extracción de datos (\autoref{fig:interaction-extraction}), si ha terminado satisfactoriamente.
 

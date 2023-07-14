@@ -2,7 +2,7 @@
 
 En esta sección final se desarrollarán las conclusiones derivadas del desarrollo de este proyecto, así como los resultados obtenidos en comparación con los objetivos planteados inicialmente. También se incluye un listado de posibles mejoras a implementar de cara a líneas de trabajo futuras.
 
-\section{Conclusiones}
+\section{Conclusiones} \label{section:conclusions}
 
 Este proyecto ha sido el resultado de los conocimientos aprendidos hasta el momento y de los obtenidos a medida que se estaba desarrollando esta <<Plataforma \textit{Big Data} para \textit{Sentiment Analysis}>>.
 
@@ -36,13 +36,13 @@ A continuación, se listan una serie de posibles líneas de mejora o aspectos co
 \begin{itemize}
     \item Actualmente, la plataforma desarrollada se ha enfocado en trabajar con datos en \textit{batch}. Por ello, la ejecución del proceso \textit{ETL}, en especial la etapa de Extracción y la fase de inferencia mediante \textit{NLP} de la etapa de Transformación, conllevan cierta cantidad de tiempo para su finalización.
     
-    Una de las posibles mejoras futuras para esta plataforma sería implementar la posibilidad de trabajar también con datos en \textit{streaming}, para los casos de uso en los que se quiera obtener la información de inmediato en lugar de esperar a la ejecución periódica de los \textit{data pipelines}.
+    Una de las posibles mejoras futuras para esta plataforma sería implementar la posibilidad de trabajar también con datos en flujo (\textit{streaming}), para los casos de uso en los que se quiera obtener la información de inmediato en lugar de esperar a la ejecución periódica de los \textit{data pipelines}.
 
-    \item El funcionamiento desarrollado para la fase de inferencia mediante técnicas \textit{NLP} se realiza en las \textit{data pipelines} de manera consecutiva, ejecutando todas las tareas de procesamiento de lenguaje natural una a una sobre los datos. La herramienta Apache Airflow permite ejecución de tareas en paralelo mediante su programación en \textit{DAGs} (\textit{Directed Acyclic Graph}). El código desarrollado para las \textit{data pipelines} se ha diseñado de tal manera que permita la inclusión de estos cambios para su generación de manera dinámica.
+    \item El funcionamiento desarrollado para la fase de inferencia mediante técnicas \textit{NLP} se realiza en las \textit{data pipelines} de manera consecutiva, ejecutando todas las tareas de procesamiento de lenguaje natural una a una sobre los datos. La herramienta Apache Airflow permite la ejecución de tareas en paralelo mediante su programación en \textit{DAGs} (\textit{Directed Acyclic Graph}). El código desarrollado para las \textit{data pipelines} se ha diseñado de tal manera que permita la inclusión de estos cambios para su generación de manera dinámica.
     
-    Por lo que otra posible línea de mejora consistiría en realizar la ejecución cada tarea \textit{NLP} en paralelo, necesitando posteriormente la agregación de los datos inferidos de cada tarea con sus respectivos registros de datos. Esto conllevaría un aumento notable en la velocidad de ejecución de las \textit{data pipelines}, debido a que esta fase es la que supone una mayor carga de trabajo en la plataforma.
+    Por lo que otra posible línea de mejora consistiría en realizar la ejecución de cada tarea \textit{NLP} en paralelo, necesitando posteriormente la agregación de los datos inferidos de cada tarea con sus respectivos registros de datos. Esto conllevaría un aumento notable en la velocidad de ejecución de las \textit{data pipelines}, debido a que esta fase es la que supone una mayor carga de trabajo en la plataforma.
 
-    \item Como se ha mencionado en la anterior sección, la arquitectura de la plataforma está compuesta por numerosas tecnologías. Este diseño se podría reducir y emplear una menor cantidad de componentes en caso de que se quiera aligerar la carga de trabajo en el servidor de despliegue, por ejemplo, eliminando el uso de algunos componentes y unificando su funcionalidad en una sola tecnología o herramienta.
+    \item Como se ha mencionado en la sección anterior, la arquitectura de la plataforma está compuesta por numerosas tecnologías. Este diseño se podría reducir y emplear una menor cantidad de componentes en caso de que se quiera aligerar la carga de trabajo en el servidor de despliegue, por ejemplo, eliminando el uso de algunos componentes y unificando su funcionalidad en una sola tecnología o herramienta.
 
     \item En contraste con el punto anterior, se podría también sugerir añadir un componente más. Al trabajar con \textit{Big Data}, y más concretamente con opiniones de personas, resulta necesario mantener la seguridad de los datos. Para ello, se podría sugerir la implementación de una herramienta para llevar a cabo la <<gobernanza>> de los datos y asignar los permisos necesarios a cada usuario según el uso que se necesite dar a los datos.
 

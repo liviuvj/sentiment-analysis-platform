@@ -8,6 +8,7 @@
 \usepackage{lmodern} % Scalable font
 \usepackage{microtype}
 \usepackage{placeins}
+\usepackage{longtable}
 
 %Para el float H de tablaSmallSinColores
 \usepackage{float}
@@ -306,7 +307,6 @@
 \definecolor{anger}{HTML}{FF2400}
 
 
-
 %
 % Nuevo comando para tablas grandes sin cabecera.
 \newcommand{\tablaSinCabeceraConBandas}[5]{%
@@ -335,6 +335,92 @@
   \label{tabla:#4}
   \end{center}
 }
+
+
+
+
+% 
+% Nuevo comando para los Casos de Uso
+% Parámetros:
+%   #1  ==> ID del Caso de Uso      (Ej: CU-01)
+%   #2  ==> Nombre del Caso de Uso  (Ej: Caso de Uso 1)
+%   #3  ==> Requisitos asociados    (Ej: RF1, RF2, ...)
+%   #4  ==> Descripción             (Ej: Texto largo...)
+%   #5  ==> Precondición            (Ej: Texto largo...)
+%   #6  ==> Acciones                (Ej: \item Acción 1...
+%                                        \item Acción 2...)
+%   #7  ==> Postcondición           (Ej: Texto largo...)
+%   #8 ==> Excepciones             (Ej: \item Excepción 1...
+%                                        \item Excepción 2...)
+%   #9 ==> Importancia             (Ej: Baja, Alta, ...)
+\newcommand{\casoDeUso}[9]{%
+\begin{longtable}[H]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.23\columnwidth}\raggedright\strut
+\textbf{#1}\strut
+\end{minipage} & \begin{minipage}[b]{0.71\columnwidth}\raggedright\strut
+\textbf{#2}\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+\textbf{Versión}\strut
+\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright\strut
+1.0\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+\textbf{Autor}\strut
+\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright\strut
+Liviu Viorel Jula\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+\textbf{Requisitos asociados}\strut
+\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright\strut
+#3\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+\textbf{Descripción}\strut
+\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright\strut
+#4\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+\textbf{Precondición}\strut
+\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright\strut
+#5\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+\textbf{Acciones}\strut
+\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright\strut
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+#6
+\end{enumerate}\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+\textbf{Postcondición}\strut
+\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright\strut
+#7\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+\textbf{Excepciones}\strut
+\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright\strut
+\begin{itemize}
+\tightlist
+#8
+\end{itemize}\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+\textbf{Importancia}\strut
+\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright\strut
+#9\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\caption{#1 #2}
+\end{longtable}
+}
+
+
 
 
 \graphicspath{ {./img/} }
@@ -381,10 +467,9 @@
 \begin{center}%
 	\includegraphics[height=3cm]{img/escudoUBU} \hspace{1cm}
 	\includegraphics[height=3cm]{img/escudoUVA} \hspace{1cm}
-	\includegraphics[height=3cm]{img/escudoULE} \vspace{1cm}%
+	\includegraphics[height=3cm]{img/escudoULE} \vspace{0.5cm}%
 \end{center}%
 
-  \vfill
   % Título proyecto y escudo informática ----------------
   \colorbox{cpardoBox}{%
     \begin{minipage}{.9\textwidth}
@@ -398,7 +483,6 @@
 
   }%
   \hfill
-  \vfill
   % Datos de alumno, curso y tutores ------------------
   \begin{center}%
   {%
