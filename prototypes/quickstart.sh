@@ -4,6 +4,8 @@
 #
 # Quickstart script for the project's prototype.
 
+set -e
+
 # Activate environment
 source ../.venv/bin/activate
 
@@ -11,11 +13,11 @@ source ../.venv/bin/activate
 cd extraction
 git clone --depth 1 https://github.com/airbytehq/airbyte.git
 cd airbyte
-./run-ab-platform.sh
+./run-ab-platform.sh -b
 
 # Create external networks
 docker network create etl_network
-docker network create --bridge etl_bridge
+docker network create etl_bridge
 
 # Run MongoDB instance
 cd ../../mongodb
@@ -23,7 +25,20 @@ docker compose up -d
 
 # Configure data extraction and data loading pipeline
 cd ../extraction
+sleep 30
 python config.py
+
+# Build custom spark image
+cd ../spark
+echo "SPARK_TASKS_PATH=$PWD/spark-tasks" >> .env
+source .env
+docker build -t $SPARK_IMAGE_NAME .
+
+# Build NLP image
+cd ../nlp
+echo "NLP_TASKS_PATH=$PWD/nlp-tasks" >> .env
+source .env
+docker build -t $NLP_IMAGE_NAME .
 
 # Run ClickHouse instance and connect to bridge network
 cd ../clickhouse
@@ -42,7 +57,12 @@ git clone https://github.com/apache/superset.git
 cd superset
 docker-compose -f docker-compose-non-dev.yml pull
 docker-compose -f docker-compose-non-dev.yml up -d
-cd ..
+cd ../..
+
+# Run script to import dashboard and datasets
+source ./clickhouse/.env
+source ./superset/.env
+python -u import_dashboard.py $SUPERSET_ADMIN_PASSWORD $CLICKHOUSE_PASSWORD
 
 # Wait until container is ready and add it to the bridge network
 until [ "$( docker container inspect -f '{{.State.Status}}' superset_app )" = "running" ]; do
@@ -61,4 +81,10 @@ curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.6.2/docker-compose.y
 docker compose up airflow-init
 
 # Run Airflow platform
+docker compose up -d
+docker compose -f docker-compose.proxy.yaml up -d
+cd ..
+
+# Run centralized web access point
+cd web
 docker compose up -d

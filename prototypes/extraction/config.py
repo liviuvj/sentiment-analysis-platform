@@ -2,6 +2,7 @@ from requests.auth import HTTPBasicAuth
 import requests
 import json
 import yaml
+import os
 
 
 def parse_config_file(path: str):
@@ -74,6 +75,7 @@ class AirbyteConfig(BaseConfig):
         response = requests.post(url, auth=self.BASIC_AUTH).json()
 
         print(response)
+        return response
 
     def update_workspace_initial_setup(self, workspace_id: str) -> int:
         """
@@ -348,16 +350,20 @@ class DatasetConfig(BaseConfig):
         super().__init__(airbyte_username, airbyte_password)
         self.workspace_id = workspace_id
         self.dataset_config = {
-            "0000-Dataset-GOT-Movie": {
+            "Dataset-GOT-Movie": {
                 "dataset_name": "movie",
                 "file_url": "https://drive.google.com/uc?export=download&id=1doLbhxFP5y4TRoMUpx6kgaIR3MUFVDVX"
             },
-            "0000-Dataset-GOT-Jon": {
+            "Dataset-GOT-Jon": {
                 "dataset_name": "jon",
                 "file_url": "https://drive.google.com/uc?export=download&id=1Uji4IajDAYlAj3yhQdQ9B1NcSFg-pqrG"
             },
-            "0000-Dataset-GOT-Daenerys": {
+            "Dataset-GOT-Daenerys": {
                 "dataset_name": "daenerys",
+                "file_url": "https://drive.google.com/uc?export=download&id=1hL3eh3K2lKtMNEkaG2JSgNSXjoNtHyTG"
+            },
+            "Dataset-GOT-Season8": {
+                "dataset_name": "season8",
                 "file_url": "https://drive.google.com/uc?export=download&id=1hL3eh3K2lKtMNEkaG2JSgNSXjoNtHyTG"
             }
         }
@@ -594,9 +600,9 @@ def main():
 
     # Configure workspace
     airbyte = AirbyteConfig(credentials["AIRBYTE"]["USERNAME"], credentials["AIRBYTE"]["PASSWORD"])
-    airbyte.list_workspaces()
-    workspace_id = airbyte.create_workspace("custom_name", "custom_account@email.com")
-    print(">> New workspace created:", workspace_id)
+    workspace_id = airbyte.list_workspaces()["workspaces"][0]["workspaceId"]
+    # workspace_id = airbyte.create_workspace("custom_name", "custom_account@email.com")
+    print(">> Workspace ID:", workspace_id)
     assert airbyte.update_workspace_initial_setup(workspace_id) == requests.codes.ALL_OK
 
     # Get destination definition ID
@@ -605,7 +611,7 @@ def main():
 
     # Configure data destination
     destination = DestinationConfig(credentials["AIRBYTE"]["USERNAME"], credentials["AIRBYTE"]["PASSWORD"], workspace_id)
-    destination_name = "MongoDB>>>Dataset"
+    destination_name = "MongoDB-Dataset"
     destination_id = destination.create_mongodb_destination(
         destination_definition_id, destination_name, "raw_dataset",
         credentials["MONGODB"]["USERNAME"], credentials["MONGODB"]["PASSWORD"],
@@ -636,8 +642,15 @@ def main():
         connection_id = dataset.create_connection(
             connection_name, source_id, destination_id, data_catalog
         )
+
         assert connection_id
         print(f">> New connection created: {connection_name} ({connection_id})")
+
+        # Export environment variable with the connection id for Apache Airflow DAGs.
+        # The naming format is: AIRBYTE_<QUERY>_CONNECTION_ID
+        with open(".env", "a") as f:
+            environ_key = f"AIRBYTE_{config['dataset_name'].upper()}_CONNECTION_ID={connection_id}\n"
+            f.write(environ_key)
 
     # The next line will trigger a manual sync of the connection established above
     # assert airbyte.trigger_connection_manual_sync(connection_id) == "running"

@@ -9,6 +9,7 @@ source ../mongodb/.env
 source ../spark/.env
 source ../nlp/.env
 source ../clickhouse/.env
+source ../extraction/.env
 
 # Set here variables to use inside the DAG configurations.
 # The paths declared here must be ABSOLUTE, not relative.
@@ -26,6 +27,10 @@ CLICKHOUSE_HOST=$(echo $CLICKHOUSE_CONTAINER_NAME | tr -d "\n\r")
 CLICKHOUSE_PORT=$(echo $CLICKHOUSE_PORT_NATIVE | tr -d "\n\r")
 CLICKHOUSE_USER=$(echo $CLICKHOUSE_USER | tr -d "\n\r")
 CLICKHOUSE_PASSWORD=$(echo $CLICKHOUSE_PASSWORD | tr -d "\n\r")
+AIRBYTE_MOVIE_CONNECTION_ID=$(echo $AIRBYTE_MOVIE_CONNECTION_ID | tr -d "\n\r") 
+AIRBYTE_SEASON8_CONNECTION_ID=$(echo $AIRBYTE_SEASON8_CONNECTION_ID | tr -d "\n\r") 
+AIRBYTE_JON_CONNECTION_ID=$(echo $AIRBYTE_JON_CONNECTION_ID | tr -d "\n\r") 
+AIRBYTE_DAENERYS_CONNECTION_ID=$(echo $AIRBYTE_DAENERYS_CONNECTION_ID | tr -d "\n\r") 
 AIRBYTE_USER="airbyte"
 AIRBYTE_PASSWORD="password"
 
@@ -33,8 +38,14 @@ AIRBYTE_PASSWORD="password"
 sed -i "s/image: \${AIRFLOW_IMAGE_NAME:-apache\/airflow:2.6.2}/# &/" ./docker-compose.yaml
 sed -i "s/# build: ./build:\n    dockerfile: airflow.dockerfile/" ./docker-compose.yaml
 
+sed -i "s/command: celery worker/command: celery worker\n    extra_hosts:\n      - \"host.docker.internal:host-gateway\"/" ./docker-compose.yaml
+
 # Generate Fernet key to encrypt variables
 FERNET_KEY=$(docker compose run --rm airflow-worker python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())" | tr -d "\n")
+
+echo "FERNET encryption key: $FERNET_KEY"
+
+docker compose stop
 
 # Change default Fernet key
 sed -i "s/AIRFLOW__CORE__FERNET_KEY: ''/AIRFLOW__CORE__FERNET_KEY: '$FERNET_KEY'/" ./docker-compose.yaml
@@ -57,5 +68,9 @@ docker compose run --rm airflow-worker bash -c "
     airflow variables set CLICKHOUSE_PORT $CLICKHOUSE_PORT;
     airflow variables set CLICKHOUSE_USER $CLICKHOUSE_USER;
     airflow variables set CLICKHOUSE_PASSWORD $CLICKHOUSE_PASSWORD;
+    airflow variables set AIRBYTE_MOVIE_CONNECTION_ID $AIRBYTE_MOVIE_CONNECTION_ID;
+    airflow variables set AIRBYTE_SEASON8_CONNECTION_ID $AIRBYTE_SEASON8_CONNECTION_ID;
+    airflow variables set AIRBYTE_JON_CONNECTION_ID $AIRBYTE_JON_CONNECTION_ID;
+    airflow variables set AIRBYTE_DAENERYS_CONNECTION_ID $AIRBYTE_DAENERYS_CONNECTION_ID;
     airflow connections add AIRBYTE_CONNECTION --conn-uri airbyte://$AIRBYTE_USER:$AIRBYTE_PASSWORD@host.docker.internal:8001;
     "

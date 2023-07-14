@@ -9,5 +9,5 @@ touch ./superset/docker/requirements-local.txt
 echo "clickhouse-connect>=0.4.1" >> ./superset/docker/requirements-local.txt
 
 # Change default admin password
-SUPERSET_ADMIN_PASSWORD="superset_password"
-sed "0,/ADMIN_PASSWORD=\"admin\"/s//ADMIN_PASSWORD=$SUPERSET_ADMIN_PASSWORD/" ./superset/docker/docker-init.sh
+source .env
+sed -i "0,/ADMIN_PASSWORD=\"admin\"/s//ADMIN_PASSWORD=$SUPERSET_ADMIN_PASSWORD/" ./superset/docker/docker-init.sh
